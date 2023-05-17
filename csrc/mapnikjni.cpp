@@ -12,7 +12,7 @@
 #include <mapnik/image_util.hpp>
 #include <mapnik/agg_renderer.hpp>
 #include <mapnik/font_engine_freetype.hpp>
-#include <mapnik/geometry_type.hpp>
+#include <mapnik/geometry/geometry_type.hpp>
 #include <mapnik/projection.hpp>
 #include <mapnik/vertex_processor.hpp>
 
