@@ -48,7 +48,7 @@ cd mapnik-jni-win
 cmake -DBoost_NO_WARN_NEW_VERSIONS=ON -Bbuild -G "Visual Studio 17 2022" -T host=x64 -A x64 --toolchain "C:\vcpkg\scripts\buildsystems\vcpkg.cmake"
 ```
 
-其中`Visual Studio 17 2022`为Visual Studio安装的版本，`C:\vcpkg`为vcpkg的安装路径。由于vcpkg编译的mapnik不包含默认字体，如果希望能通过java接口获取并注册默认字体路径，需要指定宏`-DMAPNIK_FONTS_DIR=xxx`，其中`xxx`为mapnik的字体路径，否则`Mapnik.getInstalledFontsDir()`将返回`Null`。
+其中`Visual Studio 17 2022`为Visual Studio安装的版本，`C:\vcpkg`为vcpkg的安装路径。
 
 配置完成后，使用如下指令编译本项目：
 
