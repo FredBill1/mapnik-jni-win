@@ -9,14 +9,14 @@ find_package(mapnik CONFIG REQUIRED)
 find_package(GDAL CONFIG REQUIRED)
 find_package(ICU REQUIRED COMPONENTS uc io dt in)
 
-set(CMAKE_BUILD_TYPE Release)
-mapnik_find_plugin_dir(MAPNIK_PLUGINS_DIR)
-message(STATUS "MAPNIK_PLUGINS_DIR: ${MAPNIK_PLUGINS_DIR}")
-message(STATUS "MAPNIK_FONTS_DIR: ${MAPNIK_FONTS_DIR}")
-add_definitions(
-    -DMAPNIK_FONTS_DIR="${MAPNIK_FONTS_DIR}"
-    -DMAPNIK_INPUT_PLUGINS_DIR="${MAPNIK_PLUGINS_DIR}"
-)
+# set(CMAKE_BUILD_TYPE Release)
+# mapnik_find_plugin_dir(MAPNIK_PLUGINS_DIR)
+# message(STATUS "MAPNIK_PLUGINS_DIR: ${MAPNIK_PLUGINS_DIR}")
+# message(STATUS "MAPNIK_FONTS_DIR: ${MAPNIK_FONTS_DIR}")
+# add_definitions(
+#     -DMAPNIK_FONTS_DIR="${MAPNIK_FONTS_DIR}"
+#     -DMAPNIK_INPUT_PLUGINS_DIR="${MAPNIK_PLUGINS_DIR}"
+# )
 
 add_library(${PROJECT_NAME} SHARED
     csrc/mapnikjni.cpp
