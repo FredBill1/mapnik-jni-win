@@ -2,10 +2,12 @@ cmake_minimum_required(VERSION 3.15)
 
 project(mapnik-jni)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 find_package(JNI REQUIRED)
 find_package(mapnik CONFIG REQUIRED)
+find_package(GDAL CONFIG REQUIRED)
+find_package(ICU REQUIRED COMPONENTS uc io dt in)
 
 set(CMAKE_BUILD_TYPE Release)
 mapnik_find_plugin_dir(MAPNIK_PLUGINS_DIR)
@@ -29,4 +31,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
     mapnik::mapnik mapnik::json mapnik::wkt
+    GDAL::GDAL
+    ICU::uc ICU::io ICU::dt ICU::in
 )

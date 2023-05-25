@@ -154,6 +154,8 @@ static jmethodID lookup_static_method(JNIEnv* env, jclass c, const char* name, c
 }
 
 static bool init_ids(JNIEnv* env) {
+    mapnik::setup();
+
 	// Load NativeObject classes
 	init_class(env, "mapnik/NativeObject", CLASS_NATIVEOBJECT);
 	init_class(env, "mapnik/MapDefinition", CLASS_MAP);
