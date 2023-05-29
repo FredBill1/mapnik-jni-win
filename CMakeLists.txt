@@ -15,25 +15,6 @@ find_package(ICU REQUIRED COMPONENTS uc io dt in)
 find_package(unofficial-lerc CONFIG REQUIRED)
 find_package(GEOS CONFIG REQUIRED)
 
-function(dump_cmake_variables)
-    get_cmake_property(_variableNames VARIABLES)
-
-    # list(SORT _variableNames)
-    foreach(_variableName ${_variableNames})
-        if(ARGV0)
-            unset(MATCHED)
-            string(REGEX MATCH ${ARGV0} MATCHED ${_variableName})
-
-            if(NOT MATCHED)
-                continue()
-            endif()
-        endif()
-
-        message(STATUS "${_variableName}=${${_variableName}}")
-    endforeach()
-endfunction()
-
-dump_cmake_variables()
 add_library(${PROJECT_NAME} SHARED
     csrc/mapnikjni.cpp
     csrc/mapnikjni.h

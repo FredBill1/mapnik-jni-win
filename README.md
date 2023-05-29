@@ -3,12 +3,22 @@
 要用这个来装mapnik的static版
 
 ```shell
-.\vcpkg\vcpkg install mapnik[input-csv,input-gdal,input-geobuf,input-geojson,input-ogr,input-pgraster,input-postgis,input-raster,input-shape,input-sqlite,input-topojson] --triplet=x64-windows-static
+.\vcpkg\vcpkg install mapnik[input-csv,input-gdal,input-geobuf,input-geojson,input-ogr,input-pgraster,input-postgis,input-raster,input-shape,input-sqlite,input-topojson] --triplet=x64-windows-static-release
 ```
 
-`cmake.configureArgs`也要加上`-DVCPKG_TARGET_TRIPLET=x64-windows-static`
+`cmake.configureArgs`也要加上`-DVCPKG_TARGET_TRIPLET=x64-windows-static-release`
 
-之后用cmake配置好vs的工程之后，用vs打开`build/mapnik-jni.sln`，右键点在界面右边的解决方案下面的`mapnik-jni`项目，选`属性`，配置选`Release`，之后在`配置属性/链接器/输入/附加依赖项`里，把所有既在vcpkg的`debug`路径里出现又在`release`路径里出现的`.lib`文件只留`release`版。之后才能正常用vs编译。
+`.vscode/settings.json`:
+
+```json
+{
+    "cmake.configureArgs": [
+        "-DBoost_NO_WARN_NEW_VERSIONS=ON",
+        "-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "-DVCPKG_TARGET_TRIPLET=x64-windows-static-release",
+    ]
+}
+```
 
 # 1. 编译步骤
 
