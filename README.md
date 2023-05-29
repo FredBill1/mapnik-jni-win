@@ -8,7 +8,7 @@
 
 `cmake.configureArgs`也要加上`-DVCPKG_TARGET_TRIPLET=x64-windows-static`
 
-之后用cmake配置好vs的工程之后，用vs打开`build/mapnik-jni.sln`，右键点在界面右边的解决方案下面的`mapnik-jni`项目，选`属性`，配置选`Release`，之后在`配置属性/C/C++/代码生成/运行库`中由`多线程DLL(/MD)`改成`多线程(/MT)`，再在`配置属性/链接器/输入/附加依赖项`里，把所有既在vcpkg的`debug`路径里出现又在`release`路径里出现的`.lib`文件只留`release`版。之后才能正常用vs编译。
+之后用cmake配置好vs的工程之后，用vs打开`build/mapnik-jni.sln`，右键点在界面右边的解决方案下面的`mapnik-jni`项目，选`属性`，配置选`Release`，之后在`配置属性/链接器/输入/附加依赖项`里，把所有既在vcpkg的`debug`路径里出现又在`release`路径里出现的`.lib`文件只留`release`版。之后才能正常用vs编译。
 
 # 1. 编译步骤
 
