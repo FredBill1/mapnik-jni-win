@@ -8,6 +8,8 @@ set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_FIND_DEBUG_MODE FALSE)
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBCMTD.lib")
 
+add_subdirectory(modules/mapnik-vector-tile)
+
 find_package(JNI REQUIRED)
 find_package(mapnik CONFIG REQUIRED)
 find_package(GDAL CONFIG REQUIRED)
@@ -32,4 +34,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     ICU::uc ICU::io ICU::dt ICU::in
     unofficial::Lerc::Lerc
     GEOS::geos_c
+    mapnik-vector-tile
 )

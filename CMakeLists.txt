@@ -4,6 +4,8 @@ project(mapnik-jni)
 
 set(CMAKE_CXX_STANDARD 17)
 
+add_subdirectory(modules/mapnik-vector-tile)
+
 find_package(JNI REQUIRED)
 find_package(mapnik CONFIG REQUIRED)
 find_package(GDAL CONFIG REQUIRED)
@@ -33,4 +35,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     mapnik::mapnik mapnik::json mapnik::wkt
     GDAL::GDAL
     ICU::uc ICU::io ICU::dt ICU::in
+    mapnik-vector-tile
 )
