@@ -1,4 +1,4 @@
-#include "jni/mapnik_Renderer.h"
+#include "mapnik_Renderer.h"
 
 #include "globals.hpp"
 

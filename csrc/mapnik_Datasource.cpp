@@ -1,4 +1,4 @@
-#include "jni/mapnik_Datasource.h"
+#include "mapnik_Datasource.h"
 
 #include "globals.hpp"
 // -- Datasource

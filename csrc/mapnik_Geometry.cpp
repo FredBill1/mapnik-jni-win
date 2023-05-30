@@ -1,4 +1,4 @@
-#include "jni/mapnik_Geometry.h"
+#include "mapnik_Geometry.h"
 
 #include "globals.hpp"
 /// -- Geometry class

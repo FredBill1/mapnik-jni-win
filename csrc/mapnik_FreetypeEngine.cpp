@@ -1,4 +1,4 @@
-﻿#include "jni/mapnik_FreetypeEngine.h"
+﻿#include "mapnik_FreetypeEngine.h"
 
 #include "globals.hpp"
 /*

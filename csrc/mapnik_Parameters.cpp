@@ -1,4 +1,4 @@
-#include "jni/mapnik_Parameters.h"
+#include "mapnik_Parameters.h"
 
 #include "globals.hpp"
 //// --- Parameters

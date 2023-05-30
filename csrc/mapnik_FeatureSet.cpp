@@ -1,4 +1,4 @@
-#include "jni/mapnik_FeatureSet.h"
+#include "mapnik_FeatureSet.h"
 
 #include "globals.hpp"
 /// -- FeatureSet class

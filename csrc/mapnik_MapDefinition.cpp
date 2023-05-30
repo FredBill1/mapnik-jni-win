@@ -1,4 +1,4 @@
-#include "jni/mapnik_MapDefinition.h"
+#include "mapnik_MapDefinition.h"
 
 #include "globals.hpp"
 //// --- Map class members

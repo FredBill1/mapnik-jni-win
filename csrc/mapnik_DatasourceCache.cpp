@@ -1,4 +1,4 @@
-#include "jni/mapnik_DatasourceCache.h"
+#include "mapnik_DatasourceCache.h"
 
 #include "globals.hpp"
 //// -- DatasourceCache

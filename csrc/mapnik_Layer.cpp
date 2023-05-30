@@ -1,4 +1,4 @@
-#include "jni/mapnik_Layer.h"
+#include "mapnik_Layer.h"
 
 #include "globals.hpp"
 //// -- Layer class

@@ -1,4 +1,4 @@
-#include "jni/mapnik_Image.h"
+#include "mapnik_Image.h"
 
 #include "globals.hpp"
 /*

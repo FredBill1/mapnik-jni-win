@@ -1,5 +1,5 @@
 
-#include "jni/mapnik_Projection.h"
+#include "mapnik_Projection.h"
 
 #include "globals.hpp"
 

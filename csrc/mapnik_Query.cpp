@@ -1,4 +1,4 @@
-#include "jni/mapnik_Query.h"
+#include "mapnik_Query.h"
 
 #include "globals.hpp"
 /// -- Query class

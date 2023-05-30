@@ -1,4 +1,4 @@
-#include "jni/mapnik_FeatureTypeStyle.h"
+#include "mapnik_FeatureTypeStyle.h"
 
 #include "globals.hpp"
 /// -- FeatureTypeStyle class
