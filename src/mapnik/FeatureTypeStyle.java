@@ -9,16 +9,18 @@ import java.util.Set;
  *
  */
 public class FeatureTypeStyle extends NativeObject {
-	private static native long alloc();
-	native void dealloc(long ptr);
-	
-	public FeatureTypeStyle() {
-		ptr=alloc();
-	}
-	
-	/**
-	 * Collect all attribute names referenced in rules
-	 * @return Set of attributes
-	 */
-	public native Set<String> collectAttributes();
+    private static native long alloc();
+
+    native void dealloc(long ptr);
+
+    public FeatureTypeStyle() {
+        ptr = alloc();
+    }
+
+    /**
+     * Collect all attribute names referenced in rules
+     * 
+     * @return Set of attributes
+     */
+    public native Set<String> collectAttributes();
 }
