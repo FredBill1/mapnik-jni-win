@@ -1,3 +1,27 @@
+# windows下单dll编译说明：
+
+要用这个来装mapnik的static版
+
+```shell
+.\vcpkg\vcpkg install mapnik[input-csv,input-gdal,input-geobuf,input-geojson,input-ogr,input-pgraster,input-postgis,input-raster,input-shape,input-sqlite,input-topojson] --triplet=x64-windows-static-release
+```
+
+用`CMakeLists_single_dll.txt`来配置
+
+`cmake.configureArgs`也要加上`-DVCPKG_TARGET_TRIPLET=x64-windows-static-release`
+
+`.vscode/settings.json`:
+
+```json
+{
+    "cmake.configureArgs": [
+        "-DBoost_NO_WARN_NEW_VERSIONS=ON",
+        "-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "-DVCPKG_TARGET_TRIPLET=x64-windows-static-release",
+    ]
+}
+```
+
 # 1. 编译步骤
 
 ## 1.1 安装vcpkg
