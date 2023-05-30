@@ -22,8 +22,6 @@
 #include <mapnik/version.hpp>
 #include <mapnik/vertex_processor.hpp>
 
-#include "mapnikjni.h"
-
 //// -- Globals
 
 // clang-format off
