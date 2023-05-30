@@ -1,3 +1,4 @@
+#include "globals.hpp"
 /// -- FeatureTypeStyle class
 /*
  * Class:     mapnik_FeatureTypeStyle

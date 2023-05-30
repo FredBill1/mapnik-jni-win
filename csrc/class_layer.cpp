@@ -1,3 +1,4 @@
+#include "globals.hpp"
 //// -- Layer class
 /*
  * Class:     mapnik_Layer
