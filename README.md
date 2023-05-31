@@ -3,7 +3,7 @@
 要用这个来装mapnik的static版
 
 ```shell
-.\vcpkg\vcpkg install mapnik[input-csv,input-gdal,input-geobuf,input-geojson,input-ogr,input-pgraster,input-postgis,input-raster,input-shape,input-sqlite,input-topojson] --triplet=x64-windows-static-release
+.\vcpkg\vcpkg install mapnik[input-csv,input-gdal,input-geobuf,input-geojson,input-ogr,input-pgraster,input-postgis,input-raster,input-shape,input-sqlite,input-topojson] mapbox-wagyu --triplet=x64-windows-static-release
 ```
 
 用`CMakeLists_single_dll.txt`来配置
@@ -45,7 +45,7 @@ git clone https://github.com/microsoft/vcpkg
 使用如下指令下载并编译mapnik和它的依赖
 
 ```shell
-.\vcpkg\vcpkg install mapnik[input-csv,input-gdal,input-geobuf,input-geojson,input-ogr,input-pgraster,input-postgis,input-raster,input-shape,input-sqlite,input-topojson]
+.\vcpkg\vcpkg install mapnik[input-csv,input-gdal,input-geobuf,input-geojson,input-ogr,input-pgraster,input-postgis,input-raster,input-shape,input-sqlite,input-topojson] mapbox-wagyu
 ```
 
 将编译完成后的路径添加到环境变量`PATH`中：
