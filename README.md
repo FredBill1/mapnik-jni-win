@@ -8,7 +8,7 @@
 
 用`CMakeLists_single_dll.txt`来配置
 
-`cmake.configureArgs`也要加上`-DVCPKG_TARGET_TRIPLET=x64-windows-static-release`
+`cmake.configureArgs`也要加上`-DVCPKG_TARGET_TRIPLET=x64-windows-static-release -DMAPNIK_JNI_MSVC_USE_STATIC_LINKING=ON`
 
 `.vscode/settings.json`:
 
@@ -18,6 +18,7 @@
         "-DBoost_NO_WARN_NEW_VERSIONS=ON",
         "-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake",
         "-DVCPKG_TARGET_TRIPLET=x64-windows-static-release",
+        "-DMAPNIK_JNI_MSVC_USE_STATIC_LINKING=ON",
     ]
 }
 ```
