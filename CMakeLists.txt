@@ -39,3 +39,4 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     ${PROJECT_NAME}_native
 )
 target_include_directories(${PROJECT_NAME} PRIVATE ${JNI_INCLUDE_DIRS})
+target_precompile_headers(${PROJECT_NAME} PRIVATE "csrc/globals.hpp")

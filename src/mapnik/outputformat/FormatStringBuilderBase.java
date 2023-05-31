@@ -9,7 +9,7 @@ public abstract class FormatStringBuilderBase {
     private String formatString = null;
 
     protected FormatStringBuilderBase() {
-        options = new HashMap();
+        options = new HashMap<String, String>();
     }
 
     protected FormatStringBuilderBase(Map<String, String> options) {
