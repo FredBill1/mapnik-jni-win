@@ -406,6 +406,8 @@ JNIEXPORT jbyteArray JNICALL Java_mapnik_VectorTile_getDataImpl(JNIEnv *env, job
     TRAILER(NULL);
 }
 
+// TODO: info
+
 /*
  * Class:     mapnik_VectorTile
  * Method:    layerImpl
@@ -723,3 +725,5 @@ JNIEXPORT jstring JNICALL Java_mapnik_VectorTile_toGeoJSON__J(JNIEnv *env, jobje
     return env->NewStringUTF(result.c_str());
     TRAILER(NULL);
 }
+
+// TODO: toJSON
