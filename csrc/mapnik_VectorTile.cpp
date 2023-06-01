@@ -486,9 +486,9 @@ JNIEXPORT jobjectArray JNICALL Java_mapnik_VectorTile_paintedLayers(JNIEnv *env,
 // TODO: queryMany
 
 template <typename Renderer>
-void process_layers(Renderer &ren, mapnik::request const &m_req, mapnik::projection const &map_proj,
-                    std::vector<mapnik::layer> const &layers, double scale_denom, std::string const &map_srs,
-                    mapnik::vector_tile_impl::merc_tile *tile) {
+static void process_layers(Renderer &ren, mapnik::request const &m_req, mapnik::projection const &map_proj,
+                           std::vector<mapnik::layer> const &layers, double scale_denom, std::string const &map_srs,
+                           mapnik::vector_tile_impl::merc_tile *tile) {
     for (auto const &lyr : layers) {
         if (lyr.visible(scale_denom)) {
             protozero::pbf_reader layer_msg;
@@ -577,7 +577,8 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_setDataImpl(JNIEnv *env, jobject o
     TRAILER_VOID;
 }
 
-bool layer_to_geojson(protozero::pbf_reader const &layer, std::string &result, unsigned x, unsigned y, unsigned z) {
+static bool layer_to_geojson(protozero::pbf_reader const &layer, std::string &result, unsigned x, unsigned y,
+                             unsigned z) {
     mapnik::vector_tile_impl::tile_datasource_pbf ds(layer, x, y, z);
     mapnik::projection wgs84("+init=epsg:4326", true);
     mapnik::projection merc("+init=epsg:3857", true);
@@ -615,7 +616,7 @@ bool layer_to_geojson(protozero::pbf_reader const &layer, std::string &result, u
     return !first;
 }
 
-void write_geojson_array(std::string &result, mapnik::vector_tile_impl::merc_tile *v) {
+static void write_geojson_array(std::string &result, mapnik::vector_tile_impl::merc_tile *v) {
     protozero::pbf_reader tile_msg = v->get_reader();
     result += "[";
     bool first = true;
@@ -640,7 +641,7 @@ void write_geojson_array(std::string &result, mapnik::vector_tile_impl::merc_til
     result += "]";
 }
 
-void write_geojson_all(std::string &result, mapnik::vector_tile_impl::merc_tile *v) {
+static void write_geojson_all(std::string &result, mapnik::vector_tile_impl::merc_tile *v) {
     protozero::pbf_reader tile_msg = v->get_reader();
     result += "{\"type\":\"FeatureCollection\",\"features\":[";
     bool first = true;
@@ -660,7 +661,8 @@ void write_geojson_all(std::string &result, mapnik::vector_tile_impl::merc_tile 
     result += "]}";
 }
 
-bool write_geojson_layer_index(std::string &result, std::size_t layer_idx, mapnik::vector_tile_impl::merc_tile *v) {
+static bool write_geojson_layer_index(std::string &result, std::size_t layer_idx,
+                                      mapnik::vector_tile_impl::merc_tile *v) {
     protozero::pbf_reader layer_msg;
     if (v->layer_reader(layer_idx, layer_msg) && v->get_layers().size() > layer_idx) {
         std::string layer_name = v->get_layers()[layer_idx];
@@ -675,7 +677,8 @@ bool write_geojson_layer_index(std::string &result, std::size_t layer_idx, mapni
     // LCOV_EXCL_STOP
 }
 
-bool write_geojson_layer_name(std::string &result, std::string const &name, mapnik::vector_tile_impl::merc_tile *v) {
+static bool write_geojson_layer_name(std::string &result, std::string const &name,
+                                     mapnik::vector_tile_impl::merc_tile *v) {
     protozero::pbf_reader layer_msg;
     if (v->layer_reader(name, layer_msg)) {
         result += "{\"type\":\"FeatureCollection\",";
