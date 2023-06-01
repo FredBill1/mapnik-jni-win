@@ -22,6 +22,8 @@
 #include <mapnik/version.hpp>
 #include <mapnik/vertex_processor.hpp>
 
+#include "vector_tile_merc_tile.hpp"
+
 //// -- Globals
 
 // clang-format off
@@ -137,6 +139,7 @@ inline jlong ASSERT_LONG_POINTER(jlong ptr) {
     }
 
 // Pointer access macros
+// clang-format off
 #define LOAD_OBJECT_POINTER(object) ((void*)(ASSERT_LONG_POINTER(env->GetLongField(object, FIELD_PTR))))
 #define LOAD_MAP_POINTER(object) (static_cast<mapnik::Map*>(LOAD_OBJECT_POINTER(object)))
 #define LOAD_LAYER_POINTER(object) (static_cast<mapnik::layer*>(LOAD_OBJECT_POINTER(object)))
@@ -145,10 +148,11 @@ inline jlong ASSERT_LONG_POINTER(jlong ptr) {
 #define LOAD_PROJECTION_POINTER(object) (static_cast<mapnik::projection*>(LOAD_OBJECT_POINTER(object)))
 #define LOAD_QUERY_POINTER(object) (static_cast<mapnik::query*>(LOAD_OBJECT_POINTER(object)))
 #define LOAD_FEATURESET_POINTER(object) (static_cast<mapnik::featureset_ptr*>(LOAD_OBJECT_POINTER(object)))
-#define LOAD_FEATURE_POINTER(object) \
-    (static_cast<mapnik::feature_ptr*>(TO_POINTER(env->GetLongField(object, FIELD_FEATURESET_FEATURE_PTR))))
+#define LOAD_FEATURE_POINTER(object) (static_cast<mapnik::feature_ptr*>(TO_POINTER(env->GetLongField(object, FIELD_FEATURESET_FEATURE_PTR))))
 #define LOAD_GEOMETRY_POINTER(object) (static_cast<mapnik::geometry::geometry<double>*>(LOAD_OBJECT_POINTER(object)))
 #define LOAD_IMAGE_POINTER(object) (static_cast<mapnik::image_rgba8*>(LOAD_OBJECT_POINTER(object)))
+#define LOAD_VECTOR_TILE_POINTER(object) (static_cast<mapnik::vector_tile_impl::merc_tile*>(LOAD_OBJECT_POINTER(object)))
+// clang-format on
 
 class refjavastring {
     JNIEnv* env;
