@@ -44,7 +44,7 @@ public class VectorTile extends NativeObject {
 
     public native void setBufferSize(int size);
 
-    public class AddOrSetDataOptions {
+    static public class AddOrSetDataOptions {
         public boolean validate = false;
         public boolean upgrade = false;
     }
@@ -63,7 +63,7 @@ public class VectorTile extends NativeObject {
         evenOdd, nonZero, positive, negative
     }
 
-    public class AddGeoJsonOptions {
+    static public class AddGeoJsonOptions {
         public double area_threshold = 0.1;
         public double simplify_distance = 0.0;
         public boolean strictly_simple = true;
@@ -93,7 +93,7 @@ public class VectorTile extends NativeObject {
         webp, jpeg, png, tiff
     }
 
-    public class AddImageOptions {
+    static public class AddImageOptions {
         public ImageScaling image_scaling = ImageScaling.bilinear;
         public ImageFormat image_format = ImageFormat.webp;
     }
@@ -119,7 +119,7 @@ public class VectorTile extends NativeObject {
         async, deferred
     }
 
-    public class CompositeOptions {
+    static public class CompositeOptions {
         public double scale_factor = 1.0;
         public int offset_x = 0;
         public int offset_y = 0;
@@ -168,7 +168,7 @@ public class VectorTile extends NativeObject {
         DEFAULT, FILTERED, HUFFMAN_ONLY, RLE, FIXED
     }
 
-    public class GetDataOptions {
+    static public class GetDataOptions {
         public Compression compression = Compression.none;
         public int level = 0;
         public CompressionStrategy strategy = CompressionStrategy.DEFAULT;
@@ -176,6 +176,10 @@ public class VectorTile extends NativeObject {
 
     public byte[] getData(GetDataOptions options) {
         return getDataImpl(options.compression == Compression.gzip, options.level, options.strategy.ordinal());
+    }
+
+    public byte[] getData() {
+        return getData(new GetDataOptions());
     }
 
     public native byte[] getDataImpl(boolean compress, int level, int strategy);
@@ -194,7 +198,7 @@ public class VectorTile extends NativeObject {
 
     public native String[] paintedLayers();
 
-    public class QueryOptions {
+    static public class QueryOptions {
         public double tolerance = 0.0;
         public String layer = null;
     }
@@ -205,7 +209,7 @@ public class VectorTile extends NativeObject {
 
     public native FeatureSet queryImpl(double longitude, double latitude, double tolerance, String layer);
 
-    public class QueryManyOptions {
+    static public class QueryManyOptions {
         public double tolerance = 0.0;
         public String layer = null;
         public String[] fields = null;
@@ -221,11 +225,11 @@ public class VectorTile extends NativeObject {
         cairo, svg
     }
 
-    public class RenderOptions {
+    static public class RenderOptions {
         public long[] zxy = null;
-        public int buffer_size = 0;
+        public int buffer_size = 256;
         public double scale = 1.0;
-        public double scale_denominator = 0.0;
+        public double scale_denominator = 1.0;
     }
 
     public void render(MapDefinition map, Image surface, RenderOptions options) {
@@ -240,30 +244,18 @@ public class VectorTile extends NativeObject {
     public native void renderImpl(MapDefinition map, Image surface, long[] zxy, int buffer_size, double scale,
             double scale_denominator);
 
-    public class NotSimpleFeature {
-        NotSimpleFeature(String layer, long feature_id) {
-            this.layer = layer;
-            this.feature_id = feature_id;
-        }
-
-        public final String layer;
-        public final long feature_id;
+    static public class NotSimpleFeature {
+        public String layer;
+        public long feature_id;
     }
 
     public native NotSimpleFeature[] reportGeometrySimplicity();
 
-    public class NotValidFeature {
-        NotValidFeature(String message, String layer, long feature_id, String geojson) {
-            this.message = message;
-            this.layer = layer;
-            this.feature_id = feature_id;
-            this.geojson = geojson;
-        }
-
-        public final String message;
-        public final String layer;
-        public final long feature_id;
-        public final String geojson;
+    static public class NotValidFeature {
+        public String message;
+        public String layer;
+        public long feature_id;
+        public String geojson;
     }
 
     public native NotValidFeature[] reportGeometryValidity(Object options);

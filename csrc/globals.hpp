@@ -9,20 +9,30 @@
 #include <mapnik/datasource.hpp>
 #include <mapnik/datasource_cache.hpp>
 #include <mapnik/feature.hpp>
+#include <mapnik/feature_factory.hpp>
 #include <mapnik/feature_type_style.hpp>
 #include <mapnik/font_engine_freetype.hpp>
 #include <mapnik/geometry/geometry_type.hpp>
+#include <mapnik/geometry/reprojection.hpp>
 #include <mapnik/image_util.hpp>
 #include <mapnik/layer.hpp>
 #include <mapnik/load_map.hpp>
 #include <mapnik/map.hpp>
 #include <mapnik/mapnik.hpp>
+#include <mapnik/memory_datasource.hpp>
 #include <mapnik/projection.hpp>
+#include <mapnik/raster.hpp>
 #include <mapnik/save_map.hpp>
+#include <mapnik/scale_denominator.hpp>
+#include <mapnik/util/feature_to_geojson.hpp>
 #include <mapnik/version.hpp>
 #include <mapnik/vertex_processor.hpp>
 
+#include "vector_tile_composite.hpp"
+#include "vector_tile_config.hpp"
+#include "vector_tile_load_tile.hpp"
 #include "vector_tile_merc_tile.hpp"
+#include "vector_tile_projection.hpp"
 
 //// -- Globals
 

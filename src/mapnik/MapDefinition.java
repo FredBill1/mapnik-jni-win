@@ -156,4 +156,8 @@ public class MapDefinition extends NativeObject {
     public String saveMapToString() {
         return saveMapToString(false);
     }
+
+    public native void render(VectorTile tile);
+
+    public native void render(Image image);
 }

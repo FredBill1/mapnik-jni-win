@@ -1,13 +1,6 @@
 #include "mapnik_VectorTile.h"
 
-#include <mapnik/geometry/reprojection.hpp>
-#include <mapnik/memory_datasource.hpp>
-#include <mapnik/util/feature_to_geojson.hpp>
-
-#include "vector_tile_composite.hpp"
-#include "vector_tile_config.hpp"
-#include "vector_tile_load_tile.hpp"
-#include "vector_tile_projection.hpp"
+#include "globals.hpp"
 
 constexpr char const *const image_format_names[]{"webp", "jpeg", "png", "tiff"};
 constexpr std::launch threading_modes[]{std::launch::async, std::launch::deferred};
@@ -580,8 +573,8 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_setDataImpl(JNIEnv *env, jobject o
 static bool layer_to_geojson(protozero::pbf_reader const &layer, std::string &result, unsigned x, unsigned y,
                              unsigned z) {
     mapnik::vector_tile_impl::tile_datasource_pbf ds(layer, x, y, z);
-    mapnik::projection wgs84("+init=epsg:4326", true);
-    mapnik::projection merc("+init=epsg:3857", true);
+    mapnik::projection wgs84("epsg:4326", true);
+    mapnik::projection merc("epsg:3857", true);
     mapnik::proj_transform prj_trans(merc, wgs84);
     // This mega box ensures we capture all features, including those
     // outside the tile extent. Geometries outside the tile extent are
@@ -592,7 +585,7 @@ static bool layer_to_geojson(protozero::pbf_reader const &layer, std::string &re
     for (auto const &item : ld.get_descriptors()) { q.add_property_name(item.get_name()); }
     mapnik::featureset_ptr fs = ds.features(q);
     bool first = true;
-    if (fs) {
+    if (fs && mapnik::is_valid(fs)) {
         mapnik::feature_ptr feature;
         while ((feature = fs->next())) {
             if (first) {

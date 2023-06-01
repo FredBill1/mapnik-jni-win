@@ -636,3 +636,33 @@ JNIEXPORT jint JNICALL Java_mapnik_MapDefinition__1getAspectFixMode(JNIEnv* env,
     return (jint)map->get_aspect_fix_mode();
     TRAILER(0);
 }
+
+/*
+ * Class:     mapnik_MapDefinition
+ * Method:    render
+ * Signature: (Lmapnik/VectorTile;)V
+ */
+JNIEXPORT void JNICALL Java_mapnik_MapDefinition_render__Lmapnik_VectorTile_2(JNIEnv* env, jobject mapobject,
+                                                                              jobject tilej) {
+    PREAMBLE;
+    mapnik::Map const& map = *LOAD_MAP_POINTER(mapobject);
+    mapnik::vector_tile_impl::processor ren(map);
+    std::cout<<"map.layer_count()"<<map.layer_count()<<std::endl;
+    ren.set_fill_type(mapnik::vector_tile_impl:: polygon_fill_type::positive_fill);
+    ren.set_scale_factor(1);
+    ren.set_scaling_method(mapnik::SCALING_NEAR);
+    ren.set_image_format("webp");
+    ren.set_threading_mode(std::launch::deferred);
+    auto tile = LOAD_VECTOR_TILE_POINTER(tilej);
+    ren.update_tile(*tile, 0);
+    std::cout<<"tile->get_layers().size() "<<tile->get_layers().size()<<std::endl;
+    TRAILER_VOID;
+}
+
+/*
+ * Class:     mapnik_MapDefinition
+ * Method:    render
+ * Signature: (Lmapnik/Image;)V
+ */
+JNIEXPORT void JNICALL Java_mapnik_MapDefinition_render__Lmapnik_Image_2(JNIEnv* env, jobject mapobject,
+                                                                         jobject imagej);
