@@ -56,6 +56,10 @@ public class MapDefinition extends NativeObject {
         ptr = copy(other.ptr);
     }
 
+    public MapDefinition clone() {
+        return new MapDefinition(this);
+    }
+
     public native void loadMap(String filename, boolean strict);
 
     public native void loadMapString(String str, boolean strict, String basePath);
@@ -83,6 +87,7 @@ public class MapDefinition extends NativeObject {
     public native void setBasePath(String basePath);
 
     // Layers
+    // TODO: change the implementation
     public native int getLayerCount();
 
     public native Layer getLayer(int index);
@@ -92,6 +97,10 @@ public class MapDefinition extends NativeObject {
     public native void removeLayer(int index);
 
     public native void removeAllLayers();
+
+    public void clear() {
+        removeAllLayers();
+    }
 
     public native void addLayer(Layer layer);
 
