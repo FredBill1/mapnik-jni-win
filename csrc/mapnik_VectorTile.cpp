@@ -278,7 +278,6 @@ JNIEXPORT jdoubleArray JNICALL Java_mapnik_VectorTile_bufferedExtent(JNIEnv *env
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_mapnik_VectorTile_clear(JNIEnv *env, jobject obj) {
-    // TODO: noexcept?
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     tile->clear();
@@ -343,7 +342,6 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_compositeImpl(
  * Signature: ()Z
  */
 JNIEXPORT jboolean JNICALL Java_mapnik_VectorTile_empty(JNIEnv *env, jobject obj) {
-    // TODO: noexcept?
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     return tile->is_empty();
@@ -516,7 +514,6 @@ static void process_layers(Renderer &ren, mapnik::request const &m_req, mapnik::
 JNIEXPORT void JNICALL Java_mapnik_VectorTile_renderImpl(JNIEnv *env, jobject obj, jobject mapj, jobject surfacej,
                                                          jlongArray zxy, jint buffer_size, jdouble scale,
                                                          jdouble scale_denominator, jobject variablesj) {
-    // TODO: dont know what `Grid` and `CairoSurface` is, only using `Image` type
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
 

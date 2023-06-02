@@ -30,6 +30,10 @@ inline void jni_map_to_mapnik_attributes(JNIEnv* env, jobject mapj, mapnik::attr
         } else if (env->IsInstanceOf(value, CLASS_DOUBLE)) {
             jdouble valued = env->CallDoubleMethod(value, METHOD_DOUBLE_DOUBLEVALUE);
             mapnik_attributes[keyc] = mapnik::value_double(valued);
+        } else {
+            throw std::exception(
+                "Unknown type of value in `mapnik_attributes`, the value must be a `String`, `Integer`, `Boolean`, "
+                "`Long`, `Double` or `null`");
         }
         env->ReleaseStringUTFChars(key, keyc);
         env->DeleteLocalRef(entryj);
