@@ -470,16 +470,16 @@ JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_info(JNIEnv *env, jclass, jbyte
                 env->SetLongField(layer_obj, FIELD_VECTOR_TILE_INFO_LAYER_UNKNOWN_FEATURES, unknown_feature_count);
                 env->SetLongField(layer_obj, FIELD_VECTOR_TILE_INFO_LAYER_RASTER_FEATURES, raster_feature_count);
                 env->SetIntField(layer_obj, FIELD_VECTOR_TILE_INFO_LAYER_VERSION, layer_version);
-                jobjectArray err_arr = env->NewObjectArray(layer_errors.size(), CLASS_STRING, NULL);
                 if (!layer_errors.empty()) {
                     has_errors = true;
+                    jobjectArray err_arr = env->NewObjectArray(layer_errors.size(), CLASS_STRING, NULL);
                     std::size_t i = 0;
                     for (auto const &e : layer_errors)
                         env->SetObjectArrayElement(
                             err_arr, i++,
                             env->NewStringUTF(mapnik::vector_tile_impl::validity_error_to_string(e).c_str()));
+                    env->SetObjectField(layer_obj, FIELD_VECTOR_TILE_INFO_LAYER_ERRORS, err_arr);
                 }
-                env->SetObjectField(layer_obj, FIELD_VECTOR_TILE_INFO_LAYER_ERRORS, err_arr);
                 if (first_layer) {
                     version = layer_version;
                 } else {
@@ -502,13 +502,15 @@ JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_info(JNIEnv *env, jclass, jbyte
     for (jobject layer : layers) env->SetObjectArrayElement(layersj, i++, layer);
     env->SetObjectField(out, FIELD_VECTOR_TILE_INFO_LAYERS, layersj);
     env->SetBooleanField(out, FIELD_VECTOR_TILE_INFO_ERRORS, has_errors);
-    jobjectArray err_arr = env->NewObjectArray(errors.size(), CLASS_STRING, NULL);
-    i = 0;
-    for (auto const &e : errors) {
-        env->SetObjectArrayElement(err_arr, i++,
-                                   env->NewStringUTF(mapnik::vector_tile_impl::validity_error_to_string(e).c_str()));
+    if (!errors.empty()) {
+        jobjectArray err_arr = env->NewObjectArray(errors.size(), CLASS_STRING, NULL);
+        i = 0;
+        for (auto const &e : errors) {
+            env->SetObjectArrayElement(
+                err_arr, i++, env->NewStringUTF(mapnik::vector_tile_impl::validity_error_to_string(e).c_str()));
+        }
+        env->SetObjectField(out, FIELD_VECTOR_TILE_INFO_TILE_ERRORS, err_arr);
     }
-    env->SetObjectField(out, FIELD_VECTOR_TILE_INFO_TILE_ERRORS, err_arr);
     return out;
     TRAILER(NULL);
 }
