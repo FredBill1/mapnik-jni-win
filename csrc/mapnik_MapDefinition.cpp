@@ -641,15 +641,14 @@ JNIEXPORT jint JNICALL Java_mapnik_MapDefinition__1getAspectFixMode(JNIEnv* env,
 
 /*
  * Class:     mapnik_MapDefinition
- * Method:    renderImpl
- * Signature: (Lmapnik/VectorTile;IDDIIIIDZZIIDLjava/util/Map;Z)V
+ * Method:    renderVectorTileImpl
+ * Signature: (Lmapnik/VectorTile;DDIIIIDZZIIDLjava/util/Map;Z)V
  */
-JNIEXPORT void JNICALL Java_mapnik_MapDefinition_renderImpl__Lmapnik_VectorTile_2IDDIIIIDZZIIDLjava_util_Map_2Z(
-    JNIEnv* env, jobject mapj, jobject tilej, jint buffer_size, jdouble scale, jdouble scale_denominator, jint offset_x,
-    jint offset_y, jint image_scaling, jint image_format, jdouble area_threshold, jboolean strictly_simple,
+JNIEXPORT void JNICALL Java_mapnik_MapDefinition_renderVectorTileImpl(
+    JNIEnv* env, jobject mapj, jobject tilej, jdouble scale, jdouble scale_denominator, jint offset_x, jint offset_y,
+    jint image_scaling, jint image_format, jdouble area_threshold, jboolean strictly_simple,
     jboolean multi_polygon_union, jint fill_type, jint threading_mode, jdouble simplify_distance, jobject variablesj,
     jboolean process_all_rings) {
-    (void)buffer_size;
     PREAMBLE;
     auto map = LOAD_MAP_POINTER(mapj);
     auto tile = LOAD_VECTOR_TILE_POINTER(tilej);
@@ -672,24 +671,13 @@ JNIEXPORT void JNICALL Java_mapnik_MapDefinition_renderImpl__Lmapnik_VectorTile_
 
 /*
  * Class:     mapnik_MapDefinition
- * Method:    renderImpl
- * Signature: (Lmapnik/Image;IDDIIIIDZZIIDLjava/util/Map;Z)V
+ * Method:    renderImageImpl
+ * Signature: (Lmapnik/Image;IDDIILjava/util/Map;)V
  */
-JNIEXPORT void JNICALL Java_mapnik_MapDefinition_renderImpl__Lmapnik_Image_2IDDIIIIDZZIIDLjava_util_Map_2Z(
-    JNIEnv* env, jobject mapj, jobject imagej, jint buffer_size, jdouble scale, jdouble scale_denominator,
-    jint offset_x, jint offset_y, jint image_scaling, jint image_format, jdouble area_threshold,
-    jboolean strictly_simple, jboolean multi_polygon_union, jint fill_type, jint threading_mode,
-    jdouble simplify_distance, jobject variablesj, jboolean process_all_rings) {
-    (void)image_scaling;
-    (void)image_format;
-    (void)area_threshold;
-    (void)strictly_simple;
-    (void)multi_polygon_union;
-    (void)fill_type;
-    (void)threading_mode;
-    (void)simplify_distance;
-    (void)process_all_rings;
-
+JNIEXPORT void JNICALL Java_mapnik_MapDefinition_renderImageImpl(JNIEnv* env, jobject mapj, jobject imagej,
+                                                                 jint buffer_size, jdouble scale,
+                                                                 jdouble scale_denominator, jint offset_x,
+                                                                 jint offset_y, jobject variablesj) {
     PREAMBLE;
     auto map = LOAD_MAP_POINTER(mapj);
     auto image = LOAD_IMAGE_POINTER(imagej);

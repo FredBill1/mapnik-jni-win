@@ -163,8 +163,7 @@ public class MapDefinition extends NativeObject {
         return saveMapToString(false);
     }
 
-    static public class RenderOptions {
-        int buffer_size = 0;
+    static public class RenderVectorTileOptions {
         double scale = 1.0;
         double scale_denominator = 0.0;
         int offset_x = 0;
@@ -181,37 +180,41 @@ public class MapDefinition extends NativeObject {
         boolean process_all_rings = false;
     }
 
-    native void renderImpl(VectorTile tile, int buffer_size, double scale, double scale_denominator, int offset_x,
+    native void renderVectorTileImpl(VectorTile tile, double scale, double scale_denominator, int offset_x,
             int offset_y, int image_scaling, int image_format, double area_threshold, boolean strictly_simple,
             boolean multi_polygon_union, int fill_type, int threading_mode, double simplify_distance,
             Map<String, Object> variables, boolean process_all_rings);
 
-    public void render(VectorTile tile, RenderOptions options) {
-        renderImpl(tile, options.buffer_size, options.scale, options.scale_denominator, options.offset_x,
-                options.offset_y, options.image_scaling.ordinal(), options.image_format.ordinal(),
-                options.area_threshold, options.strictly_simple, options.multi_polygon_union,
-                options.fill_type.ordinal(), options.threading_mode.ordinal(), options.simplify_distance,
-                options.variables, options.process_all_rings);
+    public void renderVectorTile(VectorTile tile, RenderVectorTileOptions options) {
+        renderVectorTileImpl(tile, options.scale, options.scale_denominator, options.offset_x, options.offset_y,
+                options.image_scaling.ordinal(), options.image_format.ordinal(), options.area_threshold,
+                options.strictly_simple, options.multi_polygon_union, options.fill_type.ordinal(),
+                options.threading_mode.ordinal(), options.simplify_distance, options.variables,
+                options.process_all_rings);
     }
 
-    public void render(VectorTile tile) {
-        render(tile, new RenderOptions());
+    public void renderVectorTile(VectorTile tile) {
+        renderVectorTile(tile, new RenderVectorTileOptions());
     }
 
-    native void renderImpl(Image image, int buffer_size, double scale, double scale_denominator, int offset_x,
-            int offset_y, int image_scaling, int image_format, double area_threshold, boolean strictly_simple,
-            boolean multi_polygon_union, int fill_type, int threading_mode, double simplify_distance,
-            Map<String, Object> variables, boolean process_all_rings);
-
-    public void render(Image image, RenderOptions options) {
-        renderImpl(image, options.buffer_size, options.scale, options.scale_denominator, options.offset_x,
-                options.offset_y, options.image_scaling.ordinal(), options.image_format.ordinal(),
-                options.area_threshold, options.strictly_simple, options.multi_polygon_union,
-                options.fill_type.ordinal(), options.threading_mode.ordinal(), options.simplify_distance,
-                options.variables, options.process_all_rings);
+    static public class RenderImageOptions {
+        int buffer_size = 0;
+        double scale = 1.0;
+        double scale_denominator = 0.0;
+        int offset_x = 0;
+        int offset_y = 0;
+        Map<String, Object> variables = null;
     }
 
-    public void render(Image image) {
-        render(image, new RenderOptions());
+    native void renderImageImpl(Image image, int buffer_size, double scale, double scale_denominator, int offset_x,
+            int offset_y, Map<String, Object> variables);
+
+    public void renderImage(Image image, RenderImageOptions options) {
+        renderImageImpl(image, options.buffer_size, options.scale, options.scale_denominator, options.offset_x,
+                options.offset_y, options.variables);
+    }
+
+    public void renderImage(Image image) {
+        renderImage(image, new RenderImageOptions());
     }
 }

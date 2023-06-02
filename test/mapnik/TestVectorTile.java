@@ -35,11 +35,14 @@ public class TestVectorTile {
         m.zoomToBox(bounds);
         Image image = new Image(512, 512);
         VectorTile vt = new mapnik.VectorTile(3, 3, 2);
-        m.render(vt);
+        m.renderVectorTile(vt);
         vt.render(m, image);
-        m.close();
         image.saveToFile("C:/Users/17819/GEO/mapnik-jni-win/test.png", "png");
+        Image image2 = new Image(4096, 4096);
+        m.renderImage(image2);
+        image2.saveToFile("C:/Users/17819/GEO/mapnik-jni-win/test2.png", "png");
 
+        m.close();
         vt.close();
         image.close();
     }
