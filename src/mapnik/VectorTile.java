@@ -1,5 +1,14 @@
 package mapnik;
 
+import java.util.Map;
+
+import mapnik.options.Compression;
+import mapnik.options.CompressionStrategy;
+import mapnik.options.ImageFormat;
+import mapnik.options.ImageScaling;
+import mapnik.options.PolygonFillType;
+import mapnik.options.Launch;
+
 /**
  * A tile generator built according to the Mapbox Vector Tile specification for
  * compressed and simplified tiled vector data.
@@ -59,10 +68,6 @@ public class VectorTile extends NativeObject {
 
     public native void addDataImpl(byte[] buffer, boolean validate, boolean upgrade);
 
-    public enum PolygonFillType {
-        evenOdd, nonZero, positive, negative
-    }
-
     static public class AddGeoJsonOptions {
         public double area_threshold = 0.1;
         public double simplify_distance = 0.0;
@@ -83,15 +88,6 @@ public class VectorTile extends NativeObject {
 
     private native void addGeoJSONImpl(String geojson, String name, double area_threshold, double simplify_distance,
             boolean strictly_simple, boolean multi_polygon_union, int fill_type, boolean process_all_rings);
-
-    public enum ImageScaling {
-        near, bilinear, bicubic, spline16, spline36, hanning, hamming, hermite, kaiser, quadric, catrom, gaussian,
-        bessel, mitchell, sinc, lanczos, blackman
-    }
-
-    public enum ImageFormat {
-        webp, jpeg, png, tiff
-    }
 
     static public class AddImageOptions {
         public ImageScaling image_scaling = ImageScaling.bilinear;
@@ -114,10 +110,6 @@ public class VectorTile extends NativeObject {
     public native double[] bufferedExtent();
 
     public native void clear();
-
-    public enum Launch {
-        async, deferred
-    }
 
     static public class CompositeOptions {
         public double scale_factor = 1.0;
@@ -159,14 +151,6 @@ public class VectorTile extends NativeObject {
     public native String[] emptyLayers();
 
     public native double[] extent();
-
-    public enum Compression {
-        none, gzip
-    }
-
-    public enum CompressionStrategy {
-        DEFAULT, FILTERED, HUFFMAN_ONLY, RLE, FIXED
-    }
 
     static public class GetDataOptions {
         public Compression compression = Compression.none;
@@ -221,20 +205,17 @@ public class VectorTile extends NativeObject {
 
     public native Object queryManyImpl(float[][] array, double tolerance, String layer, String[] fields);
 
-    enum Renderer {
-        cairo, svg
-    }
-
     static public class RenderOptions {
         public long[] zxy = null;
-        public int buffer_size = 256;
+        public int buffer_size = 0;
         public double scale = 1.0;
-        public double scale_denominator = 1.0;
+        public double scale_denominator = 0.0;
+        Map<String, Object> variables = null;
     }
 
     public void render(MapDefinition map, Image surface, RenderOptions options) {
         renderImpl(map, surface, options.zxy, options.buffer_size, options.scale,
-                options.scale_denominator);
+                options.scale_denominator, options.variables);
     }
 
     public void render(MapDefinition map, Image surface) {
@@ -242,7 +223,7 @@ public class VectorTile extends NativeObject {
     }
 
     public native void renderImpl(MapDefinition map, Image surface, long[] zxy, int buffer_size, double scale,
-            double scale_denominator);
+            double scale_denominator, Map<String, Object> variables);
 
     static public class NotSimpleFeature {
         public String layer;

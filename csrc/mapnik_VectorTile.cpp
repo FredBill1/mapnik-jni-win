@@ -1,9 +1,7 @@
 #include "mapnik_VectorTile.h"
 
 #include "globals.hpp"
-
-constexpr char const *const image_format_names[]{"webp", "jpeg", "png", "tiff"};
-constexpr std::launch threading_modes[]{std::launch::async, std::launch::deferred};
+#include "utils/jni_map_to_mapnik_attributes.hpp"
 
 /*
  * Class:     mapnik_VectorTile
@@ -164,6 +162,7 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_addDataImpl(JNIEnv *env, jobject o
     jbyte *buffer = env->GetByteArrayElements(bufferj, NULL);
     mapnik::vector_tile_impl::merge_from_compressed_buffer(*tile, reinterpret_cast<const char *>(buffer), size,
                                                            validate, upgrade);
+    env->ReleaseByteArrayElements(bufferj, buffer, JNI_ABORT);
     TRAILER_VOID;
 }
 
@@ -187,6 +186,8 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_addGeoJSONImpl(JNIEnv *env, jobjec
     p["type"] = "geojson";
     p["inline"] = geojson_string;
     mapnik::layer lyr(geojson_name, "+init=epsg:4326");
+    env->ReleaseStringUTFChars(geojsonj, geojson_string);
+    env->ReleaseStringUTFChars(namej, geojson_name);
     lyr.set_datasource(mapnik::datasource_cache::instance().create(p));
     map.add_layer(lyr);
 
@@ -224,6 +225,7 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_addImageImpl(JNIEnv *env, jobject 
     // create map object
     mapnik::Map map(tile->tile_size(), tile->tile_size(), "+init=epsg:3857");
     mapnik::layer lyr(layer_name, "+init=epsg:3857");
+    env->ReleaseStringUTFChars(name, layer_name);
     lyr.set_datasource(ds);
     map.add_layer(lyr);
 
@@ -249,6 +251,8 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_addImageBuffer(JNIEnv *env, jobjec
     auto size = env->GetArrayLength(buffer);
     mapnik::vector_tile_impl::add_image_buffer_as_tile_layer(*tile, layer_name, reinterpret_cast<const char *>(data),
                                                              size);
+    env->ReleaseStringUTFChars(name, layer_name);
+    env->ReleaseByteArrayElements(buffer, data, JNI_ABORT);
     TRAILER_VOID;
 }
 
@@ -303,6 +307,7 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_compositeImpl(
             throw std::exception("max_extent value must be an array of [minx,miny,maxx,maxy]");
         jdouble *tmp = env->GetDoubleArrayElements(max_extent, NULL);
         mapnik::box2d<double> ext(tmp[0], tmp[1], tmp[2], tmp[3]);
+        env->ReleaseDoubleArrayElements(max_extent, tmp, JNI_ABORT);
         map.set_maximum_extent(ext);
     }
 
@@ -313,6 +318,7 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_compositeImpl(
         auto tile = LOAD_VECTOR_TILE_POINTER(obj);
         // prevent shared_ptr from deleting the tile objects by creating a no-op deleter
         merc_vtiles.emplace_back(tile, [](auto &&) {});
+        env->DeleteLocalRef(obj);
     }
 
     mapnik::vector_tile_impl::processor ren(map);
@@ -426,6 +432,7 @@ JNIEXPORT jlong JNICALL Java_mapnik_VectorTile_layerImpl(JNIEnv *env, jobject ob
             break;
         }
     }
+    env->ReleaseStringUTFChars(layer_namej, layer_name);
     return FROM_POINTER(v);
     TRAILER(0);
 }
@@ -504,11 +511,11 @@ static void process_layers(Renderer &ren, mapnik::request const &m_req, mapnik::
 /*
  * Class:     mapnik_VectorTile
  * Method:    renderImpl
- * Signature: (Lmapnik/MapDefinition;Lmapnik/Image;[JIDD)V
+ * Signature: (Lmapnik/MapDefinition;Lmapnik/Image;[JIDDLjava/util/Map;)V
  */
 JNIEXPORT void JNICALL Java_mapnik_VectorTile_renderImpl(JNIEnv *env, jobject obj, jobject mapj, jobject surfacej,
                                                          jlongArray zxy, jint buffer_size, jdouble scale,
-                                                         jdouble scale_denominator) {
+                                                         jdouble scale_denominator, jobject variablesj) {
     // TODO: dont know what `Grid` and `CairoSurface` is, only using `Image` type
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
@@ -519,16 +526,15 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_renderImpl(JNIEnv *env, jobject ob
     if (surfacej == 0) throw std::exception("surface is null");
     auto &im = *LOAD_IMAGE_POINTER(surfacej);
 
-    uint64_t z, x, y;
+    mapnik::box2d<double> map_extent;
     if (zxy != NULL) {
         if (env->GetArrayLength(zxy) != 3) throw std::exception("zxy must be an array of length 3");
         jlong *tmp = env->GetLongArrayElements(zxy, NULL);
-        z = tmp[0], x = tmp[1], y = tmp[2];
+        map_extent = mapnik::vector_tile_impl::tile_mercator_bbox(tmp[1], tmp[2], tmp[0]);
+        env->ReleaseLongArrayElements(zxy, tmp, JNI_ABORT);
     } else {
-        z = tile->z(), x = tile->x(), y = tile->y();
+        map_extent = mapnik::vector_tile_impl::tile_mercator_bbox(tile->x(), tile->y(), tile->z());
     }
-    // TODO: `mapnik::vector_tile_impl::spherical_mercator` is removed, don't know whether this is a good replacement.
-    auto map_extent = mapnik::vector_tile_impl::tile_mercator_bbox(x, y, z);
 
     mapnik::request m_req(im.width(), im.height(), map_extent);
     m_req.set_buffer_size(buffer_size);
@@ -538,7 +544,8 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_renderImpl(JNIEnv *env, jobject ob
     scale_denominator *= scale;
     const auto &layers = map_in.layers();
 
-    mapnik::attributes variables;  // TODO
+    mapnik::attributes variables;
+    jni_map_to_mapnik_attributes(env, variablesj, variables);
     mapnik::agg_renderer<mapnik::image_rgba8> ren(map_in, m_req, variables, im, scale);
     ren.start_map_processing(map_in);
     process_layers(ren, m_req, map_proj, layers, scale_denominator, map_in.srs(), tile);
@@ -567,6 +574,7 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_setDataImpl(JNIEnv *env, jobject o
     tile->clear();
     mapnik::vector_tile_impl::merge_from_compressed_buffer(*tile, reinterpret_cast<const char *>(buffer), size,
                                                            validate, upgrade);
+    env->ReleaseByteArrayElements(bufferj, buffer, JNI_ABORT);
     TRAILER_VOID;
 }
 
@@ -692,7 +700,8 @@ JNIEXPORT jstring JNICALL Java_mapnik_VectorTile_toGeoJSON__Ljava_lang_String_2(
                                                                                 jstring layer_namej) {
     PREAMBLE;
     if (layer_namej == NULL) throw std::exception("layer name is null");
-    std::string layer_name = env->GetStringUTFChars(layer_namej, 0);
+    auto layer_name_c = env->GetStringUTFChars(layer_namej, 0);
+    std::string layer_name = layer_name_c;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     std::string result;
     if (layer_name == "__array__") {
@@ -703,6 +712,7 @@ JNIEXPORT jstring JNICALL Java_mapnik_VectorTile_toGeoJSON__Ljava_lang_String_2(
         if (!write_geojson_layer_name(result, layer_name, tile))
             throw std::exception("layer does not exist in vector tile");
     }
+    env->ReleaseStringUTFChars(layer_namej, layer_name_c);
     return env->NewStringUTF(result.c_str());
     TRAILER(NULL);
 }

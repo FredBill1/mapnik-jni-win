@@ -40,7 +40,7 @@
 inline bool initialized = false;
 inline jclass
     CLASS_NATIVEOBJECT,
-    CLASS_MAP,
+    CLASS_MAP_DEFINITION,
     CLASS_LAYER,
     CLASS_DATASOURCE,
     CLASS_DATASOURCE_CACHE,
@@ -57,6 +57,10 @@ inline jclass
     CLASS_BOOLEAN,
     CLASS_LONG,
     CLASS_HASHSET,
+    CLASS_MAP,
+    CLASS_SET,
+    CLASS_ITERATOR,
+    CLASS_MAP_ENTRY,
     CLASS_PARAMETERS,
     CLASS_BOX2D,
     CLASS_COLOR,
@@ -73,11 +77,21 @@ inline jmethodID
     METHOD_PARAMETERS_SET_DOUBLE,
     METHOD_PARAMETERS_COPY_TO_NATIVE,
     METHOD_DOUBLE_VALUEOF,
+    METHOD_DOUBLE_DOUBLEVALUE,
     METHOD_INTEGER_VALUEOF,
+    METHOD_INTEGER_INTVALUE,
     METHOD_BOOLEAN_VALUEOF,
+    METHOD_BOOLEAN_BOOLEANVALUE,
     METHOD_LONG_VALUEOF,
+    METHOD_LONG_LONGVALUE,
     CTOR_HASHSET,
     METHOD_HASHSET_ADD,
+    METHOD_MAP_ENTRYSET,
+    METHOD_SET_ITERATOR,
+    METHOD_ITERATOR_HASNEXT,
+    METHOD_ITERATOR_NEXT,
+    METHOD_MAP_ENTRY_GETKEY,
+    METHOD_MAP_ENTRY_GETVALUE,
     CTOR_LAYERDESCRIPTOR,
     METHOD_LAYERDESCRIPTOR_ADDDESCRIPTOR,
     CTOR_ATTRIBUTEDESCRIPTOR;
@@ -218,5 +232,8 @@ inline jobject colorFromNative(JNIEnv* env, mapnik::color const& c) {
     env->SetIntField(ret, FIELD_COLOR_ALPHA, c.alpha());
     return ret;
 }
+
+constexpr char const* const image_format_names[]{"webp", "jpeg", "png", "tiff"};
+constexpr std::launch threading_modes[]{std::launch::async, std::launch::deferred};
 
 #endif  // _MAPNIK_JNI_GLOBALS_HPP

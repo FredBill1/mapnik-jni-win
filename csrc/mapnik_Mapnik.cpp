@@ -42,7 +42,7 @@ bool init_ids(JNIEnv* env) {
 
     // Load NativeObject classes
     init_class(env, "mapnik/NativeObject", CLASS_NATIVEOBJECT);
-    init_class(env, "mapnik/MapDefinition", CLASS_MAP);
+    init_class(env, "mapnik/MapDefinition", CLASS_MAP_DEFINITION);
     init_class(env, "mapnik/Datasource", CLASS_DATASOURCE);
     init_class(env, "mapnik/DatasourceCache", CLASS_DATASOURCE_CACHE);
     init_class(env, "mapnik/Layer", CLASS_LAYER);
@@ -66,16 +66,20 @@ bool init_ids(JNIEnv* env) {
     // Integer
     init_class(env, "java/lang/Integer", CLASS_INTEGER);
     METHOD_INTEGER_VALUEOF = lookup_static_method(env, CLASS_INTEGER, "valueOf", "(I)Ljava/lang/Integer;");
+    METHOD_INTEGER_INTVALUE = lookup_method(env, CLASS_INTEGER, "intValue", "()I");
 
     init_class(env, "java/lang/Boolean", CLASS_BOOLEAN);
     METHOD_BOOLEAN_VALUEOF = lookup_static_method(env, CLASS_BOOLEAN, "valueOf", "(Z)Ljava/lang/Boolean;");
+    METHOD_BOOLEAN_BOOLEANVALUE = lookup_method(env, CLASS_BOOLEAN, "booleanValue", "()Z");
 
     init_class(env, "java/lang/Long", CLASS_LONG);
     METHOD_LONG_VALUEOF = lookup_static_method(env, CLASS_LONG, "valueOf", "(J)Ljava/lang/Long;");
+    METHOD_LONG_LONGVALUE = lookup_method(env, CLASS_LONG, "longValue", "()J");
 
     // Double
     init_class(env, "java/lang/Double", CLASS_DOUBLE);
     METHOD_DOUBLE_VALUEOF = lookup_static_method(env, CLASS_DOUBLE, "valueOf", "(D)Ljava/lang/Double;");
+    METHOD_DOUBLE_DOUBLEVALUE = lookup_method(env, CLASS_DOUBLE, "doubleValue", "()D");
 
     // Parameters
     init_class(env, "mapnik/Parameters", CLASS_PARAMETERS);
@@ -92,6 +96,18 @@ bool init_ids(JNIEnv* env) {
     init_class(env, "java/util/HashSet", CLASS_HASHSET);
     CTOR_HASHSET = lookup_method(env, CLASS_HASHSET, "<init>", "()V");
     METHOD_HASHSET_ADD = lookup_method(env, CLASS_HASHSET, "add", "(Ljava/lang/Object;)Z");
+
+    // Map
+    init_class(env, "java/util/Map", CLASS_MAP);
+    init_class(env, "java/util/Set", CLASS_SET);
+    init_class(env, "java/util/Iterator", CLASS_ITERATOR);
+    init_class(env, "java/util/Map$Entry", CLASS_MAP_ENTRY);
+    METHOD_MAP_ENTRYSET = lookup_method(env, CLASS_MAP, "entrySet", "()Ljava/util/Set;");
+    METHOD_SET_ITERATOR = lookup_method(env, CLASS_SET, "iterator", "()Ljava/util/Iterator;");
+    METHOD_ITERATOR_HASNEXT = lookup_method(env, CLASS_ITERATOR, "hasNext", "()Z");
+    METHOD_ITERATOR_NEXT = lookup_method(env, CLASS_ITERATOR, "next", "()Ljava/lang/Object;");
+    METHOD_MAP_ENTRY_GETKEY = lookup_method(env, CLASS_MAP_ENTRY, "getKey", "()Ljava/lang/Object;");
+    METHOD_MAP_ENTRY_GETVALUE = lookup_method(env, CLASS_MAP_ENTRY, "getValue", "()Ljava/lang/Object;");
 
     // Box2d
     init_class(env, "mapnik/Box2d", CLASS_BOX2D);
