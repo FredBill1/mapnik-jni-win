@@ -273,5 +273,29 @@ public class VectorTile extends NativeObject {
 
     public native String toGeoJSON(long layer_idx);
 
-    public native Object toJSON();
+    public static class JSON {
+        public static class Layer {
+            public static class Feature {
+                public long id;
+                public int type;
+                public byte[] raster;
+                public Map<String, Object> properties;
+                public Object[] geometry;
+                public String geometry_type;
+            }
+
+            public String name;
+            public int extent;
+            public int version;
+            public Feature[] features;
+        }
+
+        public Layer[] layers;
+    }
+
+    public native JSON toJSON(boolean decode_geometry);
+
+    public JSON toJSON() {
+        return toJSON(false);
+    }
 }

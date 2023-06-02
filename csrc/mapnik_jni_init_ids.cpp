@@ -74,6 +74,8 @@ void mapnik_jni_init_ids(JNIEnv* env) {
     METHOD_LONG_VALUEOF = lookup_static_method(env, CLASS_LONG, "valueOf", "(J)Ljava/lang/Long;");
     METHOD_LONG_LONGVALUE = lookup_method(env, CLASS_LONG, "longValue", "()J");
 
+    init_class(env, "java/lang/Object", CLASS_OBJECT);
+
     // Double
     init_class(env, "java/lang/Double", CLASS_DOUBLE);
     METHOD_DOUBLE_VALUEOF = lookup_static_method(env, CLASS_DOUBLE, "valueOf", "(D)Ljava/lang/Double;");
@@ -93,6 +95,11 @@ void mapnik_jni_init_ids(JNIEnv* env) {
     init_class(env, "java/util/HashSet", CLASS_HASHSET);
     CTOR_HASHSET = lookup_method(env, CLASS_HASHSET, "<init>", "()V");
     METHOD_HASHSET_ADD = lookup_method(env, CLASS_HASHSET, "add", "(Ljava/lang/Object;)Z");
+
+    // HashMap
+    init_class(env, "java/util/HashMap", CLASS_HASHMAP);
+    CTOR_HASHMAP = lookup_method(env, CLASS_HASHMAP, "<init>", "()V");
+    METHOD_HASHMAP_PUT = lookup_method(env, CLASS_HASHMAP, "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
 
     // Map
     init_class(env, "java/util/Map", CLASS_MAP);
@@ -159,6 +166,26 @@ void mapnik_jni_init_ids(JNIEnv* env) {
     FIELD_VECTOR_TILE_INFO_LAYER_RASTER_FEATURES     = lookup_field(env, CLASS_VECTOR_TILE_INFO_LAYER, "raster_features",     "J");
     FIELD_VECTOR_TILE_INFO_LAYER_VERSION             = lookup_field(env, CLASS_VECTOR_TILE_INFO_LAYER, "version",             "I");
     FIELD_VECTOR_TILE_INFO_LAYER_ERRORS              = lookup_field(env, CLASS_VECTOR_TILE_INFO_LAYER, "errors",              "[Ljava/lang/String;");
+
+    init_class(env, "mapnik/VectorTile$JSON", CLASS_VECTOR_TILE_JSON);
+    CTOR_VECTOR_TILE_JSON = lookup_method(env, CLASS_VECTOR_TILE_JSON, "<init>", "()V");
+    FIELD_VECTOR_TILE_JSON_LAYERS = lookup_field(env, CLASS_VECTOR_TILE_JSON, "layers", "[Lmapnik/VectorTile$JSON$Layer;");
+
+    init_class(env, "mapnik/VectorTile$JSON$Layer", CLASS_VECTOR_TILE_JSON_LAYER);
+    CTOR_VECTOR_TILE_JSON_LAYER = lookup_method(env, CLASS_VECTOR_TILE_JSON_LAYER, "<init>", "()V");
+    FIELD_VECTOR_TILE_JSON_LAYER_NAME     = lookup_field(env, CLASS_VECTOR_TILE_JSON_LAYER, "name",     "Ljava/lang/String;");
+    FIELD_VECTOR_TILE_JSON_LAYER_EXTENT   = lookup_field(env, CLASS_VECTOR_TILE_JSON_LAYER, "extent",   "I");
+    FIELD_VECTOR_TILE_JSON_LAYER_VERSION  = lookup_field(env, CLASS_VECTOR_TILE_JSON_LAYER, "version",  "I");
+    FIELD_VECTOR_TILE_JSON_LAYER_FEATURES = lookup_field(env, CLASS_VECTOR_TILE_JSON_LAYER, "features", "[Lmapnik/VectorTile$JSON$Layer$Feature;");
+
+    init_class(env, "mapnik/VectorTile$JSON$Layer$Feature", CLASS_VECTOR_TILE_JSON_LAYER_FEATURE);
+    CTOR_VECTOR_TILE_JSON_LAYER_FEATURE = lookup_method(env, CLASS_VECTOR_TILE_JSON_LAYER_FEATURE, "<init>", "()V");
+    FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_ID            = lookup_field(env, CLASS_VECTOR_TILE_JSON_LAYER_FEATURE, "id",            "J");
+    FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_TYPE          = lookup_field(env, CLASS_VECTOR_TILE_JSON_LAYER_FEATURE, "type",          "I");
+    FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_RASTER        = lookup_field(env, CLASS_VECTOR_TILE_JSON_LAYER_FEATURE, "raster",        "[B");
+    FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_PROPERTIES    = lookup_field(env, CLASS_VECTOR_TILE_JSON_LAYER_FEATURE, "properties",    "Ljava/util/Map;");
+    FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_GEOMETRY      = lookup_field(env, CLASS_VECTOR_TILE_JSON_LAYER_FEATURE, "geometry",      "[Ljava/lang/Object;");
+    FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_GEOMETRY_TYPE = lookup_field(env, CLASS_VECTOR_TILE_JSON_LAYER_FEATURE, "geometry_type", "Ljava/lang/String;");
 
     // clang-format on
 }

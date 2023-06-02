@@ -60,6 +60,8 @@ public class TestVectorTile {
             e.printStackTrace();
         }
 
+        VectorTile.JSON json = vt.toJSON(true);
+
         m.close();
         vt.close();
         image.close();
