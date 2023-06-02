@@ -53,7 +53,7 @@ public class VectorTile extends NativeObject {
 
     public native void setBufferSize(int size);
 
-    static public class AddOrSetDataOptions {
+    public static class AddOrSetDataOptions {
         public boolean validate = false;
         public boolean upgrade = false;
     }
@@ -68,7 +68,7 @@ public class VectorTile extends NativeObject {
 
     public native void addDataImpl(byte[] buffer, boolean validate, boolean upgrade);
 
-    static public class AddGeoJsonOptions {
+    public static class AddGeoJsonOptions {
         public double area_threshold = 0.1;
         public double simplify_distance = 0.0;
         public boolean strictly_simple = true;
@@ -89,7 +89,7 @@ public class VectorTile extends NativeObject {
     private native void addGeoJSONImpl(String geojson, String name, double area_threshold, double simplify_distance,
             boolean strictly_simple, boolean multi_polygon_union, int fill_type, boolean process_all_rings);
 
-    static public class AddImageOptions {
+    public static class AddImageOptions {
         public ImageScaling image_scaling = ImageScaling.bilinear;
         public ImageFormat image_format = ImageFormat.webp;
     }
@@ -111,7 +111,7 @@ public class VectorTile extends NativeObject {
 
     public native void clear();
 
-    static public class CompositeOptions {
+    public static class CompositeOptions {
         public double scale_factor = 1.0;
         public int offset_x = 0;
         public int offset_y = 0;
@@ -152,7 +152,7 @@ public class VectorTile extends NativeObject {
 
     public native double[] extent();
 
-    static public class GetDataOptions {
+    public static class GetDataOptions {
         public Compression compression = Compression.none;
         public int level = 0;
         public CompressionStrategy strategy = CompressionStrategy.DEFAULT;
@@ -168,7 +168,25 @@ public class VectorTile extends NativeObject {
 
     public native byte[] getDataImpl(boolean compress, int level, int strategy);
 
-    public native void info(byte[] buffer); // TODO: json
+    public static class Info {
+        public static class Layer {
+            public String name;
+            public long features;
+            public long point_features;
+            public long linestring_features;
+            public long polygon_features;
+            public long unknown_features;
+            public long raster_features;
+            public int version;
+            public String[] errors;
+        }
+
+        public Layer[] layers;
+        public boolean errors;
+        public String[] tile_errors;
+    }
+
+    public static native Info info(byte[] buffer);
 
     public VectorTile layer(String layerName) {
         return new VectorTile(layerImpl(layerName));
@@ -182,7 +200,7 @@ public class VectorTile extends NativeObject {
 
     public native String[] paintedLayers();
 
-    static public class QueryOptions {
+    public static class QueryOptions {
         public double tolerance = 0.0;
         public String layer = null;
     }
@@ -193,7 +211,7 @@ public class VectorTile extends NativeObject {
 
     public native FeatureSet queryImpl(double longitude, double latitude, double tolerance, String layer);
 
-    static public class QueryManyOptions {
+    public static class QueryManyOptions {
         public double tolerance = 0.0;
         public String layer = null;
         public String[] fields = null;
@@ -205,7 +223,7 @@ public class VectorTile extends NativeObject {
 
     public native Object queryManyImpl(float[][] array, double tolerance, String layer, String[] fields);
 
-    static public class RenderOptions {
+    public static class RenderOptions {
         public long[] zxy = null;
         public int buffer_size = 0;
         public double scale = 1.0;
@@ -225,14 +243,14 @@ public class VectorTile extends NativeObject {
     public native void renderImpl(MapDefinition map, Image surface, long[] zxy, int buffer_size, double scale,
             double scale_denominator, Map<String, Object> variables);
 
-    static public class NotSimpleFeature {
+    public static class NotSimpleFeature {
         public String layer;
         public long feature_id;
     }
 
     public native NotSimpleFeature[] reportGeometrySimplicity();
 
-    static public class NotValidFeature {
+    public static class NotValidFeature {
         public String message;
         public String layer;
         public long feature_id;

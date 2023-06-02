@@ -40,6 +40,8 @@ static jmethodID lookup_static_method(JNIEnv* env, jclass c, const char* name, c
 bool init_ids(JNIEnv* env) {
     mapnik::setup();
 
+    // clang-format off
+
     // Load NativeObject classes
     init_class(env, "mapnik/NativeObject", CLASS_NATIVEOBJECT);
     init_class(env, "mapnik/MapDefinition", CLASS_MAP_DEFINITION);
@@ -84,8 +86,7 @@ bool init_ids(JNIEnv* env) {
     // Parameters
     init_class(env, "mapnik/Parameters", CLASS_PARAMETERS);
     CTOR_PARAMETERS = lookup_method(env, CLASS_PARAMETERS, "<init>", "()V");
-    METHOD_PARAMETERS_SET_STRING =
-        lookup_method(env, CLASS_PARAMETERS, "setString", "(Ljava/lang/String;Ljava/lang/String;)V");
+    METHOD_PARAMETERS_SET_STRING = lookup_method(env, CLASS_PARAMETERS, "setString", "(Ljava/lang/String;Ljava/lang/String;)V");
     METHOD_PARAMETERS_SET_BOOLEAN = lookup_method(env, CLASS_PARAMETERS, "setBool", "(Ljava/lang/String;Z)V");
     METHOD_PARAMETERS_SET_INT = lookup_method(env, CLASS_PARAMETERS, "setInt", "(Ljava/lang/String;I)V");
     METHOD_PARAMETERS_SET_LONG = lookup_method(env, CLASS_PARAMETERS, "setLong", "(Ljava/lang/String;J)V");
@@ -133,8 +134,7 @@ bool init_ids(JNIEnv* env) {
     CTOR_LAYERDESCRIPTOR = lookup_method(env, CLASS_LAYERDESCRIPTOR, "<init>", "()V");
     FIELD_LAYERDESCRIPTOR_NAME = lookup_field(env, CLASS_LAYERDESCRIPTOR, "name", "Ljava/lang/String;");
     FIELD_LAYERDESCRIPTOR_ENCODING = lookup_field(env, CLASS_LAYERDESCRIPTOR, "encoding", "Ljava/lang/String;");
-    METHOD_LAYERDESCRIPTOR_ADDDESCRIPTOR =
-        lookup_method(env, CLASS_LAYERDESCRIPTOR, "addDescriptor", "(Lmapnik/AttributeDescriptor;)V");
+    METHOD_LAYERDESCRIPTOR_ADDDESCRIPTOR = lookup_method(env, CLASS_LAYERDESCRIPTOR, "addDescriptor", "(Lmapnik/AttributeDescriptor;)V");
 
     // AttributeDescriptor
     init_class(env, "mapnik/AttributeDescriptor", CLASS_ATTRIBUTEDESCRIPTOR);
@@ -145,6 +145,26 @@ bool init_ids(JNIEnv* env) {
     FIELD_ATTRIBUTEDESCRIPTOR_SIZE = lookup_field(env, CLASS_ATTRIBUTEDESCRIPTOR, "size", "I");
     FIELD_ATTRIBUTEDESCRIPTOR_PRECISION = lookup_field(env, CLASS_ATTRIBUTEDESCRIPTOR, "precision", "I");
 
+    // VectorTile
+    init_class(env, "mapnik/VectorTile$Info", CLASS_VECTOR_TILE_INFO);
+    CTOR_VECTOR_TILE_INFO = lookup_method(env, CLASS_VECTOR_TILE_INFO, "<init>", "()V");
+    FIELD_VECTOR_TILE_INFO_LAYERS      = lookup_field(env, CLASS_VECTOR_TILE_INFO,       "layers",      "[Lmapnik/VectorTile$Info$Layer;");
+    FIELD_VECTOR_TILE_INFO_ERRORS      = lookup_field(env, CLASS_VECTOR_TILE_INFO,       "errors",      "Z");
+    FIELD_VECTOR_TILE_INFO_TILE_ERRORS = lookup_field(env, CLASS_VECTOR_TILE_INFO, "tile_errors", "[Ljava/lang/String;");
+
+    init_class(env, "mapnik/VectorTile$Info$Layer", CLASS_VECTOR_TILE_INFO_LAYER);
+    CTOR_VECTOR_TILE_INFO_LAYER = lookup_method(env, CLASS_VECTOR_TILE_INFO_LAYER, "<init>", "()V");
+    FIELD_VECTOR_TILE_INFO_LAYER_NAME                = lookup_field(env, CLASS_VECTOR_TILE_INFO_LAYER, "name",                "Ljava/lang/String;");
+    FIELD_VECTOR_TILE_INFO_LAYER_FEATURES            = lookup_field(env, CLASS_VECTOR_TILE_INFO_LAYER, "features",            "J");
+    FIELD_VECTOR_TILE_INFO_LAYER_POINT_FEATURES      = lookup_field(env, CLASS_VECTOR_TILE_INFO_LAYER, "point_features",      "J");
+    FIELD_VECTOR_TILE_INFO_LAYER_LINESTRING_FEATURES = lookup_field(env, CLASS_VECTOR_TILE_INFO_LAYER, "linestring_features", "J");
+    FIELD_VECTOR_TILE_INFO_LAYER_POLYGON_FEATURES    = lookup_field(env, CLASS_VECTOR_TILE_INFO_LAYER, "polygon_features",    "J");
+    FIELD_VECTOR_TILE_INFO_LAYER_UNKNOWN_FEATURES    = lookup_field(env, CLASS_VECTOR_TILE_INFO_LAYER, "unknown_features",    "J");
+    FIELD_VECTOR_TILE_INFO_LAYER_RASTER_FEATURES     = lookup_field(env, CLASS_VECTOR_TILE_INFO_LAYER, "raster_features",     "J");
+    FIELD_VECTOR_TILE_INFO_LAYER_VERSION             = lookup_field(env, CLASS_VECTOR_TILE_INFO_LAYER, "version",             "I");
+    FIELD_VECTOR_TILE_INFO_LAYER_ERRORS              = lookup_field(env, CLASS_VECTOR_TILE_INFO_LAYER, "errors",              "[Ljava/lang/String;");
+
+    // clang-format on
     return true;
 }
 

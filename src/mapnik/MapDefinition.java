@@ -172,7 +172,7 @@ public class MapDefinition extends NativeObject {
         return saveMapToString(false);
     }
 
-    static public class RenderVectorTileOptions {
+    public static class RenderVectorTileOptions {
         double scale = 1.0;
         double scale_denominator = 0.0;
         int offset_x = 0;
@@ -206,7 +206,7 @@ public class MapDefinition extends NativeObject {
         renderVectorTile(tile, new RenderVectorTileOptions());
     }
 
-    static public class RenderImageOptions {
+    public static class RenderImageOptions {
         int buffer_size = 0;
         double scale = 1.0;
         double scale_denominator = 0.0;

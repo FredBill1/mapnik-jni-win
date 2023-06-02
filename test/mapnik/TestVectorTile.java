@@ -3,6 +3,9 @@ package mapnik;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import mapnik.options.Compression;
+
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -37,10 +40,25 @@ public class TestVectorTile {
         VectorTile vt = new mapnik.VectorTile(3, 3, 2);
         m.renderVectorTile(vt);
         vt.render(m, image);
+
+        VectorTile.GetDataOptions getDataOptions = new VectorTile.GetDataOptions();
+        getDataOptions.compression = Compression.gzip;
+        getDataOptions.level = 9;
+        VectorTile.Info info = VectorTile.info(vt.getData(getDataOptions));
+
         image.saveToFile("C:/Users/17819/GEO/mapnik-jni-win/test.png", "png");
         Image image2 = new Image(4096, 4096);
         m.renderImage(image2);
         image2.saveToFile("C:/Users/17819/GEO/mapnik-jni-win/test2.png", "png");
+
+        File file = new File("C:/Users/17819/GEO/mapnik-jni-win/test.pbf");
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(vt.getData(getDataOptions));
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         m.close();
         vt.close();
