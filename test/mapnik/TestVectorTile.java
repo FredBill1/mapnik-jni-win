@@ -63,5 +63,6 @@ public class TestVectorTile {
         m.close();
         vt.close();
         image.close();
+        image2.close();
     }
 }

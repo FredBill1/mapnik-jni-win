@@ -140,6 +140,8 @@ inline jfieldID
     FIELD_VECTOR_TILE_INFO_LAYER_ERRORS;
 // clang-format on
 
+void mapnik_jni_init_ids(JNIEnv* env);
+
 inline void throw_error(JNIEnv* env, const char* msg) {
     jclass clazz = env->FindClass("java/lang/Error");
     env->ThrowNew(clazz, msg);
