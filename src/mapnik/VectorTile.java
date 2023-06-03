@@ -257,7 +257,22 @@ public class VectorTile extends NativeObject {
         public String geojson;
     }
 
-    public native NotValidFeature[] reportGeometryValidity(Object options);
+    public static class ReportGeometryValidityOptions {
+        public boolean split_multi_features = false;
+        public boolean lat_lon = false;
+        public boolean web_merc = false;
+    }
+
+    private native NotValidFeature[] reportGeometryValidityImpl(boolean split_multi_features, boolean lat_lon,
+            boolean web_merc);
+
+    public NotValidFeature[] reportGeometryValidity(ReportGeometryValidityOptions options) {
+        return reportGeometryValidityImpl(options.split_multi_features, options.lat_lon, options.web_merc);
+    }
+
+    public NotValidFeature[] reportGeometryValidity() {
+        return reportGeometryValidity(new ReportGeometryValidityOptions());
+    }
 
     public void setData(byte[] buffer, AddOrSetDataOptions options) {
         setDataImpl(buffer, options.validate, options.upgrade);

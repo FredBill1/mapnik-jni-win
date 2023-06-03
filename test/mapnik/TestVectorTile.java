@@ -62,6 +62,9 @@ public class TestVectorTile {
 
         VectorTile.JSON json = vt.toJSON(true);
 
+        VectorTile.NotSimpleFeature[] notSimpleFeatures = vt.reportGeometrySimplicity();
+        VectorTile.NotValidFeature[] notValidFeatures = vt.reportGeometryValidity();
+
         m.close();
         vt.close();
         image.close();

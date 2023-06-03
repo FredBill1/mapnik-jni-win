@@ -187,5 +187,17 @@ void mapnik_jni_init_ids(JNIEnv* env) {
     FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_GEOMETRY      = lookup_field(env, CLASS_VECTOR_TILE_JSON_LAYER_FEATURE, "geometry",      "[Ljava/lang/Object;");
     FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_GEOMETRY_TYPE = lookup_field(env, CLASS_VECTOR_TILE_JSON_LAYER_FEATURE, "geometry_type", "Ljava/lang/String;");
 
+    init_class(env, "mapnik/VectorTile$NotSimpleFeature", CLASS_VECTOR_TILE_NOT_SIMPLE_FEATURE);
+    CTOR_VECTOR_TILE_NOT_SIMPLE_FEATURE = lookup_method(env, CLASS_VECTOR_TILE_NOT_SIMPLE_FEATURE, "<init>", "()V");
+    FIELD_VECTOR_TILE_NOT_SIMPLE_FEATURE_LAYER      = lookup_field(env, CLASS_VECTOR_TILE_NOT_SIMPLE_FEATURE, "layer",      "Ljava/lang/String;");
+    FIELD_VECTOR_TILE_NOT_SIMPLE_FEATURE_FEATURE_ID = lookup_field(env, CLASS_VECTOR_TILE_NOT_SIMPLE_FEATURE, "feature_id", "J");
+
+    init_class(env, "mapnik/VectorTile$NotValidFeature", CLASS_VECTOR_TILE_NOT_VALID_FEATURE);
+    CTOR_VECTOR_TILE_NOT_VALID_FEATURE = lookup_method(env, CLASS_VECTOR_TILE_NOT_VALID_FEATURE, "<init>", "()V");
+    FIELD_VECTOR_TILE_NOT_VALID_FEATURE_MESSAGE    = lookup_field(env, CLASS_VECTOR_TILE_NOT_VALID_FEATURE, "message",    "Ljava/lang/String;");
+    FIELD_VECTOR_TILE_NOT_VALID_FEATURE_LAYER      = lookup_field(env, CLASS_VECTOR_TILE_NOT_VALID_FEATURE, "layer",      "Ljava/lang/String;");
+    FIELD_VECTOR_TILE_NOT_VALID_FEATURE_FEATURE_ID = lookup_field(env, CLASS_VECTOR_TILE_NOT_VALID_FEATURE, "feature_id", "J");
+    FIELD_VECTOR_TILE_NOT_VALID_FEATURE_GEOJSON    = lookup_field(env, CLASS_VECTOR_TILE_NOT_VALID_FEATURE, "geojson",    "Ljava/lang/String;");
+
     // clang-format on
 }
