@@ -4,13 +4,13 @@
 /*
  * Class:     mapnik_VectorTile
  * Method:    addImageImpl
- * Signature: (JLjava/lang/String;II)V
+ * Signature: (Lmapnik/Image;Ljava/lang/String;II)V
  */
-JNIEXPORT void JNICALL Java_mapnik_VectorTile_addImageImpl(JNIEnv *env, jobject obj, jlong image_ptr, jstring name,
+JNIEXPORT void JNICALL Java_mapnik_VectorTile_addImageImpl(JNIEnv *env, jobject obj, jobject imagej, jstring name,
                                                            jint image_scaling, jint image_format) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
-    auto image = reinterpret_cast<mapnik::image_rgba8 *>(image_ptr);
+    auto image = LOAD_IMAGE_POINTER(imagej);
     JNIString layer_name(env, name);
     auto ds = std::make_shared<mapnik::memory_datasource>(mapnik::parameters());
     mapnik::raster_ptr ras = std::make_shared<mapnik::raster>(tile->extent(), *image, 1.0);

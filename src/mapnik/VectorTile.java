@@ -95,15 +95,14 @@ public class VectorTile extends NativeObject {
     }
 
     public void addImage(Image image, String name, AddImageOptions options) {
-        addImageImpl(image.ptr, name, options.image_scaling.ordinal(), options.image_format.ordinal());
-        image.ptr = 0;
+        addImageImpl(image, name, options.image_scaling.ordinal(), options.image_format.ordinal());
     }
 
     public void addImage(Image image, String name) {
         addImage(image, name, new AddImageOptions());
     }
 
-    private native void addImageImpl(long image, String name, int image_scaling, int image_format);
+    private native void addImageImpl(Image image, String name, int image_scaling, int image_format);
 
     public native void addImageBuffer(byte[] buffer, String name);
 
