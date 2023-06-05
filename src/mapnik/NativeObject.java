@@ -48,11 +48,11 @@ public abstract class NativeObject implements AutoCloseable {
         return ptr == 0;
     }
 
-    @Override
-    protected final void finalize() throws Throwable {
-        super.finalize();
-        close();
-    }
+    // @Override
+    // protected final void finalize() throws Throwable {
+    // super.finalize();
+    // close();
+    // }
 
     /**
      * Called on finalize and dispose to dealloc the pointer if != 0
