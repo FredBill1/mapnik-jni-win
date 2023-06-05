@@ -11,9 +11,9 @@
 JNIEXPORT void JNICALL Java_mapnik_Parameters_setNativeInt(JNIEnv *env, jclass c, jlong ptr, jstring namej,
                                                            jint value) {
     PREAMBLE;
-    refjavastring name(env, namej);
+    JNIString name(env, namej);
     mapnik::parameters *params = (mapnik::parameters *)(ptr);
-    (*params)[name.stringz] = static_cast<mapnik::value_integer>(value);
+    (*params)[name.get()] = static_cast<mapnik::value_integer>(value);
     TRAILER_VOID;
 }
 
@@ -25,10 +25,10 @@ JNIEXPORT void JNICALL Java_mapnik_Parameters_setNativeInt(JNIEnv *env, jclass c
 JNIEXPORT void JNICALL Java_mapnik_Parameters_setNativeString(JNIEnv *env, jclass c, jlong ptr, jstring namej,
                                                               jstring valuej) {
     PREAMBLE;
-    refjavastring name(env, namej);
-    refjavastring value(env, valuej);
+    JNIString name(env, namej);
+    JNIString value(env, valuej);
     mapnik::parameters *params = (mapnik::parameters *)(ptr);
-    (*params)[name.stringz] = value.stringz;
+    (*params)[name.get()] = value.get();
     TRAILER_VOID;
 }
 
@@ -40,8 +40,8 @@ JNIEXPORT void JNICALL Java_mapnik_Parameters_setNativeString(JNIEnv *env, jclas
 JNIEXPORT void JNICALL Java_mapnik_Parameters_setNativeDouble(JNIEnv *env, jclass c, jlong ptr, jstring namej,
                                                               jdouble value) {
     PREAMBLE;
-    refjavastring name(env, namej);
+    JNIString name(env, namej);
     mapnik::parameters *params = (mapnik::parameters *)(ptr);
-    (*params)[name.stringz] = (double)value;
+    (*params)[name.get()] = (double)value;
     TRAILER_VOID;
 }

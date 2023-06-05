@@ -157,17 +157,13 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_addGeoJSONImpl(JNIEnv *env, jobjec
                                                              jint fill_type, jboolean process_all_rings) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
-    if (geojsonj == NULL) throw std::exception("geojson is null");
-    auto geojson_string = env->GetStringUTFChars(geojsonj, 0);
-    if (namej == NULL) throw std::exception("layer name is null");
-    auto geojson_name = env->GetStringUTFChars(namej, 0);
+    JNIString geojson_string(env, geojsonj);
+    JNIString geojson_name(env, namej);
     mapnik::Map map(tile->tile_size(), tile->tile_size(), "+init=epsg:3857");
     mapnik::parameters p;
     p["type"] = "geojson";
-    p["inline"] = geojson_string;
-    mapnik::layer lyr(geojson_name, "+init=epsg:4326");
-    env->ReleaseStringUTFChars(geojsonj, geojson_string);
-    env->ReleaseStringUTFChars(namej, geojson_name);
+    p["inline"] = geojson_string.get();
+    mapnik::layer lyr(geojson_name.get(), "+init=epsg:4326");
     lyr.set_datasource(mapnik::datasource_cache::instance().create(p));
     map.add_layer(lyr);
 
@@ -250,8 +246,7 @@ JNIEXPORT jdoubleArray JNICALL Java_mapnik_VectorTile_extent(JNIEnv *env, jobjec
 JNIEXPORT jlong JNICALL Java_mapnik_VectorTile_layerImpl(JNIEnv *env, jobject obj, jstring layer_namej) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
-    if (layer_namej == NULL) throw std::exception("layer name is null");
-    auto layer_name = env->GetStringUTFChars(layer_namej, NULL);
+    std::string layer_name = JNIString(env, layer_namej).get();
     if (!tile->has_layer(layer_name)) throw std::exception("layer does not exist in vector tile");
 
     auto v = new mapnik::vector_tile_impl::merc_tile(tile->x(), tile->y(), tile->z(), tile->tile_size(),
@@ -267,7 +262,6 @@ JNIEXPORT jlong JNICALL Java_mapnik_VectorTile_layerImpl(JNIEnv *env, jobject ob
             break;
         }
     }
-    env->ReleaseStringUTFChars(layer_namej, layer_name);
     return FROM_POINTER(v);
     TRAILER(0);
 }

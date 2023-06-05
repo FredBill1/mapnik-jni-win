@@ -170,10 +170,10 @@ JNIEXPORT jobject JNICALL Java_mapnik_FeatureSet_getProperty(JNIEnv* env, jobjec
         return 0;
     }
 
-    refjavastring name(env, namej);
+    JNIString name(env, namej);
 
     // Convert the value
-    mapnik::value_type const& value = (*fp)->get(name.stringz);
+    mapnik::value_type const& value = (*fp)->get(name.get());
     return mapnik::value_type::visit(value, value_to_java(env));
     TRAILER(0);
 }

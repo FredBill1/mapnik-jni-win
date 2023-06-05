@@ -47,11 +47,11 @@ JNIEXPORT jstring JNICALL Java_mapnik_DatasourceCache_pluginDirectories(JNIEnv *
  */
 JNIEXPORT void JNICALL Java_mapnik_DatasourceCache_registerDatasources(JNIEnv *env, jclass c, jstring sj) {
     PREAMBLE;
-    refjavastring path(env, sj);
+    JNIString path(env, sj);
 #if MAPNIK_VERSION >= 200200
-    mapnik::datasource_cache::instance().register_datasources(path.stringz);
+    mapnik::datasource_cache::instance().register_datasources(path.get());
 #else
-    mapnik::datasource_cache::instance()->register_datasources(path.stringz);
+    mapnik::datasource_cache::instance()->register_datasources(path.get());
 #endif
     TRAILER_VOID;
 }

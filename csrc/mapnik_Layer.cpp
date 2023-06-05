@@ -9,10 +9,10 @@
  */
 JNIEXPORT jlong JNICALL Java_mapnik_Layer_alloc(JNIEnv *env, jclass c, jstring namej, jstring srsj) {
     PREAMBLE;
-    refjavastring name(env, namej);
-    refjavastring srs(env, srsj);
+    JNIString name(env, namej);
+    JNIString srs(env, srsj);
 
-    mapnik::layer *layer = new mapnik::layer(name.stringz, srs.stringz);
+    mapnik::layer *layer = new mapnik::layer(name.get(), srs.get());
     return FROM_POINTER(layer);
     TRAILER(0);
 }
@@ -48,8 +48,8 @@ JNIEXPORT jstring JNICALL Java_mapnik_Layer_getName(JNIEnv *env, jobject layerob
 JNIEXPORT void JNICALL Java_mapnik_Layer_setName(JNIEnv *env, jobject layerobj, jstring sj) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
-    refjavastring s(env, sj);
-    layer->set_name(s.stringz);
+    JNIString s(env, sj);
+    layer->set_name(s.get());
     TRAILER_VOID;
 }
 
@@ -73,8 +73,8 @@ JNIEXPORT jstring JNICALL Java_mapnik_Layer_getSrs(JNIEnv *env, jobject layerobj
 JNIEXPORT void JNICALL Java_mapnik_Layer_setSrs(JNIEnv *env, jobject layerobj, jstring sj) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
-    refjavastring s(env, sj);
-    layer->set_srs(s.stringz);
+    JNIString s(env, sj);
+    layer->set_srs(s.get());
     TRAILER_VOID;
 }
 
@@ -113,8 +113,8 @@ JNIEXPORT void JNICALL Java_mapnik_Layer_setStyles(JNIEnv *env, jobject layerobj
         jsize size = env->GetArrayLength(ary);
         for (jsize i = 0; i < size; i++) {
             jobject element = env->GetObjectArrayElement(ary, i);
-            refjavastring s(env, (jstring)element);
-            styles.push_back(s.stringz);
+            JNIString s(env, (jstring)element);
+            styles.push_back(s.get());
         }
     }
     TRAILER_VOID;

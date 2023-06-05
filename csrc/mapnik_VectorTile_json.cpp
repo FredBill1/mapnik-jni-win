@@ -123,9 +123,7 @@ static bool write_geojson_layer_name(std::string &result, std::string const &nam
 JNIEXPORT jstring JNICALL Java_mapnik_VectorTile_toGeoJSON__Ljava_lang_String_2(JNIEnv *env, jobject obj,
                                                                                 jstring layer_namej) {
     PREAMBLE;
-    if (layer_namej == NULL) throw std::exception("layer name is null");
-    auto layer_name_c = env->GetStringUTFChars(layer_namej, 0);
-    std::string layer_name = layer_name_c;
+    std::string layer_name = JNIString(env, layer_namej).get();
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     std::string result;
     if (layer_name == "__array__") {
@@ -136,7 +134,6 @@ JNIEXPORT jstring JNICALL Java_mapnik_VectorTile_toGeoJSON__Ljava_lang_String_2(
         if (!write_geojson_layer_name(result, layer_name, tile))
             throw std::exception("layer does not exist in vector tile");
     }
-    env->ReleaseStringUTFChars(layer_namej, layer_name_c);
     return env->NewStringUTF(result.c_str());
     TRAILER(NULL);
 }

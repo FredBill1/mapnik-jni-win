@@ -36,7 +36,7 @@ JNIEXPORT void JNICALL Java_mapnik_Query_dealloc(JNIEnv *env, jobject, jlong ptr
 JNIEXPORT void JNICALL Java_mapnik_Query_addPropertyName(JNIEnv *env, jobject qobj, jstring namej) {
     PREAMBLE;
     mapnik::query *q = LOAD_QUERY_POINTER(qobj);
-    refjavastring name(env, namej);
-    q->add_property_name(name.stringz);
+    JNIString name(env, namej);
+    q->add_property_name(name.get());
     TRAILER_VOID;
 }

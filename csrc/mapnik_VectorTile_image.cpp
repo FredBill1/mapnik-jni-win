@@ -11,8 +11,7 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_addImageImpl(JNIEnv *env, jobject 
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     auto image = reinterpret_cast<mapnik::image_rgba8 *>(image_ptr);
-    if (name == NULL) throw std::exception("layer name is null");
-    auto layer_name = env->GetStringUTFChars(name, 0);
+    JNIString layer_name(env, name);
     auto ds = std::make_shared<mapnik::memory_datasource>(mapnik::parameters());
     mapnik::raster_ptr ras = std::make_shared<mapnik::raster>(tile->extent(), *image, 1.0);
     mapnik::context_ptr ctx = std::make_shared<mapnik::context_type>();
@@ -23,8 +22,7 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_addImageImpl(JNIEnv *env, jobject 
     ds->set_envelope(tile->extent());
     // create map object
     mapnik::Map map(tile->tile_size(), tile->tile_size(), "+init=epsg:3857");
-    mapnik::layer lyr(layer_name, "+init=epsg:3857");
-    env->ReleaseStringUTFChars(name, layer_name);
+    mapnik::layer lyr(layer_name.get(), "+init=epsg:3857");
     lyr.set_datasource(ds);
     map.add_layer(lyr);
 
@@ -44,13 +42,11 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_addImageBuffer(JNIEnv *env, jobjec
                                                              jstring name) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
-    if (name == NULL) throw std::exception("layer name is null");
-    auto layer_name = env->GetStringUTFChars(name, 0);
+    JNIString layer_name(env, name);
     auto data = env->GetByteArrayElements(buffer, NULL);
     auto size = env->GetArrayLength(buffer);
-    mapnik::vector_tile_impl::add_image_buffer_as_tile_layer(*tile, layer_name, reinterpret_cast<const char *>(data),
-                                                             size);
-    env->ReleaseStringUTFChars(name, layer_name);
+    mapnik::vector_tile_impl::add_image_buffer_as_tile_layer(*tile, layer_name.get(),
+                                                             reinterpret_cast<const char *>(data), size);
     env->ReleaseByteArrayElements(buffer, data, JNI_ABORT);
     TRAILER_VOID;
 }

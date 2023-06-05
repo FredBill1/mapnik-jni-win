@@ -11,13 +11,11 @@ inline void jni_map_to_mapnik_attributes(JNIEnv* env, jobject mapj, mapnik::attr
         jobject entryj = env->CallObjectMethod(iterj, METHOD_ITERATOR_NEXT);
         jstring key = (jstring)env->CallObjectMethod(entryj, METHOD_MAP_ENTRY_GETKEY);
         jobject value = env->CallObjectMethod(entryj, METHOD_MAP_ENTRY_GETVALUE);
-        const char* keyc = env->GetStringUTFChars(key, NULL);
+        std::string keyc = JNIString(env, key).get();
         if (value == NULL) {
             mapnik_attributes[keyc] = mapnik::value_null();
         } else if (env->IsInstanceOf(value, CLASS_STRING)) {
-            const char* valuec = env->GetStringUTFChars((jstring)value, 0);
-            mapnik_attributes[keyc] = mapnik::value_unicode_string(valuec);
-            env->ReleaseStringUTFChars((jstring)value, valuec);
+            mapnik_attributes[keyc] = mapnik::value_unicode_string(JNIString(env, (jstring)value).get());
         } else if (env->IsInstanceOf(value, CLASS_INTEGER)) {
             jint valuei = env->CallIntMethod(value, METHOD_INTEGER_INTVALUE);
             mapnik_attributes[keyc] = mapnik::value_integer(valuei);
@@ -35,7 +33,6 @@ inline void jni_map_to_mapnik_attributes(JNIEnv* env, jobject mapj, mapnik::attr
                 "Unknown type of value in `mapnik_attributes`, the value must be a `String`, `Integer`, `Boolean`, "
                 "`Long`, `Double` or `null`");
         }
-        env->ReleaseStringUTFChars(key, keyc);
         env->DeleteLocalRef(entryj);
         env->DeleteLocalRef(key);
         if (value != NULL) env->DeleteLocalRef(value);

@@ -76,10 +76,10 @@ JNIEXPORT jint JNICALL Java_mapnik_Image_getHeight(JNIEnv* env, jobject imobj) {
 JNIEXPORT void JNICALL Java_mapnik_Image_saveToFile(JNIEnv* env, jobject imobj, jstring filenamej, jstring typej) {
     PREAMBLE;
     mapnik::image_rgba8* im = LOAD_IMAGE_POINTER(imobj);
-    refjavastring filename(env, filenamej);
-    refjavastring type(env, typej);
+    JNIString filename(env, filenamej);
+    JNIString type(env, typej);
 
-    mapnik::save_to_file(*im, filename.stringz, type.stringz);
+    mapnik::save_to_file(*im, filename.get(), type.get());
     TRAILER_VOID;
 }
 
@@ -91,9 +91,9 @@ JNIEXPORT void JNICALL Java_mapnik_Image_saveToFile(JNIEnv* env, jobject imobj, 
 JNIEXPORT jbyteArray JNICALL Java_mapnik_Image_saveToMemory(JNIEnv* env, jobject imobj, jstring typej) {
     PREAMBLE;
     mapnik::image_rgba8* im = LOAD_IMAGE_POINTER(imobj);
-    refjavastring type(env, typej);
+    JNIString type(env, typej);
 
-    std::string datastring = mapnik::save_to_string(*im, type.stringz);
+    std::string datastring = mapnik::save_to_string(*im, type.get());
     jbyteArray ret = env->NewByteArray(datastring.size());
     env->SetByteArrayRegion(ret, 0, datastring.size(), (const jbyte*)datastring.data());
 

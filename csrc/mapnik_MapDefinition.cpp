@@ -12,9 +12,8 @@
 JNIEXPORT jlong JNICALL Java_mapnik_MapDefinition_alloc__IILjava_lang_String_2(JNIEnv* env, jclass c, jint width,
                                                                                jint height, jstring srsj) {
     PREAMBLE;
-    refjavastring srs(env, srsj);
-
-    return FROM_POINTER(new mapnik::Map(width, height, srs.stringz));
+    JNIString srs(env, srsj);
+    return FROM_POINTER(new mapnik::Map(width, height, srs.get()));
     TRAILER(0);
 }
 
@@ -65,8 +64,8 @@ JNIEXPORT void JNICALL Java_mapnik_MapDefinition_loadMap(JNIEnv* env, jobject ma
                                                          jboolean strict) {
     PREAMBLE;
     mapnik::Map* map = LOAD_MAP_POINTER(mapobject);
-    refjavastring filename(env, filenamej);
-    mapnik::load_map(*map, filename.stringz, (bool)strict);
+    JNIString filename(env, filenamej);
+    mapnik::load_map(*map, filename.get(), (bool)strict);
     TRAILER_VOID;
 }
 
@@ -79,9 +78,9 @@ JNIEXPORT void JNICALL Java_mapnik_MapDefinition_loadMapString(JNIEnv* env, jobj
                                                                jboolean strict, jstring basepathj) {
     PREAMBLE;
     mapnik::Map* map = LOAD_MAP_POINTER(mapobject);
-    refjavastring str(env, strj);
-    refjavastring basepath(env, basepathj);
-    mapnik::load_map_string(*map, str.stringz, (bool)strict, basepath.stringz);
+    JNIString str(env, strj);
+    JNIString basepath(env, basepathj);
+    mapnik::load_map_string(*map, str.get(), (bool)strict, basepath.get());
     TRAILER_VOID;
 }
 
@@ -254,9 +253,9 @@ JNIEXPORT jstring JNICALL Java_mapnik_MapDefinition_getSrs(JNIEnv* env, jobject 
 JNIEXPORT void JNICALL Java_mapnik_MapDefinition_setSrs(JNIEnv* env, jobject mapobject, jstring srsj) {
     PREAMBLE;
     mapnik::Map* map = LOAD_MAP_POINTER(mapobject);
-    refjavastring srs(env, srsj);
+    JNIString srs(env, srsj);
 
-    map->set_srs(srs.stringz);
+    map->set_srs(srs.get());
     TRAILER_VOID;
 }
 
@@ -304,8 +303,8 @@ JNIEXPORT jstring JNICALL Java_mapnik_MapDefinition_getBasePath(JNIEnv* env, job
 JNIEXPORT void JNICALL Java_mapnik_MapDefinition_setBasePath(JNIEnv* env, jobject mapobject, jstring basepathj) {
     PREAMBLE;
     mapnik::Map* map = LOAD_MAP_POINTER(mapobject);
-    refjavastring basepath(env, basepathj);
-    map->set_base_path(basepath.stringz);
+    JNIString basepath(env, basepathj);
+    map->set_base_path(basepath.get());
     TRAILER_VOID;
 }
 
@@ -335,8 +334,8 @@ JNIEXPORT jobject JNICALL Java_mapnik_MapDefinition_getStyleNames(JNIEnv* env, j
 JNIEXPORT jobject JNICALL Java_mapnik_MapDefinition_getStyle(JNIEnv* env, jobject mapobject, jstring namej) {
     PREAMBLE;
     mapnik::Map* map = LOAD_MAP_POINTER(mapobject);
-    refjavastring name(env, namej);
-    std::string namestring(name.stringz);
+    JNIString name(env, namej);
+    std::string namestring(name.get());
 
     boost::optional<mapnik::feature_type_style const&> style = map->find_style(namestring);
     if (!style) return 0;
@@ -360,10 +359,10 @@ JNIEXPORT void JNICALL Java_mapnik_MapDefinition_addStyle(JNIEnv* env, jobject m
     if (!styleobject) return;
 
     mapnik::Map* map = LOAD_MAP_POINTER(mapobject);
-    refjavastring name(env, namej);
+    JNIString name(env, namej);
     mapnik::feature_type_style* style =
         static_cast<mapnik::feature_type_style*>(TO_POINTER(env->GetLongField(styleobject, FIELD_PTR)));
-    map->insert_style(name.stringz, *style);
+    map->insert_style(name.get(), *style);
     TRAILER_VOID;
 }
 
@@ -375,8 +374,8 @@ JNIEXPORT void JNICALL Java_mapnik_MapDefinition_addStyle(JNIEnv* env, jobject m
 JNIEXPORT void JNICALL Java_mapnik_MapDefinition_removeStyle(JNIEnv* env, jobject mapobject, jstring namej) {
     PREAMBLE;
     mapnik::Map* map = LOAD_MAP_POINTER(mapobject);
-    refjavastring name(env, namej);
-    map->remove_style(name.stringz);
+    JNIString name(env, namej);
+    map->remove_style(name.get());
     TRAILER_VOID;
 }
 
@@ -573,8 +572,8 @@ JNIEXPORT void JNICALL Java_mapnik_MapDefinition_setBackgroundImage(JNIEnv* env,
     PREAMBLE;
     mapnik::Map* map = LOAD_MAP_POINTER(mapobject);
     if (!filenamej) return;
-    refjavastring filename(env, filenamej);
-    map->set_background_image(filename.stringz);
+    JNIString filename(env, filenamej);
+    map->set_background_image(filename.get());
     TRAILER_VOID;
 }
 
@@ -592,8 +591,8 @@ JNIEXPORT void JNICALL Java_mapnik_MapDefinition_saveMap(JNIEnv* env, jobject ma
         return;
     }
 
-    refjavastring filename(env, filenamej);
-    mapnik::save_map(*map, filename.stringz, explicitDefaults);
+    JNIString filename(env, filenamej);
+    mapnik::save_map(*map, filename.get(), explicitDefaults);
 
     TRAILER_VOID;
 }

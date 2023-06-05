@@ -26,12 +26,12 @@ JNIEXPORT void JNICALL Java_mapnik_Mapnik_nativeInit(JNIEnv* env, jclass c) {
  */
 JNIEXPORT void JNICALL Java_mapnik_Mapnik_initLogger(JNIEnv* env, jclass c, jstring sj, jint level) {
     PREAMBLE;
-    refjavastring path(env, sj);
+    JNIString path(env, sj);
 #if MAPNIK_VERSION >= 200200
-    mapnik::logger::instance().use_file(path.stringz);
+    mapnik::logger::instance().use_file(path.get());
     mapnik::logger::instance().set_severity(static_cast<mapnik::logger::severity_type>(level));
 #else
-    mapnik::logger::instance()->use_file(path.stringz);
+    mapnik::logger::instance()->use_file(path.get());
     mapnik::logger::instance()->set_severity(static_cast<mapnik::logger::severity_type>(level));
 #endif
     TRAILER_VOID;

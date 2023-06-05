@@ -11,8 +11,8 @@ JNIEXPORT jboolean JNICALL Java_mapnik_FreetypeEngine_registerFont(JNIEnv* env, 
 
     if (!filenamej) { return false; }
 
-    refjavastring filename(env, filenamej);
-    return mapnik::freetype_engine::register_font(filename.stringz);
+    JNIString filename(env, filenamej);
+    return mapnik::freetype_engine::register_font(filename.get());
     TRAILER(false);
 }
 
@@ -27,8 +27,8 @@ JNIEXPORT jboolean JNICALL Java_mapnik_FreetypeEngine_registerFonts(JNIEnv* env,
 
     if (!dirj) { return false; }
 
-    refjavastring dir(env, dirj);
-    return mapnik::freetype_engine::register_fonts(dir.stringz, (bool)recurse);
+    JNIString dir(env, dirj);
+    return mapnik::freetype_engine::register_fonts(dir.get(), (bool)recurse);
     TRAILER(false);
 }
 
@@ -42,8 +42,8 @@ JNIEXPORT jboolean JNICALL Java_mapnik_FreetypeEngine_isFontFile(JNIEnv* env, jc
 
     if (!filenamej) { return false; }
 
-    refjavastring filename(env, filenamej);
-    return mapnik::freetype_engine::is_font_file(filename.stringz);
+    JNIString filename(env, filenamej);
+    return mapnik::freetype_engine::is_font_file(filename.get());
     TRAILER(false);
 }
 

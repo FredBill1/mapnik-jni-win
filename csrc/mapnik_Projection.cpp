@@ -11,8 +11,8 @@
  */
 JNIEXPORT jlong JNICALL Java_mapnik_Projection_alloc(JNIEnv *env, jclass c, jstring paramsj) {
     PREAMBLE;
-    refjavastring params(env, paramsj);
-    mapnik::projection *prj = new mapnik::projection(params.stringz);
+    JNIString params(env, paramsj);
+    mapnik::projection *prj = new mapnik::projection(params.get());
     return FROM_POINTER(prj);
     TRAILER(0);
 }
