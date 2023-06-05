@@ -38,15 +38,13 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_addImageImpl(JNIEnv *env, jobject 
  * Method:    addImageBuffer
  * Signature: ([BLjava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_mapnik_VectorTile_addImageBuffer(JNIEnv *env, jobject obj, jbyteArray buffer,
+JNIEXPORT void JNICALL Java_mapnik_VectorTile_addImageBuffer(JNIEnv *env, jobject obj, jbyteArray bufferj,
                                                              jstring name) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     JNIString layer_name(env, name);
-    auto data = env->GetByteArrayElements(buffer, NULL);
-    auto size = env->GetArrayLength(buffer);
-    mapnik::vector_tile_impl::add_image_buffer_as_tile_layer(*tile, layer_name.get(),
-                                                             reinterpret_cast<const char *>(data), size);
-    env->ReleaseByteArrayElements(buffer, data, JNI_ABORT);
+    JNIByteArrayElements buffer(env, bufferj);
+    mapnik::vector_tile_impl::add_image_buffer_as_tile_layer(
+        *tile, layer_name.get(), reinterpret_cast<const char *>(buffer.data()), buffer.size());
     TRAILER_VOID;
 }

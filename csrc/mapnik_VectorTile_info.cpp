@@ -11,8 +11,8 @@ JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_info(JNIEnv *env, jclass, jbyte
     PREAMBLE;
     if (infoj == NULL) throw std::exception("info is null");
     auto size = env->GetArrayLength(infoj);
-    jbyte *dataj = env->GetByteArrayElements(infoj, NULL);
-    auto data = reinterpret_cast<const char *>(dataj);
+    JNIByteArrayElements dataj(env, infoj);
+    auto data = reinterpret_cast<const char *>(dataj.data());
     std::set<mapnik::vector_tile_impl::validity_error> errors;
     bool has_errors = false;
     std::size_t layers_size = 0;

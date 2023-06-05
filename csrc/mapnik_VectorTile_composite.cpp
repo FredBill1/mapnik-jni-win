@@ -21,21 +21,18 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_compositeImpl(
     mapnik::Map map(tile->tile_size(), tile->tile_size(), "+init=epsg:3857");
     if (max_extent != NULL) {
         if (env->GetArrayLength(max_extent) != 4)
-            throw std::exception("max_extent value must be an array of [minx,miny,maxx,maxy]");
-        jdouble *tmp = env->GetDoubleArrayElements(max_extent, NULL);
+            throw std::invalid_argument("max_extent value must be an array of [minx,miny,maxx,maxy]");
+        JNIDoubleArrayElements tmp(env, max_extent);
         mapnik::box2d<double> ext(tmp[0], tmp[1], tmp[2], tmp[3]);
-        env->ReleaseDoubleArrayElements(max_extent, tmp, JNI_ABORT);
         map.set_maximum_extent(ext);
     }
 
     std::vector<mapnik::vector_tile_impl::merc_tile_ptr> merc_vtiles;
     for (jsize i = 0; i < array_len; ++i) {
-        jobject obj = env->GetObjectArrayElement(array, i);
-        if (obj == NULL) throw std::exception("some element of the input VectorTile array is null");
-        auto tile = LOAD_VECTOR_TILE_POINTER(obj);
+        JNIObject obj(env, env->GetObjectArrayElement(array, i));
+        auto tile = LOAD_VECTOR_TILE_POINTER(obj.get());
         // prevent shared_ptr from deleting the tile objects by creating a no-op deleter
         merc_vtiles.emplace_back(tile, [](auto &&) {});
-        env->DeleteLocalRef(obj);
     }
 
     mapnik::vector_tile_impl::processor ren(map);

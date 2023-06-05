@@ -11,14 +11,10 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_setDataImpl(JNIEnv *env, jobject o
                                                           jboolean validate, jboolean upgrade) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
-    if (bufferj == NULL) throw std::exception("buffer is null");
-    jsize size = env->GetArrayLength(bufferj);
-    if (size == 0) throw std::exception("buffer is empty");
-    jbyte *buffer = env->GetByteArrayElements(bufferj, NULL);
+    JNIByteArrayElements buffer(env, bufferj);
     tile->clear();
-    mapnik::vector_tile_impl::merge_from_compressed_buffer(*tile, reinterpret_cast<const char *>(buffer), size,
-                                                           validate, upgrade);
-    env->ReleaseByteArrayElements(bufferj, buffer, JNI_ABORT);
+    mapnik::vector_tile_impl::merge_from_compressed_buffer(*tile, reinterpret_cast<const char *>(buffer.data()),
+                                                           buffer.size(), validate, upgrade);
     TRAILER_VOID;
 }
 
@@ -31,13 +27,9 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_addDataImpl(JNIEnv *env, jobject o
                                                           jboolean validate, jboolean upgrade) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
-    if (bufferj == NULL) throw std::exception("buffer is null");
-    jsize size = env->GetArrayLength(bufferj);
-    if (size == 0) throw std::exception("buffer is empty");
-    jbyte *buffer = env->GetByteArrayElements(bufferj, NULL);
-    mapnik::vector_tile_impl::merge_from_compressed_buffer(*tile, reinterpret_cast<const char *>(buffer), size,
-                                                           validate, upgrade);
-    env->ReleaseByteArrayElements(bufferj, buffer, JNI_ABORT);
+    JNIByteArrayElements buffer(env, bufferj);
+    mapnik::vector_tile_impl::merge_from_compressed_buffer(*tile, reinterpret_cast<const char *>(buffer.data()),
+                                                           buffer.size(), validate, upgrade);
     TRAILER_VOID;
 }
 

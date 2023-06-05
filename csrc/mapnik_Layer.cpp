@@ -112,8 +112,8 @@ JNIEXPORT void JNICALL Java_mapnik_Layer_setStyles(JNIEnv *env, jobject layerobj
     if (ary) {
         jsize size = env->GetArrayLength(ary);
         for (jsize i = 0; i < size; i++) {
-            jobject element = env->GetObjectArrayElement(ary, i);
-            JNIString s(env, (jstring)element);
+            JNIObject element(env, env->GetObjectArrayElement(ary, i));
+            JNIString s(env, static_cast<jstring>(element.get()));
             styles.push_back(s.get());
         }
     }
