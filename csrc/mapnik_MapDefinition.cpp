@@ -3,6 +3,8 @@
 #include "globals.hpp"
 #include "utils/jni_map_to_mapnik_attributes.hpp"
 
+// TODO: getLayer return the layer array directly, not one by one
+
 //// --- Map class members
 /*
  * Class:     mapnik_MapDefinition

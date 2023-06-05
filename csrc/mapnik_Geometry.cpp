@@ -1,6 +1,9 @@
 #include "mapnik_Geometry.h"
 
 #include "globals.hpp"
+
+// TODO: return geometry array directly, not one by one
+
 /// -- Geometry class
 /*
  * Class:     mapnik_Geometry
