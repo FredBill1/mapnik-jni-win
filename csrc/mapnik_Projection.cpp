@@ -83,3 +83,61 @@ JNIEXPORT void JNICALL Java_mapnik_Projection_inverse(JNIEnv *env, jobject prjob
     env->SetDoubleField(coord, FIELD_COORD_Y, y);
     TRAILER_VOID;
 }
+
+/*
+ * Class:     mapnik_Projection
+ * Method:    forward
+ * Signature: (Lmapnik/Coord;)Lmapnik/Coord;
+ */
+JNIEXPORT jobject JNICALL Java_mapnik_Projection_forward__Lmapnik_Coord_2(JNIEnv *env, jobject obj, jobject xy_obj) {
+    PREAMBLE;
+    mapnik::projection *prj = LOAD_PROJECTION_POINTER(obj);
+    auto xy = coordToNative(env, xy_obj);
+    prj->forward(xy.x, xy.y);
+    return coordFromNative(env, xy);
+    TRAILER(NULL);
+}
+
+/*
+ * Class:     mapnik_Projection
+ * Method:    inverse
+ * Signature: (Lmapnik/Coord;)Lmapnik/Coord;
+ */
+JNIEXPORT jobject JNICALL Java_mapnik_Projection_inverse__Lmapnik_Coord_2(JNIEnv *env, jobject obj, jobject xy_obj) {
+    PREAMBLE;
+    mapnik::projection *prj = LOAD_PROJECTION_POINTER(obj);
+    auto xy = coordToNative(env, xy_obj);
+    prj->inverse(xy.x, xy.y);
+    return coordFromNative(env, xy);
+    TRAILER(NULL);
+}
+
+/*
+ * Class:     mapnik_Projection
+ * Method:    forward
+ * Signature: (Lmapnik/Box2d;)Lmapnik/Box2d;
+ */
+JNIEXPORT jobject JNICALL Java_mapnik_Projection_forward__Lmapnik_Box2d_2(JNIEnv *env, jobject obj, jobject box_obj) {
+    PREAMBLE;
+    mapnik::projection *prj = LOAD_PROJECTION_POINTER(obj);
+    auto box = box2dToNative(env, box_obj);
+    prj->forward(box.minx_, box.miny_);
+    prj->forward(box.maxx_, box.maxy_);
+    return box2dFromNative(env, box);
+    TRAILER(NULL);
+}
+
+/*
+ * Class:     mapnik_Projection
+ * Method:    inverse
+ * Signature: (Lmapnik/Box2d;)Lmapnik/Box2d;
+ */
+JNIEXPORT jobject JNICALL Java_mapnik_Projection_inverse__Lmapnik_Box2d_2(JNIEnv *env, jobject obj, jobject box_obj) {
+    PREAMBLE;
+    mapnik::projection *prj = LOAD_PROJECTION_POINTER(obj);
+    auto box = box2dToNative(env, box_obj);
+    prj->inverse(box.minx_, box.miny_);
+    prj->inverse(box.maxx_, box.maxy_);
+    return box2dFromNative(env, box);
+    TRAILER(NULL);
+}

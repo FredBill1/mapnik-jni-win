@@ -26,9 +26,6 @@ public class Projection extends NativeObject {
      * @param params a proj4 definition
      */
     public Projection(String params) {
-        if (params == null) {
-            throw new IllegalArgumentException("Projection params cannot be null");
-        }
         ptr = alloc(params);
     }
 
@@ -36,7 +33,7 @@ public class Projection extends NativeObject {
      * Creates a new WGS84 projection
      */
     public Projection() {
-        ptr = alloc(LATLNG_PARAMS);
+        this(LATLNG_PARAMS);
     }
 
     @Override
@@ -62,7 +59,7 @@ public class Projection extends NativeObject {
      * 
      * @param coord a Coord in WGS84 space
      */
-    public native void forward(Coord coord);
+    public native Coord forward(Coord coord);
 
     /***
      * Unprojects from a position in this projection to the same position in WGS84
@@ -71,7 +68,7 @@ public class Projection extends NativeObject {
      * 
      * @param coord a Coord in this projection
      */
-    public native void inverse(Coord coord);
+    public native Coord inverse(Coord coord);
 
     /***
      * Projects a bounding box from WGS84 space to this projection.
@@ -79,18 +76,7 @@ public class Projection extends NativeObject {
      * 
      * @param box a Box2d in WGS84 space
      */
-    public void forward(Box2d box) {
-        Coord c = new Coord(box.minx, box.miny);
-        forward(c);
-        box.minx = c.x;
-        box.miny = c.y;
-
-        c.x = box.maxx;
-        c.y = box.maxy;
-        forward(c);
-        box.maxx = c.x;
-        box.maxy = c.y;
-    }
+    public native Box2d forward(Box2d box);
 
     /***
      * Projects a bounding box from this projection to WGS84.
@@ -98,17 +84,6 @@ public class Projection extends NativeObject {
      * 
      * @param box a Box2d in this projection.
      */
-    public void inverse(Box2d box) {
-        Coord c = new Coord(box.minx, box.miny);
-        inverse(c);
-        box.minx = c.x;
-        box.miny = c.y;
-
-        c.x = box.maxx;
-        c.y = box.maxy;
-        inverse(c);
-        box.maxx = c.x;
-        box.maxy = c.y;
-    }
+    public native Box2d inverse(Box2d box);
 
 }

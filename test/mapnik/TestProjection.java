@@ -18,25 +18,32 @@ public class TestProjection {
 
     @Test
     public void testForward() {
-        Projection prj = new Projection(Projection.LATLNG_PARAMS);
-        Coord c = new Coord(10, 10);
-        prj.forward(c);
-        assertEquals(10, (int) c.x);
-        assertEquals(10, (int) c.y);
+        try (Projection prj = new Projection(Projection.LATLNG_PARAMS)) {
+            Coord c = new Coord(10, 10);
+            Coord d = prj.forward(c);
+            assertEquals(10, (int) c.x);
+            assertEquals(10, (int) c.y);
+            System.out.println(c);
+            System.out.println(d);
+        }
     }
 
     @Test
     public void testInverse() {
-        Projection prj = new Projection(Projection.LATLNG_PARAMS);
-        Coord c = new Coord(10, 10);
-        prj.inverse(c);
-        assertEquals(10, (int) c.x);
-        assertEquals(10, (int) c.y);
+        try (Projection prj = new Projection(Projection.LATLNG_PARAMS)) {
+            Coord c = new Coord(10, 10);
+            Coord d = prj.inverse(c);
+            assertEquals(10, (int) c.x);
+            assertEquals(10, (int) c.y);
+            System.out.println(c);
+            System.out.println(d);
+        }
     }
 
     @Test
     public void testParams() {
-        Projection prj = new Projection(Projection.LATLNG_PARAMS);
-        assertEquals(Projection.LATLNG_PARAMS, prj.getParams());
+        try (Projection prj = new Projection(Projection.LATLNG_PARAMS)) {
+            assertEquals(Projection.LATLNG_PARAMS, prj.getParams());
+        }
     }
 }
