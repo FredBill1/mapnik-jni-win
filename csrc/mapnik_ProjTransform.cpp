@@ -50,21 +50,21 @@ JNIEXPORT jobject JNICALL Java_mapnik_ProjTransform_forward__Lmapnik_Box2d_2(JNI
 /*
  * Class:     mapnik_ProjTransform
  * Method:    forward
- * Signature: (DD)[D
+ * Signature: (Lmapnik/Coord;)Lmapnik/Coord;
  */
-JNIEXPORT jdoubleArray JNICALL Java_mapnik_ProjTransform_forward__DD(JNIEnv *env, jobject obj, jdouble x, jdouble y) {
+JNIEXPORT jobject JNICALL Java_mapnik_ProjTransform_forward__Lmapnik_Coord_2(JNIEnv *env, jobject obj, jobject xy_obj) {
     PREAMBLE;
     auto tr = LOAD_PROJ_TRANSFORM_POINTER(obj);
-    double xyz[3] = {x, y, 0};
-    if (!tr->forward(xyz[0], xyz[1], xyz[2])) {
+    auto xy = coordToNative(env, xy_obj);
+    double z = 0;
+    if (!tr->forward(xy.x, xy.y, z)) {
         std::ostringstream s;
-        s << "Failed to forward project " << x << ", " << y << " using project transfrom `" << tr->definition() << '`';
+        s << "Failed to forward project " << xy.x << ", " << xy.y << " using project transfrom `" << tr->definition()
+          << '`';
         throw_runtime_exception(env, s.str().c_str());
         return NULL;
     }
-    jdoubleArray arr = env->NewDoubleArray(2);
-    env->SetDoubleArrayRegion(arr, 0, 2, xyz);
-    return arr;
+    return coordFromNative(env, xy);
     TRAILER(NULL);
 }
 
@@ -91,20 +91,21 @@ JNIEXPORT jobject JNICALL Java_mapnik_ProjTransform_backward__Lmapnik_Box2d_2(JN
 /*
  * Class:     mapnik_ProjTransform
  * Method:    backward
- * Signature: (DD)[D
+ * Signature: (Lmapnik/Coord;)Lmapnik/Coord;
  */
-JNIEXPORT jdoubleArray JNICALL Java_mapnik_ProjTransform_backward__DD(JNIEnv *env, jobject obj, jdouble x, jdouble y) {
+JNIEXPORT jobject JNICALL Java_mapnik_ProjTransform_backward__Lmapnik_Coord_2(JNIEnv *env, jobject obj,
+                                                                              jobject xy_obj) {
     PREAMBLE;
     auto tr = LOAD_PROJ_TRANSFORM_POINTER(obj);
-    double xyz[3] = {x, y, 0};
-    if (!tr->backward(xyz[0], xyz[1], xyz[2])) {
+    auto xy = coordToNative(env, xy_obj);
+    double z = 0;
+    if (!tr->backward(xy.x, xy.y, z)) {
         std::ostringstream s;
-        s << "Failed to backward project " << x << ", " << y << " using project transfrom `" << tr->definition() << '`';
+        s << "Failed to backward project " << xy.x << ", " << xy.y << " using project transfrom `" << tr->definition()
+          << '`';
         throw_runtime_exception(env, s.str().c_str());
         return NULL;
     }
-    jdoubleArray arr = env->NewDoubleArray(2);
-    env->SetDoubleArrayRegion(arr, 0, 2, xyz);
-    return arr;
+    return coordFromNative(env, xy);
     TRAILER(NULL);
 }

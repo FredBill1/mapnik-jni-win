@@ -110,6 +110,18 @@ inline mapnik::box2d<double> box2dToNative(JNIEnv* env, jobject box) {
     return ret;
 }
 
+inline jobject coordFromNative(JNIEnv* env, mapnik::coord2d const& coord) {
+    jobject ret = env->AllocObject(CLASS_COORD);
+    env->SetDoubleField(ret, FIELD_COORD_X, coord.x);
+    env->SetDoubleField(ret, FIELD_COORD_Y, coord.y);
+    return ret;
+}
+
+inline mapnik::coord2d coordToNative(JNIEnv* env, jobject coord) {
+    mapnik::coord2d ret(env->GetDoubleField(coord, FIELD_COORD_X), env->GetDoubleField(coord, FIELD_COORD_Y));
+    return ret;
+}
+
 inline mapnik::color colorToNative(JNIEnv* env, jobject c) {
     return mapnik::color(env->GetIntField(c, FIELD_COLOR_RED), env->GetIntField(c, FIELD_COLOR_GREEN),
                          env->GetIntField(c, FIELD_COLOR_BLUE), env->GetIntField(c, FIELD_COLOR_ALPHA));

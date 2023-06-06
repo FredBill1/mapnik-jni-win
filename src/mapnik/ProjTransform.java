@@ -18,9 +18,9 @@ public class ProjTransform extends NativeObject {
 
     public native Box2d forward(Box2d box);
 
-    public native double[] forward(double x, double y); // TODO: use Coord instead
+    public native Coord forward(Coord xy);
 
     public native Box2d backward(Box2d box);
 
-    public native double[] backward(double x, double y); // TODO: use Coord instead
+    public native Coord backward(Coord xy);
 }
