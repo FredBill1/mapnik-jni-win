@@ -177,8 +177,10 @@ struct geometry_array_visitor {
     template <typename T> jobjectArray operator()(mapnik::geometry::point<T> const &geom) {
         jobjectArray arr = env_->NewObjectArray(2, CLASS_OBJECT, NULL);
         jni_value_visitor visitor(env_);
-        env_->SetObjectArrayElement(arr, 0, visitor(geom.x));
-        env_->SetObjectArrayElement(arr, 1, visitor(geom.y));
+        JNIObject x(env_, visitor(geom.x));
+        JNIObject y(env_, visitor(geom.y));
+        env_->SetObjectArrayElement(arr, 0, x.get());
+        env_->SetObjectArrayElement(arr, 1, y.get());
         return arr;
     }
     template <typename T> jobjectArray operator()(T &&geom) {
@@ -227,7 +229,10 @@ struct geometry_type_name {
 struct json_value_visitor {
     json_value_visitor(JNIEnv *env, jobject att_obj, const char *name)
         : env_(env), att_obj_(att_obj), key_(env->NewStringUTF(name)) {}
-    void put(jobject val) { env_->CallObjectMethod(att_obj_, METHOD_HASHMAP_PUT, key_, val); }
+    void put(jobject val) {
+        JNIObjectAllowNull(env_, env_->CallObjectMethod(att_obj_, METHOD_HASHMAP_PUT, key_, val));
+        env_->DeleteLocalRef(val);
+    }
     void operator()(std::string const &val) { put(env_->NewStringUTF(val.c_str())); }
     void operator()(bool const &val) { put(env_->CallStaticObjectMethod(CLASS_BOOLEAN, METHOD_BOOLEAN_VALUEOF, val)); }
     void operator()(int64_t const &val) { put(env_->CallStaticObjectMethod(CLASS_LONG, METHOD_LONG_VALUEOF, val)); }

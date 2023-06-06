@@ -1,81 +1,100 @@
 #include "mapnik_Geometry.h"
 
+#include <mapnik/geometry/geometry_type.hpp>
+#include <mapnik/util/geometry_to_geojson.hpp>
+#include <mapnik/util/geometry_to_wkb.hpp>
+#include <mapnik/util/geometry_to_wkt.hpp>
+
 #include "globals.hpp"
 
-// TODO: return geometry array directly, not one by one
-
-/// -- Geometry class
-/*
- * Class:     mapnik_Geometry
- * Method:    getType
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_mapnik_Geometry_getType(JNIEnv *env, jobject gobj) {
-    PREAMBLE;
-    mapnik::geometry::geometry<double> *g = LOAD_GEOMETRY_POINTER(gobj);
-    return mapnik::geometry::geometry_type(*g);
-    TRAILER(0);
-}
-
-struct VertexCollector {
-    std::vector<std::tuple<unsigned, double, double>> vertices;
-
-    template <typename T> void operator()(const T &vertex_adapter) {
-        unsigned command;
-        double x, y;
-        while ((command = vertex_adapter.vertex(&x, &y)) != mapnik::SEG_END)
-            vertices.push_back(std::make_tuple(command, x, y));
-    }
-};
-
-/*
- * Class:     mapnik_Geometry
- * Method:    getNumPoints
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_mapnik_Geometry_getNumPoints(JNIEnv *env, jobject gobj) {
-    PREAMBLE;
-    mapnik::geometry::geometry<double> *g = LOAD_GEOMETRY_POINTER(gobj);
-
-    VertexCollector vertex_collector;
-    mapnik::geometry::vertex_processor<VertexCollector> processor(vertex_collector);
-    processor(*g);
-
-    return vertex_collector.vertices.size();
-    TRAILER(0);
+static bool to_geojson_projected(std::string &json, mapnik::geometry::geometry<double> const &geom,
+                                 mapnik::proj_transform const &prj_trans) {
+    unsigned int n_err = 0;
+    mapnik::geometry::geometry<double> projected_geom = mapnik::geometry::reproject_copy(geom, prj_trans, n_err);
+    if (n_err > 0) return false;
+    return mapnik::util::to_geojson(json, projected_geom);
 }
 
 /*
  * Class:     mapnik_Geometry
- * Method:    getVertex
- * Signature: (ILmapnik/Coord;)I
+ * Method:    dealloc
+ * Signature: (J)V
  */
-JNIEXPORT jint JNICALL Java_mapnik_Geometry_getVertex(JNIEnv *env, jobject gobj, jint pos, jobject coord) {
+JNIEXPORT void JNICALL Java_mapnik_Geometry_dealloc(JNIEnv *env, jobject, jlong ptr) {
     PREAMBLE;
-    mapnik::geometry::geometry<double> *g = LOAD_GEOMETRY_POINTER(gobj);
-
-    VertexCollector vertex_collector;
-    mapnik::geometry::vertex_processor<VertexCollector> processor(vertex_collector);
-    processor(*g);
-    const std::tuple<unsigned, double, double> &command_and_coords = vertex_collector.vertices.at(pos);
-
-    if (coord) {
-        env->SetDoubleField(coord, FIELD_COORD_X, std::get<1>(command_and_coords));
-        env->SetDoubleField(coord, FIELD_COORD_Y, std::get<2>(command_and_coords));
-    }
-
-    return std::get<0>(command_and_coords);
-    TRAILER(0);
+    delete reinterpret_cast<mapnik::feature_ptr *>(ptr);
+    TRAILER_VOID;
 }
 
 /*
  * Class:     mapnik_Geometry
- * Method:    getEnvelope
+ * Method:    extent
  * Signature: ()Lmapnik/Box2d;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_Geometry_getEnvelope(JNIEnv *env, jobject gobj) {
+JNIEXPORT jobject JNICALL Java_mapnik_Geometry_extent(JNIEnv *env, jobject obj) {
     PREAMBLE;
-    mapnik::geometry::geometry<double> *g = LOAD_GEOMETRY_POINTER(gobj);
-    return box2dFromNative(env, mapnik::geometry::envelope(*g));
+    auto feature = LOAD_FEATURE_POINTER(obj);
+    return box2dFromNative(env, (*feature)->envelope());
+    TRAILER(NULL);
+}
+
+/*
+ * Class:     mapnik_Geometry
+ * Method:    toJSON
+ * Signature: (Lmapnik/ProjTransform;)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_mapnik_Geometry_toJSON(JNIEnv *env, jobject obj, jobject transform) {
+    PREAMBLE;
+    const auto &geom = (*LOAD_FEATURE_POINTER(obj))->get_geometry();
+    std::string json;
+    if (transform == NULL) {
+        if (!mapnik::util::to_geojson(json, geom)) throw std::runtime_error("Failed to generate GeoJSON");
+    } else {
+        auto tr = LOAD_PROJ_TRANSFORM_POINTER(transform);
+        if (!to_geojson_projected(json, geom, *tr)) throw std::runtime_error("Failed to generate GeoJSON");
+    }
+    return env->NewStringUTF(json.c_str());
+    TRAILER(NULL);
+}
+
+/*
+ * Class:     mapnik_Geometry
+ * Method:    toWKB
+ * Signature: ()[B
+ */
+JNIEXPORT jbyteArray JNICALL Java_mapnik_Geometry_toWKB(JNIEnv *env, jobject obj) {
+    PREAMBLE;
+    const auto &geom = (*LOAD_FEATURE_POINTER(obj))->get_geometry();
+    mapnik::util::wkb_buffer_ptr wkb = mapnik::util::to_wkb(geom, mapnik::wkbNDR);
+    if (!wkb) throw std::runtime_error("Failed to generate WKB - geometry likely null");
+    jbyteArray ret = env->NewByteArray(wkb->size());
+    env->SetByteArrayRegion(ret, 0, wkb->size(), reinterpret_cast<const jbyte *>(wkb->buffer()));
+    return ret;
+    TRAILER(NULL);
+}
+
+/*
+ * Class:     mapnik_Geometry
+ * Method:    toWKT
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_mapnik_Geometry_toWKT(JNIEnv *env, jobject obj) {
+    PREAMBLE;
+    const auto &geom = (*LOAD_FEATURE_POINTER(obj))->get_geometry();
+    std::string wkt;
+    if (!mapnik::util::to_wkt(wkt, geom)) throw std::runtime_error("Failed to generate WKT");
+    return env->NewStringUTF(wkt.c_str());
+    TRAILER(NULL);
+}
+
+/*
+ * Class:     mapnik_Geometry
+ * Method:    typeImpl
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_mapnik_Geometry_typeImpl(JNIEnv *env, jobject obj) {
+    PREAMBLE;
+    const auto &geom = (*LOAD_FEATURE_POINTER(obj))->get_geometry();
+    return mapnik::geometry::geometry_type(geom);
     TRAILER(0);
 }

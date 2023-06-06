@@ -288,10 +288,7 @@ JNIEXPORT jobject JNICALL Java_mapnik_Layer_getDatasource(JNIEnv *env, jobject l
     if (!ds) return 0;
 
     mapnik::datasource_ptr *dspinned = new mapnik::datasource_ptr(ds);
-    jobject ret = env->NewObject(CLASS_DATASOURCE, CTOR_NATIVEOBJECT);
-    env->SetLongField(ret, FIELD_PTR, FROM_POINTER(dspinned));
-
-    return ret;
+    return createDatasourceObj(env, dspinned);
     TRAILER(0);
 }
 

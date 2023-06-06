@@ -48,15 +48,13 @@ void mapnik_jni_init_ids(JNIEnv* env) {
     init_class(env, "mapnik/Projection", CLASS_PROJECTION);
     init_class(env, "mapnik/Query", CLASS_QUERY);
     init_class(env, "mapnik/FeatureSet", CLASS_FEATURESET);
+    init_class(env, "mapnik/Feature", CLASS_FEATURE);
     init_class(env, "mapnik/Geometry", CLASS_GEOMETRY);
     init_class(env, "mapnik/Image", CLASS_IMAGE);
 
     // Ptr
     CTOR_NATIVEOBJECT = lookup_method(env, CLASS_NATIVEOBJECT, "<init>", "()V");
     FIELD_PTR = lookup_field(env, CLASS_NATIVEOBJECT, "ptr", "J");
-
-    // FeatureSet
-    FIELD_FEATURESET_FEATURE_PTR = lookup_field(env, CLASS_FEATURESET, "feature_ptr", "J");
 
     // String
     init_class(env, "java/lang/String", CLASS_STRING);

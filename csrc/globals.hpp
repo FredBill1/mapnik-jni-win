@@ -86,12 +86,13 @@ inline jlong ASSERT_LONG_POINTER(jlong ptr) {
 #define LOAD_DATASOURCE_POINTER(object) (static_cast<mapnik::datasource_ptr*>(LOAD_OBJECT_POINTER(object)))
 #define LOAD_FEATURE_TYPE_STYLE_POINTER(object) (static_cast<mapnik::feature_type_style*>(LOAD_OBJECT_POINTER(object)))
 #define LOAD_PROJECTION_POINTER(object) (static_cast<mapnik::projection*>(LOAD_OBJECT_POINTER(object)))
+#define LOAD_PROJ_TRANSFORM_POINTER(object) (static_cast<mapnik::proj_transform*>(LOAD_OBJECT_POINTER(object)))
 #define LOAD_QUERY_POINTER(object) (static_cast<mapnik::query*>(LOAD_OBJECT_POINTER(object)))
-#define LOAD_FEATURESET_POINTER(object) (static_cast<mapnik::featureset_ptr*>(LOAD_OBJECT_POINTER(object)))
-#define LOAD_FEATURE_POINTER(object) (static_cast<mapnik::feature_ptr*>(TO_POINTER(env->GetLongField(object, FIELD_FEATURESET_FEATURE_PTR))))
-#define LOAD_GEOMETRY_POINTER(object) (static_cast<mapnik::geometry::geometry<double>*>(LOAD_OBJECT_POINTER(object)))
 #define LOAD_IMAGE_POINTER(object) (static_cast<mapnik::image_rgba8*>(LOAD_OBJECT_POINTER(object)))
 #define LOAD_VECTOR_TILE_POINTER(object) (static_cast<mapnik::vector_tile_impl::merc_tile*>(LOAD_OBJECT_POINTER(object)))
+#define LOAD_FEATURE_POINTER(object) (static_cast<mapnik::feature_ptr*>(LOAD_OBJECT_POINTER(object)))
+#define LOAD_FEATURESET_POINTER(object) (static_cast<mapnik::featureset_ptr*>(LOAD_OBJECT_POINTER(object)))
+
 // clang-format on
 
 inline jobject box2dFromNative(JNIEnv* env, mapnik::box2d<double> const& box) {
@@ -120,6 +121,30 @@ inline jobject colorFromNative(JNIEnv* env, mapnik::color const& c) {
     env->SetIntField(ret, FIELD_COLOR_GREEN, c.green());
     env->SetIntField(ret, FIELD_COLOR_BLUE, c.blue());
     env->SetIntField(ret, FIELD_COLOR_ALPHA, c.alpha());
+    return ret;
+}
+
+inline jobject createDatasourceObj(JNIEnv* env, mapnik::datasource_ptr* ds) {
+    jobject ret = env->NewObject(CLASS_DATASOURCE, CTOR_NATIVEOBJECT);
+    env->SetLongField(ret, FIELD_PTR, FROM_POINTER(ds));
+    return ret;
+}
+
+inline jobject creatrFeatureSetObj(JNIEnv* env, mapnik::featureset_ptr* featureset) {
+    jobject ret = env->NewObject(CLASS_FEATURESET, CTOR_NATIVEOBJECT);
+    env->SetLongField(ret, FIELD_PTR, FROM_POINTER(featureset));
+    return ret;
+}
+
+inline jobject createFeatureObj(JNIEnv* env, mapnik::feature_ptr* feature) {
+    jobject ret = env->NewObject(CLASS_FEATURE, CTOR_NATIVEOBJECT);
+    env->SetLongField(ret, FIELD_PTR, FROM_POINTER(feature));
+    return ret;
+}
+
+inline jobject createGeometryObj(JNIEnv* env, mapnik::feature_ptr* feature) {
+    jobject ret = env->NewObject(CLASS_GEOMETRY, CTOR_NATIVEOBJECT);
+    env->SetLongField(ret, FIELD_PTR, FROM_POINTER(feature));
     return ret;
 }
 

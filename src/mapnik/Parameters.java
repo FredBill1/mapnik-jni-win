@@ -2,6 +2,8 @@ package mapnik;
 
 import java.util.HashMap;
 
+// TODO: remove this class
+
 /**
  * Shadows a mapnik::parameters object
  * 

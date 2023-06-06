@@ -19,6 +19,7 @@ public class Mapnik {
     static {
         nativeAllocCounts = new HashMap<>();
         nativeAllocCounts.put(Datasource.class, new AtomicInteger());
+        nativeAllocCounts.put(Feature.class, new AtomicInteger());
         nativeAllocCounts.put(FeatureSet.class, new AtomicInteger());
         nativeAllocCounts.put(FeatureTypeStyle.class, new AtomicInteger());
         nativeAllocCounts.put(Geometry.class, new AtomicInteger());
@@ -26,6 +27,7 @@ public class Mapnik {
         nativeAllocCounts.put(Layer.class, new AtomicInteger());
         nativeAllocCounts.put(MapDefinition.class, new AtomicInteger());
         nativeAllocCounts.put(Projection.class, new AtomicInteger());
+        nativeAllocCounts.put(ProjTransform.class, new AtomicInteger());
         nativeAllocCounts.put(Query.class, new AtomicInteger());
         nativeAllocCounts.put(VectorTile.class, new AtomicInteger());
     }

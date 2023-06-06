@@ -131,11 +131,7 @@ JNIEXPORT jobject JNICALL Java_mapnik_Datasource_features(JNIEnv* env, jobject d
     fspinned = new mapnik::featureset_ptr();
     fs.swap(*fspinned);
 
-    jobject ret = env->NewObject(CLASS_FEATURESET, CTOR_NATIVEOBJECT);
-
-    env->SetLongField(ret, FIELD_PTR, FROM_POINTER(fspinned));
-    env->SetLongField(ret, FIELD_FEATURESET_FEATURE_PTR, 0l);
-    return ret;
+    return creatrFeatureSetObj(env, fspinned);
 
     TRAILER(0);
 }
@@ -155,9 +151,7 @@ JNIEXPORT jobject JNICALL Java_mapnik_Datasource_featuresAtPoint(JNIEnv* env, jo
     mapnik::featureset_ptr fs = (*dsp)->features_at_point(pt);
     mapnik::featureset_ptr* fspinned = new mapnik::featureset_ptr(fs);
 
-    jobject ret = env->NewObject(CLASS_FEATURESET, CTOR_NATIVEOBJECT);
-    env->SetLongField(ret, FIELD_PTR, FROM_POINTER(fspinned));
-    return ret;
+    return creatrFeatureSetObj(env, fspinned);
 
     TRAILER(0);
 }

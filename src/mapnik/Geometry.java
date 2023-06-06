@@ -1,5 +1,7 @@
 package mapnik;
 
+import mapnik.options.GeometryTypes;
+
 /**
  * A mapnik::geometry_type instance. These instances are always owned
  * by the corresponding feature.
@@ -8,47 +10,33 @@ package mapnik;
  *
  */
 public class Geometry extends NativeObject {
-    // mapnik::geometry_type*
+    // holds a `mapnik::feature_ptr*`, same as the class `Feature`
 
-    /**
-     * Only ever alloc'd from native code
-     */
     private Geometry() {
     }
 
     @Override
-    void dealloc(long ptr) {
+    native void dealloc(long ptr);
+
+    public native Box2d extent();
+
+    public native String toJSON(ProjTransform transform);
+
+    public String toJSON() {
+        return toJSON(null);
     }
 
-    public static final int TYPE_POINT = 1,
-            TYPE_LINESTRING = 2,
-            TYPE_POLYGON = 3,
-            TYPE_MULTIPOINT = 4,
-            TYPE_MULTILINESTRING = 5,
-            TYPE_MULTIPOLYGON = 6;
+    public native byte[] toWKB();
 
-    public native int getType();
+    public native String toWKT();
 
-    public native int getNumPoints();
+    private native int typeImpl();
 
-    public native int getVertex(int pos, Coord c);
+    public GeometryTypes type() {
+        return GeometryTypes.values()[typeImpl()];
+    }
 
-    public native Box2d getEnvelope();
-
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Geometry(").append(getType()).append(",[");
-        Coord c = new Coord();
-        for (int i = 0; i < getNumPoints(); i++) {
-            int code = getVertex(i, c);
-            if (i > 0)
-                sb.append(",");
-            sb.append(c.x);
-            sb.append(" ");
-            sb.append(c.y);
-        }
-
-        sb.append("])");
-        return sb.toString();
+    public String typeName() {
+        return type().name();
     }
 }
