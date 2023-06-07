@@ -189,7 +189,7 @@ public class MapDefinition extends NativeObject {
         boolean process_all_rings = false;
     }
 
-    native void renderVectorTileImpl(VectorTile tile, double scale, double scale_denominator, int offset_x,
+    private native void renderVectorTileImpl(VectorTile tile, double scale, double scale_denominator, int offset_x,
             int offset_y, int image_scaling, int image_format, double area_threshold, boolean strictly_simple,
             boolean multi_polygon_union, int fill_type, int threading_mode, double simplify_distance,
             Map<String, Object> variables, boolean process_all_rings);
@@ -215,8 +215,8 @@ public class MapDefinition extends NativeObject {
         Map<String, Object> variables = null;
     }
 
-    native void renderImageImpl(Image image, int buffer_size, double scale, double scale_denominator, int offset_x,
-            int offset_y, Map<String, Object> variables);
+    private native void renderImageImpl(Image image, int buffer_size, double scale, double scale_denominator,
+            int offset_x, int offset_y, Map<String, Object> variables);
 
     public void renderImage(Image image, RenderImageOptions options) {
         renderImageImpl(image, options.buffer_size, options.scale, options.scale_denominator, options.offset_x,
