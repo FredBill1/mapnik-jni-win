@@ -2,9 +2,6 @@
 
 #include "globals.hpp"
 
-// TODO: getLayer return the layer array directly, not one by one
-
-//// --- Map class members
 /*
  * Class:     mapnik_MapDefinition
  * Method:    alloc
@@ -76,13 +73,9 @@ JNIEXPORT jint JNICALL Java_mapnik_MapDefinition_getLayerCount(JNIEnv* env, jobj
 JNIEXPORT jobject JNICALL Java_mapnik_MapDefinition_getLayer(JNIEnv* env, jobject mapobject, jint index) {
     PREAMBLE;
     mapnik::Map* map = LOAD_MAP_POINTER(mapobject);
-    std::vector<mapnik::layer>& layers(map->layers());
-    if (index < 0 || ((unsigned)index) > layers.size()) { return 0; }
-
-    mapnik::layer* layer_copy = new mapnik::layer(layers[index]);
-    jobject layer = env->NewObject(CLASS_LAYER, CTOR_NATIVEOBJECT);
-    env->SetLongField(layer, FIELD_PTR, FROM_POINTER(layer_copy));
-    return layer;
+    auto& layers = map->layers();
+    auto layer_copy = new mapnik::layer(layers.at(index));
+    return createLayerObj(env, layer_copy);
     TRAILER(0);
 }
 
@@ -94,13 +87,10 @@ JNIEXPORT jobject JNICALL Java_mapnik_MapDefinition_getLayer(JNIEnv* env, jobjec
 JNIEXPORT void JNICALL Java_mapnik_MapDefinition_setLayer(JNIEnv* env, jobject mapobject, jint index,
                                                           jobject layerobject) {
     PREAMBLE;
-    mapnik::Map* map = LOAD_MAP_POINTER(mapobject);
-    std::vector<mapnik::layer>& layers(map->layers());
-    if (index < 0 || ((unsigned)index) > layers.size()) { return; }
-
-    if (!layerobject) return;
-    mapnik::layer* layer = static_cast<mapnik::layer*>(TO_POINTER(env->GetLongField(layerobject, FIELD_PTR)));
-    layers[index] = *layer;
+    auto map = LOAD_MAP_POINTER(mapobject);
+    auto layer = LOAD_LAYER_POINTER(layerobject);
+    auto& layers = map->layers();
+    layers.at(index) = *layer;
     TRAILER_VOID;
 }
 
@@ -122,12 +112,9 @@ JNIEXPORT void JNICALL Java_mapnik_MapDefinition_removeLayer(JNIEnv* env, jobjec
  * Signature: (Lmapnik/Layer;)V
  */
 JNIEXPORT void JNICALL Java_mapnik_MapDefinition_addLayer(JNIEnv* env, jobject mapobject, jobject layerobject) {
-    if (!layerobject) return;
-
     PREAMBLE;
-    mapnik::Map* map = LOAD_MAP_POINTER(mapobject);
-    mapnik::layer* layer = static_cast<mapnik::layer*>(TO_POINTER(env->GetLongField(layerobject, FIELD_PTR)));
-
+    auto map = LOAD_MAP_POINTER(mapobject);
+    auto layer = LOAD_LAYER_POINTER(layerobject);
     map->add_layer(*layer);
     TRAILER_VOID;
 }
@@ -139,8 +126,8 @@ JNIEXPORT void JNICALL Java_mapnik_MapDefinition_addLayer(JNIEnv* env, jobject m
  */
 JNIEXPORT void JNICALL Java_mapnik_MapDefinition_removeAllLayers(JNIEnv* env, jobject mapobject) {
     PREAMBLE;
-    mapnik::Map* map = LOAD_MAP_POINTER(mapobject);
-    std::vector<mapnik::layer>& layers(map->layers());
+    auto map = LOAD_MAP_POINTER(mapobject);
+    auto& layers = map->layers();
     layers.clear();
     TRAILER_VOID;
 }
@@ -373,22 +360,20 @@ JNIEXPORT jobject JNICALL Java_mapnik_MapDefinition_getMaximumExtent(JNIEnv* env
  */
 JNIEXPORT void JNICALL Java_mapnik_MapDefinition_setMaximumExtent(JNIEnv* env, jobject mapobject, jobject extentj) {
     PREAMBLE;
-    mapnik::Map* map = LOAD_MAP_POINTER(mapobject);
-    if (!extentj) return;
-
+    auto map = LOAD_MAP_POINTER(mapobject);
     map->set_maximum_extent(box2dToNative(env, extentj));
     TRAILER_VOID;
 }
 
 /*
  * Class:     mapnik_MapDefinition
- * Method:    getCurrentExtent
+ * Method:    getExtent
  * Signature: ()Lmapnik/Box2d;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_MapDefinition_getCurrentExtent(JNIEnv* env, jobject mapobject) {
+JNIEXPORT jobject JNICALL Java_mapnik_MapDefinition_getExtent(JNIEnv* env, jobject obj) {
     PREAMBLE;
-    mapnik::Map* map = LOAD_MAP_POINTER(mapobject);
-    mapnik::box2d<double> extent = map->get_current_extent();
+    auto map = LOAD_MAP_POINTER(obj);
+    auto& extent = map->get_current_extent();
     return box2dFromNative(env, extent);
     TRAILER(0);
 }
@@ -425,8 +410,6 @@ JNIEXPORT void JNICALL Java_mapnik_MapDefinition_zoom(JNIEnv* env, jobject mapob
  */
 JNIEXPORT void JNICALL Java_mapnik_MapDefinition_zoomToBox(JNIEnv* env, jobject mapobject, jobject box) {
     PREAMBLE;
-    if (!box) return;
-
     mapnik::Map* map = LOAD_MAP_POINTER(mapobject);
     map->zoom_to_box(box2dToNative(env, box));
     TRAILER_VOID;

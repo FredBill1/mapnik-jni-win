@@ -60,9 +60,30 @@ public class MapDefinition extends NativeObject {
         return new MapDefinition(this);
     }
 
-    public native void loadMap(String filename, boolean strict);
+    public static class LoadOptions {
+        boolean strict = false;
+        String base = "";
+    }
 
-    public native void loadMapString(String str, boolean strict, String basePath);
+    private native void loadImpl(String filename, boolean strict, String basePath);
+
+    public void load(String filename, LoadOptions options) {
+        loadImpl(filename, options.strict, options.base);
+    }
+
+    public void load(String filename) {
+        load(filename, new LoadOptions());
+    }
+
+    private native void fromStringImpl(String str, boolean strict, String basePath);
+
+    public void fromString(String stylesheet, LoadOptions options) {
+        fromStringImpl(stylesheet, options.strict, options.base);
+    }
+
+    public void fromString(String stylesheet) {
+        fromString(stylesheet, new LoadOptions());
+    }
 
     public native int getWidth();
 
@@ -87,14 +108,58 @@ public class MapDefinition extends NativeObject {
     public native void setBasePath(String basePath);
 
     // Layers
-    // TODO: change the implementation
     public native int getLayerCount();
 
     public native Layer getLayer(int index);
 
+    public Layer getLayer(String name) {
+        for (int i = 0; i < getLayerCount(); i++) {
+            Layer layer = getLayer(i);
+            if (layer.getName().equals(name))
+                return layer;
+            layer.close();
+        }
+        return null;
+    }
+
+    public Layer get_layer(int index) {
+        return getLayer(index);
+    }
+
+    public Layer get_layer(String name) {
+        return getLayer(name);
+    }
+
+    public Layer[] layers() {
+        Layer[] layers = new Layer[getLayerCount()];
+        for (int i = 0; i < layers.length; i++)
+            layers[i] = getLayer(i);
+        return layers;
+    }
+
     public native void setLayer(int index, Layer layer);
 
     public native void removeLayer(int index);
+
+    public void removeLayer(String name) {
+        int count = getLayerCount();
+        for (int i = 0; i < count; i++) {
+            try (Layer layer = getLayer(i)) {
+                if (layer.getName().equals(name)) {
+                    removeLayer(i);
+                    return;
+                }
+            }
+        }
+    }
+
+    public void remove_layer(int index) {
+        removeLayer(index);
+    }
+
+    public void remove_layer(String name) {
+        removeLayer(name);
+    }
 
     public native void removeAllLayers();
 
@@ -103,6 +168,10 @@ public class MapDefinition extends NativeObject {
     }
 
     public native void addLayer(Layer layer);
+
+    public void add_layer(Layer layer) {
+        addLayer(layer);
+    }
 
     // Aspect fix mode
     public void setAspectFixMode(AspectFixMode m) {
@@ -131,7 +200,11 @@ public class MapDefinition extends NativeObject {
 
     public native void setMaximumExtent(Box2d extent);
 
-    public native Box2d getCurrentExtent();
+    public native Box2d getExtent();
+
+    public void setExtent(Box2d extent) {
+        zoomToBox(extent);
+    }
 
     public native Box2d getBufferedExtent();
 
@@ -148,7 +221,15 @@ public class MapDefinition extends NativeObject {
 
     public native double getScale();
 
+    public double scale() {
+        return getScale();
+    }
+
     public native double getScaleDenominator();
+
+    public double scaleDenominator() {
+        return getScaleDenominator();
+    }
 
     // Background
     public native Color getBackground();
@@ -168,8 +249,16 @@ public class MapDefinition extends NativeObject {
         saveMap(fileName, false);
     }
 
+    public void save(String fileName) {
+        saveMap(fileName);
+    }
+
     public String saveMapToString() {
         return saveMapToString(false);
+    }
+
+    public String toXML() {
+        return saveMapToString();
     }
 
     public static class RenderVectorTileOptions {

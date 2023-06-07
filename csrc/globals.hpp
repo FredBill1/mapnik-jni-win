@@ -105,6 +105,7 @@ inline jobject box2dFromNative(JNIEnv* env, mapnik::box2d<double> const& box) {
 }
 
 inline mapnik::box2d<double> box2dToNative(JNIEnv* env, jobject box) {
+    if (!box) throw std::runtime_error("Box2d is null");
     mapnik::box2d<double> ret(env->GetDoubleField(box, FIELD_BOX2D_MINX), env->GetDoubleField(box, FIELD_BOX2D_MINY),
                               env->GetDoubleField(box, FIELD_BOX2D_MAXX), env->GetDoubleField(box, FIELD_BOX2D_MAXY));
     return ret;
@@ -157,6 +158,12 @@ inline jobject createFeatureObj(JNIEnv* env, mapnik::feature_ptr* feature) {
 inline jobject createGeometryObj(JNIEnv* env, mapnik::feature_ptr* feature) {
     jobject ret = env->NewObject(CLASS_GEOMETRY, CTOR_NATIVEOBJECT);
     env->SetLongField(ret, FIELD_PTR, FROM_POINTER(feature));
+    return ret;
+}
+
+inline jobject createLayerObj(JNIEnv* env, mapnik::layer* layer) {
+    jobject ret = env->NewObject(CLASS_LAYER, CTOR_NATIVEOBJECT);
+    env->SetLongField(ret, FIELD_PTR, FROM_POINTER(layer));
     return ret;
 }
 

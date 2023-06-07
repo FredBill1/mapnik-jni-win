@@ -32,7 +32,7 @@ public class TestVectorTile {
     public void test1() {
         Box2d bounds = new Box2d(-180, -90, 180, 90);
         MapDefinition m = new MapDefinition();
-        m.loadMap("C:/Users/17819/GEO/mapnik-jni-win/122.xml", false);
+        m.load("C:/Users/17819/GEO/mapnik-jni-win/122.xml");
         m.setSrs(Projection.SRS900913_PARAMS);
         m.resize(512, 512);
         m.zoomToBox(bounds);
