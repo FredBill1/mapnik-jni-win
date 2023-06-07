@@ -181,16 +181,13 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_addGeoJSONImpl(JNIEnv *env, jobjec
 /*
  * Class:     mapnik_VectorTile
  * Method:    bufferedExtent
- * Signature: ()[D
+ * Signature: ()Lmapnik/Box2d;
  */
-JNIEXPORT jdoubleArray JNICALL Java_mapnik_VectorTile_bufferedExtent(JNIEnv *env, jobject obj) {
+JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_bufferedExtent(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     auto ext = tile->get_buffered_extent();
-    jdoubleArray arr = env->NewDoubleArray(4);
-    jdouble tmp[4]{ext.minx(), ext.miny(), ext.maxx(), ext.maxy()};
-    env->SetDoubleArrayRegion(arr, 0, 4, tmp);
-    return arr;
+    return box2dFromNative(env, ext);
     TRAILER(NULL);
 }
 
@@ -228,16 +225,13 @@ JNIEXPORT jobjectArray JNICALL Java_mapnik_VectorTile_emptyLayers(JNIEnv *env, j
 /*
  * Class:     mapnik_VectorTile
  * Method:    extent
- * Signature: ()[D
+ * Signature: ()Lmapnik/Box2d;
  */
-JNIEXPORT jdoubleArray JNICALL Java_mapnik_VectorTile_extent(JNIEnv *env, jobject obj) {
+JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_extent(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     auto ext = tile->extent();
-    jdoubleArray arr = env->NewDoubleArray(4);
-    jdouble tmp[4]{ext.minx(), ext.miny(), ext.maxx(), ext.maxy()};
-    env->SetDoubleArrayRegion(arr, 0, 4, tmp);
-    return arr;
+    return box2dFromNative(env, ext);
     TRAILER(NULL);
 }
 

@@ -106,7 +106,7 @@ public class VectorTile extends NativeObject {
 
     public native void addImageBuffer(byte[] buffer, String name);
 
-    public native double[] bufferedExtent();
+    public native Box2d bufferedExtent();
 
     public native void clear();
 
@@ -149,7 +149,7 @@ public class VectorTile extends NativeObject {
 
     public native String[] emptyLayers();
 
-    public native double[] extent();
+    public native Box2d extent();
 
     public static class GetDataOptions {
         public Compression compression = Compression.none;
