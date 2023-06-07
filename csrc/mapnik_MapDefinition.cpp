@@ -1,5 +1,7 @@
 #include "mapnik_MapDefinition.h"
 
+#include <algorithm>
+
 #include "globals.hpp"
 
 /*
@@ -70,13 +72,36 @@ JNIEXPORT jint JNICALL Java_mapnik_MapDefinition_getLayerCount(JNIEnv* env, jobj
  * Method:    getLayer
  * Signature: (I)Lmapnik/Layer;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_MapDefinition_getLayer(JNIEnv* env, jobject mapobject, jint index) {
+JNIEXPORT jobject JNICALL Java_mapnik_MapDefinition_getLayer__I(JNIEnv* env, jobject mapobject, jint index) {
     PREAMBLE;
-    mapnik::Map* map = LOAD_MAP_POINTER(mapobject);
+    auto map = LOAD_MAP_POINTER(mapobject);
     auto& layers = map->layers();
     auto layer_copy = new mapnik::layer(layers.at(index));
     return createLayerObj(env, layer_copy);
-    TRAILER(0);
+    TRAILER(NULL);
+}
+
+/*
+ * Class:     mapnik_MapDefinition
+ * Method:    getLayer
+ * Signature: (Ljava/lang/String;)Lmapnik/Layer;
+ */
+JNIEXPORT jobject JNICALL Java_mapnik_MapDefinition_getLayer__Ljava_lang_String_2(JNIEnv* env, jobject mapobject,
+                                                                                  jstring namej) {
+    PREAMBLE;
+    auto map = LOAD_MAP_POINTER(mapobject);
+    std::string name = JNIString(env, namej).get();
+    auto& layers = map->layers();
+    auto it = std::find_if(layers.begin(), layers.end(), [&](auto&& x) { return x.name() == name; });
+    if (it == layers.end()) {
+        std::ostringstream ss;
+        ss << "layer with name `" << name << "` not found";
+        throw_runtime_exception(env, ss.str().c_str());
+        return NULL;
+    }
+    auto layer_copy = new mapnik::layer(*it);
+    return createLayerObj(env, layer_copy);
+    TRAILER(NULL);
 }
 
 /*

@@ -26,28 +26,64 @@ JNIEXPORT jobjectArray JNICALL Java_mapnik_MapDefinition_fonts(JNIEnv *env, jobj
  * Method:    fontDirectory
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_mapnik_MapDefinition_fontDirectory(JNIEnv *env, jobject obj);
+JNIEXPORT jstring JNICALL Java_mapnik_MapDefinition_fontDirectory(JNIEnv *env, jobject obj) {
+    PREAMBLE
+    auto map = LOAD_MAP_POINTER(obj);
+    auto &font_dir = map->font_directory();
+    if (!font_dir) return NULL;
+    return env->NewStringUTF(font_dir->c_str());
+    TRAILER(NULL);
+}
 
 /*
  * Class:     mapnik_MapDefinition
  * Method:    fontFiles
  * Signature: ()Ljava/util/Map;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_MapDefinition_fontFiles(JNIEnv *env, jobject obj);
+JNIEXPORT jobject JNICALL Java_mapnik_MapDefinition_fontFiles(JNIEnv *env, jobject obj) {
+    PREAMBLE
+    auto map = LOAD_MAP_POINTER(obj);
+    auto &mapping = map->get_font_file_mapping();
+    jobjectArray arr = env->NewObjectArray(mapping.size(), CLASS_STRING, nullptr);
+    int i = 0;
+    for (auto &&[k, v] : mapping) {
+        JNIObject key(env, env->NewStringUTF(v.second.c_str()));
+        env->SetObjectArrayElement(arr, i++, key.get());
+    }
+    return arr;
+    TRAILER(NULL);
+}
 
 /*
  * Class:     mapnik_MapDefinition
  * Method:    memoryFonts
  * Signature: ()[Ljava/lang/String;
  */
-JNIEXPORT jobjectArray JNICALL Java_mapnik_MapDefinition_memoryFonts(JNIEnv *env, jobject obj);
+JNIEXPORT jobjectArray JNICALL Java_mapnik_MapDefinition_memoryFonts(JNIEnv *env, jobject obj) {
+    PREAMBLE
+    auto map = LOAD_MAP_POINTER(obj);
+    auto &font_cache = map->get_font_memory_cache();
+    jobjectArray arr = env->NewObjectArray(font_cache.size(), CLASS_STRING, nullptr);
+    int i = 0;
+    for (auto &&[k, v] : font_cache) {
+        JNIObject key(env, env->NewStringUTF(k.c_str()));
+        env->SetObjectArrayElement(arr, i++, key.get());
+    }
+    return arr;
+    TRAILER(NULL);
+}
 
 /*
  * Class:     mapnik_MapDefinition
  * Method:    loadFonts
  * Signature: ()Z
  */
-JNIEXPORT jboolean JNICALL Java_mapnik_MapDefinition_loadFonts(JNIEnv *env, jobject obj);
+JNIEXPORT jboolean JNICALL Java_mapnik_MapDefinition_loadFonts(JNIEnv *env, jobject obj) {
+    PREAMBLE
+    auto map = LOAD_MAP_POINTER(obj);
+    return map->load_fonts();
+    TRAILER(false);
+}
 
 /*
  * Class:     mapnik_MapDefinition
@@ -55,4 +91,10 @@ JNIEXPORT jboolean JNICALL Java_mapnik_MapDefinition_loadFonts(JNIEnv *env, jobj
  * Signature: (Ljava/lang/String;Z)Z
  */
 JNIEXPORT jboolean JNICALL Java_mapnik_MapDefinition_registerFonts(JNIEnv *env, jobject obj, jstring pathj,
-                                                                   jboolean recurse);
+                                                                   jboolean recurse) {
+    PREAMBLE
+    auto map = LOAD_MAP_POINTER(obj);
+    JNIString path(env, pathj);
+    return map->register_fonts(path.get(), recurse);
+    TRAILER(false);
+}

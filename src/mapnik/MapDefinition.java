@@ -112,15 +112,7 @@ public class MapDefinition extends NativeObject {
 
     public native Layer getLayer(int index);
 
-    public Layer getLayer(String name) {
-        for (int i = 0; i < getLayerCount(); i++) {
-            Layer layer = getLayer(i);
-            if (layer.getName().equals(name))
-                return layer;
-            layer.close();
-        }
-        return null;
-    }
+    public native Layer getLayer(String name);
 
     public Layer get_layer(int index) {
         return getLayer(index);
@@ -355,15 +347,15 @@ public class MapDefinition extends NativeObject {
         return registerFonts(path, false);
     }
 
-    public native FeatureSet[] queryMapPoint(double x, double y, String layer_name);
+    public native FeatureSet queryMapPoint(double x, double y, String layer_name);
 
-    public native FeatureSet[] queryMapPoint(double x, double y, int layer_index);
+    public native FeatureSet queryMapPoint(double x, double y, int layer_index);
 
-    public native FeatureSet[] queryMapPoint(double x, double y);
+    public native Map<String, FeatureSet> queryMapPoint(double x, double y);
 
-    public native FeatureSet[] queryPoint(double x, double y, String layer_name);
+    public native FeatureSet queryPoint(double x, double y, String layer_name);
 
-    public native FeatureSet[] queryPoint(double x, double y, int layer_index);
+    public native FeatureSet queryPoint(double x, double y, int layer_index);
 
-    public native FeatureSet[] queryPoint(double x, double y);
+    public native Map<String, FeatureSet> queryPoint(double x, double y);
 }

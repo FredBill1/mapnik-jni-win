@@ -25,7 +25,9 @@ public class TestVectorTile {
     @Test
     public void testCreate() {
         VectorTile tile = new VectorTile(0, 0, 0);
+        tile.close();
         tile = new VectorTile(0, 0, 0, 4096, 128);
+        tile.close();
     }
 
     @Test
