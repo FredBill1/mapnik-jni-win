@@ -325,10 +325,11 @@ jobjectArray make_not_simple_array(JNIEnv* env, std::vector<not_simple_feature>&
     jobjectArray array = env->NewObjectArray(errors.size(), CLASS_VECTOR_TILE_NOT_SIMPLE_FEATURE, nullptr);
     jsize idx = 0;
     for (auto const& error : errors) {
-        jobject obj = env->NewObject(CLASS_VECTOR_TILE_NOT_SIMPLE_FEATURE, CTOR_VECTOR_TILE_NOT_SIMPLE_FEATURE);
-        env->SetObjectField(obj, FIELD_VECTOR_TILE_NOT_SIMPLE_FEATURE_LAYER, env->NewStringUTF(error.layer.c_str()));
-        env->SetLongField(obj, FIELD_VECTOR_TILE_NOT_SIMPLE_FEATURE_FEATURE_ID, error.feature_id);
-        env->SetObjectArrayElement(array, idx++, obj);
+        JNIObject obj(env, env->NewObject(CLASS_VECTOR_TILE_NOT_SIMPLE_FEATURE, CTOR_VECTOR_TILE_NOT_SIMPLE_FEATURE));
+        JNIObject layer(env, env->NewStringUTF(error.layer.c_str()));
+        env->SetObjectField(obj.get(), FIELD_VECTOR_TILE_NOT_SIMPLE_FEATURE_LAYER, layer.get());
+        env->SetLongField(obj.get(), FIELD_VECTOR_TILE_NOT_SIMPLE_FEATURE_FEATURE_ID, error.feature_id);
+        env->SetObjectArrayElement(array, idx++, obj.get());
     }
     return array;
 }
@@ -346,12 +347,15 @@ jobjectArray make_not_valid_array(JNIEnv* env, std::vector<not_valid_feature>& e
     jobjectArray array = env->NewObjectArray(errors.size(), CLASS_VECTOR_TILE_NOT_VALID_FEATURE, nullptr);
     jsize idx = 0;
     for (auto const& error : errors) {
-        jobject obj = env->NewObject(CLASS_VECTOR_TILE_NOT_VALID_FEATURE, CTOR_VECTOR_TILE_NOT_VALID_FEATURE);
-        env->SetObjectField(obj, FIELD_VECTOR_TILE_NOT_VALID_FEATURE_LAYER, env->NewStringUTF(error.layer.c_str()));
-        env->SetLongField(obj, FIELD_VECTOR_TILE_NOT_VALID_FEATURE_FEATURE_ID, error.feature_id);
-        env->SetObjectField(obj, FIELD_VECTOR_TILE_NOT_VALID_FEATURE_MESSAGE, env->NewStringUTF(error.message.c_str()));
-        env->SetObjectField(obj, FIELD_VECTOR_TILE_NOT_VALID_FEATURE_GEOJSON, env->NewStringUTF(error.geojson.c_str()));
-        env->SetObjectArrayElement(array, idx++, obj);
+        JNIObject obj(env, env->NewObject(CLASS_VECTOR_TILE_NOT_VALID_FEATURE, CTOR_VECTOR_TILE_NOT_VALID_FEATURE));
+        JNIObject layer(env, env->NewStringUTF(error.layer.c_str()));
+        JNIObject message(env, env->NewStringUTF(error.message.c_str()));
+        JNIObject geojson(env, env->NewStringUTF(error.geojson.c_str()));
+        env->SetObjectField(obj.get(), FIELD_VECTOR_TILE_NOT_VALID_FEATURE_LAYER, layer.get());
+        env->SetLongField(obj.get(), FIELD_VECTOR_TILE_NOT_VALID_FEATURE_FEATURE_ID, error.feature_id);
+        env->SetObjectField(obj.get(), FIELD_VECTOR_TILE_NOT_VALID_FEATURE_MESSAGE, message.get());
+        env->SetObjectField(obj.get(), FIELD_VECTOR_TILE_NOT_VALID_FEATURE_GEOJSON, geojson.get());
+        env->SetObjectArrayElement(array, idx++, obj.get());
     }
     return array;
 }

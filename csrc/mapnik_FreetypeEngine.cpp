@@ -58,7 +58,8 @@ JNIEXPORT jobjectArray JNICALL Java_mapnik_FreetypeEngine_faceNames(JNIEnv* env,
     jobjectArray ary = env->NewObjectArray(names.size(), CLASS_STRING, (jobject)0);
 
     for (unsigned i = 0; i < names.size(); i++) {
-        env->SetObjectArrayElement(ary, i, env->NewStringUTF(names[i].c_str()));
+        JNIObject name(env, env->NewStringUTF(names[i].c_str()));
+        env->SetObjectArrayElement(ary, i, name.get());
     }
 
     return ary;

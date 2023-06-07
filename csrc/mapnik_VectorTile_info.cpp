@@ -19,7 +19,7 @@ JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_info(JNIEnv *env, jclass, jbyte
     bool first_layer = true;
     std::set<std::string> layer_names_set;
     std::uint32_t version = 1;
-    protozero::pbf_reader tile_msg;
+    protozero::pbf_reader tile_msg, layer_msg;
     std::string decompressed;
     jobject out = env->NewObject(CLASS_VECTOR_TILE_INFO, CTOR_VECTOR_TILE_INFO);
     std::vector<jobject> layers;
@@ -27,10 +27,21 @@ JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_info(JNIEnv *env, jclass, jbyte
         if (mapnik::vector_tile_impl::is_gzip_compressed(data, size) ||
             mapnik::vector_tile_impl::is_zlib_compressed(data, size)) {
             mapnik::vector_tile_impl::zlib_decompress(data, size, decompressed);
-            tile_msg = protozero::pbf_reader(decompressed);
+            tile_msg = layer_msg = protozero::pbf_reader(decompressed);
         } else {
-            tile_msg = protozero::pbf_reader(data, size);
+            tile_msg = layer_msg = protozero::pbf_reader(data, size);
         }
+
+        size_t layer_cnt = 0;
+        try {
+            while (layer_msg.next(mapnik::vector_tile_impl::Tile_Encoding::LAYERS)) {
+                layer_msg.skip();
+                ++layer_cnt;
+            }
+        } catch (...) {}
+        env->EnsureLocalCapacity(layer_cnt * 2 + 10);
+        layers.reserve(layer_cnt);
+
         while (tile_msg.next()) {
             switch (tile_msg.tag()) {
             case mapnik::vector_tile_impl::Tile_Encoding::LAYERS: {
@@ -58,9 +69,8 @@ JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_info(JNIEnv *env, jclass, jbyte
                 if (!layer_name.empty()) {
                     auto p = layer_names_set.insert(layer_name);
                     if (!p.second) errors.insert(mapnik::vector_tile_impl::TILE_REPEATED_LAYER_NAMES);
-                    // layer_obj.Set("name", layer_name);
-                    env->SetObjectField(layer_obj, FIELD_VECTOR_TILE_INFO_LAYER_NAME,
-                                        env->NewStringUTF(layer_name.c_str()));
+                    JNIObject name(env, env->NewStringUTF(layer_name.c_str()));
+                    env->SetObjectField(layer_obj, FIELD_VECTOR_TILE_INFO_LAYER_NAME, name.get());
                 }
                 env->SetLongField(layer_obj, FIELD_VECTOR_TILE_INFO_LAYER_FEATURES, feature_count);
                 env->SetLongField(layer_obj, FIELD_VECTOR_TILE_INFO_LAYER_POINT_FEATURES, point_feature_count);
@@ -71,13 +81,14 @@ JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_info(JNIEnv *env, jclass, jbyte
                 env->SetIntField(layer_obj, FIELD_VECTOR_TILE_INFO_LAYER_VERSION, layer_version);
                 if (!layer_errors.empty()) {
                     has_errors = true;
-                    jobjectArray err_arr = env->NewObjectArray(layer_errors.size(), CLASS_STRING, NULL);
+                    JNIObject err_arr(env, env->NewObjectArray(layer_errors.size(), CLASS_STRING, NULL));
                     std::size_t i = 0;
-                    for (auto const &e : layer_errors)
-                        env->SetObjectArrayElement(
-                            err_arr, i++,
-                            env->NewStringUTF(mapnik::vector_tile_impl::validity_error_to_string(e).c_str()));
-                    env->SetObjectField(layer_obj, FIELD_VECTOR_TILE_INFO_LAYER_ERRORS, err_arr);
+                    for (auto const &e : layer_errors) {
+                        JNIObject err(env,
+                                      env->NewStringUTF(mapnik::vector_tile_impl::validity_error_to_string(e).c_str()));
+                        env->SetObjectArrayElement((jobjectArray)err_arr.get(), i++, err.get());
+                    }
+                    env->SetObjectField(layer_obj, FIELD_VECTOR_TILE_INFO_LAYER_ERRORS, err_arr.get());
                 }
                 if (first_layer) {
                     version = layer_version;
@@ -96,19 +107,22 @@ JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_info(JNIEnv *env, jclass, jbyte
             }
         }
     } catch (...) { errors.insert(mapnik::vector_tile_impl::INVALID_PBF_BUFFER); }
-    jobjectArray layersj = env->NewObjectArray(layers.size(), CLASS_VECTOR_TILE_INFO_LAYER, NULL);
+    JNIObject layersj(env, env->NewObjectArray(layers.size(), CLASS_VECTOR_TILE_INFO_LAYER, NULL));
     std::size_t i = 0;
-    for (jobject layer : layers) env->SetObjectArrayElement(layersj, i++, layer);
-    env->SetObjectField(out, FIELD_VECTOR_TILE_INFO_LAYERS, layersj);
+    for (jobject layer : layers) {
+        JNIObject layerj(env, layer);
+        env->SetObjectArrayElement((jobjectArray)layersj.get(), i++, layerj.get());
+    }
+    env->SetObjectField(out, FIELD_VECTOR_TILE_INFO_LAYERS, layersj.get());
     env->SetBooleanField(out, FIELD_VECTOR_TILE_INFO_ERRORS, has_errors);
     if (!errors.empty()) {
-        jobjectArray err_arr = env->NewObjectArray(errors.size(), CLASS_STRING, NULL);
+        JNIObject err_arr(env, env->NewObjectArray(errors.size(), CLASS_STRING, NULL));
         i = 0;
         for (auto const &e : errors) {
-            env->SetObjectArrayElement(
-                err_arr, i++, env->NewStringUTF(mapnik::vector_tile_impl::validity_error_to_string(e).c_str()));
+            JNIObject err(env, env->NewStringUTF(mapnik::vector_tile_impl::validity_error_to_string(e).c_str()));
+            env->SetObjectArrayElement((jobjectArray)err_arr.get(), i++, err.get());
         }
-        env->SetObjectField(out, FIELD_VECTOR_TILE_INFO_TILE_ERRORS, err_arr);
+        env->SetObjectField(out, FIELD_VECTOR_TILE_INFO_TILE_ERRORS, err_arr.get());
     }
     return out;
     TRAILER(NULL);

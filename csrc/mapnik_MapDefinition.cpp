@@ -277,8 +277,8 @@ JNIEXPORT jobject JNICALL Java_mapnik_MapDefinition_getStyleNames(JNIEnv* env, j
     mapnik::Map* map = LOAD_MAP_POINTER(mapobject);
     jobject ret = env->NewObject(CLASS_HASHSET, CTOR_HASHSET);
     for (mapnik::Map::style_iterator iter = map->begin_styles(); iter != map->end_styles(); iter++) {
-        jstring name = env->NewStringUTF(iter->first.c_str());
-        env->CallBooleanMethod(ret, METHOD_HASHSET_ADD, name);
+        JNIObject name(env, env->NewStringUTF(iter->first.c_str()));
+        env->CallBooleanMethod(ret, METHOD_HASHSET_ADD, name.get());
     }
 
     return ret;

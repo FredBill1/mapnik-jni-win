@@ -41,7 +41,8 @@ JNIEXPORT jobject JNICALL Java_mapnik_FeatureTypeStyle_collectAttributes(JNIEnv*
 
     jobject ret = env->NewObject(CLASS_HASHSET, CTOR_HASHSET);
     for (std::set<std::string>::iterator iter = attrs.begin(); iter != attrs.end(); iter++) {
-        env->CallBooleanMethod(ret, METHOD_HASHSET_ADD, env->NewStringUTF(iter->c_str()));
+        JNIObject key(env, env->NewStringUTF(iter->c_str()));
+        env->CallBooleanMethod(ret, METHOD_HASHSET_ADD, key.get());
     }
 
     return ret;

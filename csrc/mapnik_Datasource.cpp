@@ -40,7 +40,8 @@ class translate_parameter_visitor : public boost::static_visitor<> {
     }
 
     void operator()(std::string const& value) const {
-        env->CallVoidMethod(paramobject, METHOD_PARAMETERS_SET_STRING, key, env->NewStringUTF(value.c_str()));
+        JNIObject jstr(env, env->NewStringUTF(value.c_str()));
+        env->CallVoidMethod(paramobject, METHOD_PARAMETERS_SET_STRING, key, jstr.get());
     }
 
     void operator()(mapnik::value_null const& value) const {
@@ -61,8 +62,8 @@ JNIEXPORT jobject JNICALL Java_mapnik_Datasource_getParameters(JNIEnv* env, jobj
     jobject paramobject = env->NewObject(CLASS_PARAMETERS, CTOR_PARAMETERS);
 
     for (mapnik::param_map::const_iterator iter = params.begin(); iter != params.end(); iter++) {
-        jstring key = env->NewStringUTF(iter->first.c_str());
-        translate_parameter_visitor visitor(env, paramobject, key);
+        JNIObject key(env, env->NewStringUTF(iter->first.c_str()));
+        translate_parameter_visitor visitor(env, paramobject, (jstring)key.get());
         // TODO - The call to visit() does not compile on MSVC 2015 (error C2783).
         // The compiler cannot deduce the __formal type(?) in:
         // const T &mapnik::util::variant<mapnik::value_null,
@@ -167,20 +168,25 @@ JNIEXPORT jobject JNICALL Java_mapnik_Datasource_getDescriptor(JNIEnv* env, jobj
     mapnik::layer_descriptor desc = (*dsp)->get_descriptor();
 
     jobject ret = env->NewObject(CLASS_LAYERDESCRIPTOR, CTOR_LAYERDESCRIPTOR);
-    env->SetObjectField(ret, FIELD_LAYERDESCRIPTOR_NAME, env->NewStringUTF(desc.get_name().c_str()));
-    env->SetObjectField(ret, FIELD_LAYERDESCRIPTOR_ENCODING, env->NewStringUTF(desc.get_encoding().c_str()));
+    {
+        JNIObject name(env, env->NewStringUTF(desc.get_name().c_str()));
+        JNIObject encoding(env, env->NewStringUTF(desc.get_encoding().c_str()));
+        env->SetObjectField(ret, FIELD_LAYERDESCRIPTOR_NAME, name.get());
+        env->SetObjectField(ret, FIELD_LAYERDESCRIPTOR_ENCODING, encoding.get());
+    }
 
     std::vector<mapnik::attribute_descriptor>& descriptors(desc.get_descriptors());
     for (std::vector<mapnik::attribute_descriptor>::iterator iter = descriptors.begin(); iter != descriptors.end();
          iter++) {
-        jobject attr = env->NewObject(CLASS_ATTRIBUTEDESCRIPTOR, CTOR_ATTRIBUTEDESCRIPTOR);
-        env->SetObjectField(attr, FIELD_ATTRIBUTEDESCRIPTOR_NAME, env->NewStringUTF(iter->get_name().c_str()));
-        env->SetIntField(attr, FIELD_ATTRIBUTEDESCRIPTOR_TYPE, iter->get_type());
-        env->SetBooleanField(attr, FIELD_ATTRIBUTEDESCRIPTOR_PRIMARYKEY, (jboolean)iter->is_primary_key());
-        env->SetIntField(attr, FIELD_ATTRIBUTEDESCRIPTOR_SIZE, iter->get_size());
-        env->SetIntField(attr, FIELD_ATTRIBUTEDESCRIPTOR_PRECISION, iter->get_precision());
+        JNIObject attr(env, env->NewObject(CLASS_ATTRIBUTEDESCRIPTOR, CTOR_ATTRIBUTEDESCRIPTOR));
+        JNIObject name(env, env->NewStringUTF(iter->get_name().c_str()));
+        env->SetObjectField(attr.get(), FIELD_ATTRIBUTEDESCRIPTOR_NAME, name.get());
+        env->SetIntField(attr.get(), FIELD_ATTRIBUTEDESCRIPTOR_TYPE, iter->get_type());
+        env->SetBooleanField(attr.get(), FIELD_ATTRIBUTEDESCRIPTOR_PRIMARYKEY, (jboolean)iter->is_primary_key());
+        env->SetIntField(attr.get(), FIELD_ATTRIBUTEDESCRIPTOR_SIZE, iter->get_size());
+        env->SetIntField(attr.get(), FIELD_ATTRIBUTEDESCRIPTOR_PRECISION, iter->get_precision());
 
-        env->CallVoidMethod(ret, METHOD_LAYERDESCRIPTOR_ADDDESCRIPTOR, attr);
+        env->CallVoidMethod(ret, METHOD_LAYERDESCRIPTOR_ADDDESCRIPTOR, attr.get());
     }
 
     return ret;

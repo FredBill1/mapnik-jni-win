@@ -91,7 +91,8 @@ JNIEXPORT jobjectArray JNICALL Java_mapnik_Layer_getStyles(JNIEnv *env, jobject 
     jobjectArray ary = env->NewObjectArray(styles.size(), CLASS_STRING, (jobject)0);
 
     for (unsigned i = 0; i < styles.size(); i++) {
-        env->SetObjectArrayElement(ary, i, env->NewStringUTF(styles[i].c_str()));
+        JNIObject style(env, env->NewStringUTF(styles[i].c_str()));
+        env->SetObjectArrayElement(ary, i, style.get());
     }
 
     return ary;

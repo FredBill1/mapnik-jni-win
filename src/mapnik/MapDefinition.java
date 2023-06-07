@@ -295,6 +295,14 @@ public class MapDefinition extends NativeObject {
         renderVectorTile(tile, new RenderVectorTileOptions());
     }
 
+    public void render(VectorTile tile) {
+        renderVectorTile(tile);
+    }
+
+    public void render(VectorTile tile, RenderVectorTileOptions options) {
+        renderVectorTile(tile, options);
+    }
+
     public static class RenderImageOptions {
         int buffer_size = 0;
         double scale = 1.0;
@@ -315,4 +323,47 @@ public class MapDefinition extends NativeObject {
     public void renderImage(Image image) {
         renderImage(image, new RenderImageOptions());
     }
+
+    public void render(Image image) {
+        renderImage(image);
+    }
+
+    public void render(Image image, RenderImageOptions options) {
+        renderImage(image, options);
+    }
+
+    public void renderFile(String fileName, String type, RenderImageOptions options) {
+        try (Image image = new Image(getWidth(), getHeight())) {
+            renderImage(image, options);
+            image.saveToFile(fileName, type);
+        }
+    }
+
+    public native String[] fonts();
+
+    public native String fontDirectory();
+
+    public native Map<String, String> fontFiles();
+
+    public native String[] memoryFonts();
+
+    public native boolean loadFonts();
+
+    public native boolean registerFonts(String path, boolean recurse);
+
+    public boolean registerFonts(String path) {
+        return registerFonts(path, false);
+    }
+
+    public native FeatureSet[] queryMapPoint(double x, double y, String layer_name);
+
+    public native FeatureSet[] queryMapPoint(double x, double y, int layer_index);
+
+    public native FeatureSet[] queryMapPoint(double x, double y);
+
+    public native FeatureSet[] queryPoint(double x, double y, String layer_name);
+
+    public native FeatureSet[] queryPoint(double x, double y, int layer_index);
+
+    public native FeatureSet[] queryPoint(double x, double y);
 }

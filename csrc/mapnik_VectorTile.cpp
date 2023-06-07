@@ -217,7 +217,10 @@ JNIEXPORT jobjectArray JNICALL Java_mapnik_VectorTile_emptyLayers(JNIEnv *env, j
     auto &names = tile->get_empty_layers();
     auto arr = env->NewObjectArray(names.size(), CLASS_STRING, NULL);
     int i = 0;
-    for (auto &name : names) env->SetObjectArrayElement(arr, i++, env->NewStringUTF(name.c_str()));
+    for (auto &name : names) {
+        JNIObject namej(env, env->NewStringUTF(name.c_str()));
+        env->SetObjectArrayElement(arr, i++, namej.get());
+    }
     return arr;
     TRAILER(NULL);
 }
@@ -277,7 +280,10 @@ JNIEXPORT jobjectArray JNICALL Java_mapnik_VectorTile_names(JNIEnv *env, jobject
     auto &names = tile->get_layers();
     auto arr = env->NewObjectArray(names.size(), CLASS_STRING, NULL);
     int i = 0;
-    for (auto &name : names) env->SetObjectArrayElement(arr, i++, env->NewStringUTF(name.c_str()));
+    for (auto &name : names) {
+        JNIObject namej(env, env->NewStringUTF(name.c_str()));
+        env->SetObjectArrayElement(arr, i++, namej.get());
+    }
     return arr;
     TRAILER(NULL);
 }
@@ -305,7 +311,10 @@ JNIEXPORT jobjectArray JNICALL Java_mapnik_VectorTile_paintedLayers(JNIEnv *env,
     auto &names = tile->get_painted_layers();
     auto arr = env->NewObjectArray(names.size(), CLASS_STRING, NULL);
     int i = 0;
-    for (auto &name : names) env->SetObjectArrayElement(arr, i++, env->NewStringUTF(name.c_str()));
+    for (auto &name : names) {
+        JNIObject namej(env, env->NewStringUTF(name.c_str()));
+        env->SetObjectArrayElement(arr, i++, namej.get());
+    }
     return arr;
     TRAILER(NULL);
 }

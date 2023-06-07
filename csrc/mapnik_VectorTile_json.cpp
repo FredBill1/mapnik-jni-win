@@ -187,7 +187,10 @@ struct geometry_array_visitor {
         if (geom.empty()) return (*this)();
         jobjectArray arr = env_->NewObjectArray(geom.size(), CLASS_OBJECT, NULL);
         std::uint32_t c = 0;
-        for (auto const &pt : geom) env_->SetObjectArrayElement(arr, c++, (*this)(pt));
+        for (auto const &pt : geom) {
+            JNIObject obj(env_, (*this)(pt));
+            env_->SetObjectArrayElement(arr, c++, obj.get());
+        }
         return arr;
     }
     template <typename T> jobjectArray operator()(mapnik::geometry::geometry<T> const &geom) {
@@ -255,11 +258,11 @@ JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_toJSON(JNIEnv *env, jobject obj
     jobject out = env->NewObject(CLASS_VECTOR_TILE_JSON, CTOR_VECTOR_TILE_JSON);
 
     protozero::pbf_reader tile_msg = tile->get_reader();
-    jobjectArray arr = env->NewObjectArray(tile->get_layers().size(), CLASS_VECTOR_TILE_JSON_LAYER, NULL);
+    JNIObject arr(env, env->NewObjectArray(tile->get_layers().size(), CLASS_VECTOR_TILE_JSON_LAYER, NULL));
     std::size_t l_idx = 0;
     while (tile_msg.next(mapnik::vector_tile_impl::Tile_Encoding::LAYERS)) {
         protozero::pbf_reader layer_msg = tile_msg.get_message();
-        jobject layer_obj = env->NewObject(CLASS_VECTOR_TILE_JSON_LAYER, CTOR_VECTOR_TILE_JSON_LAYER);
+        JNIObject layer_obj(env, env->NewObject(CLASS_VECTOR_TILE_JSON_LAYER, CTOR_VECTOR_TILE_JSON_LAYER));
         std::vector<std::string> layer_keys;
         mapnik::vector_tile_impl::layer_pbf_attr_type layer_values;
         std::vector<protozero::pbf_reader> layer_features;
@@ -267,10 +270,10 @@ JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_toJSON(JNIEnv *env, jobject obj
         std::uint32_t version = 1;
         while (layer_msg.next()) {
             switch (layer_msg.tag()) {
-            case mapnik::vector_tile_impl::Layer_Encoding::NAME:
-                env->SetObjectField(layer_obj, FIELD_VECTOR_TILE_JSON_LAYER_NAME,
-                                    env->NewStringUTF(layer_msg.get_string().c_str()));
-                break;
+            case mapnik::vector_tile_impl::Layer_Encoding::NAME: {
+                JNIObject msg(env, env->NewStringUTF(layer_msg.get_string().c_str()));
+                env->SetObjectField(layer_obj.get(), FIELD_VECTOR_TILE_JSON_LAYER_NAME, msg.get());
+            } break;
             case mapnik::vector_tile_impl::Layer_Encoding::FEATURES:
                 layer_features.push_back(layer_msg.get_message());
                 break;
@@ -313,11 +316,11 @@ JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_toJSON(JNIEnv *env, jobject obj
                 }
                 break;
             case mapnik::vector_tile_impl::Layer_Encoding::EXTENT:
-                env->SetIntField(layer_obj, FIELD_VECTOR_TILE_JSON_LAYER_EXTENT, layer_msg.get_uint32());
+                env->SetIntField(layer_obj.get(), FIELD_VECTOR_TILE_JSON_LAYER_EXTENT, layer_msg.get_uint32());
                 break;
             case mapnik::vector_tile_impl::Layer_Encoding::VERSION:
                 version = layer_msg.get_uint32();
-                env->SetIntField(layer_obj, FIELD_VECTOR_TILE_JSON_LAYER_VERSION, version);
+                env->SetIntField(layer_obj.get(), FIELD_VECTOR_TILE_JSON_LAYER_VERSION, version);
                 break;
             default:
                 // LCOV_EXCL_START
@@ -326,11 +329,11 @@ JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_toJSON(JNIEnv *env, jobject obj
                 // LCOV_EXCL_STOP
             }
         }
-        jobjectArray f_arr = env->NewObjectArray(layer_features.size(), CLASS_VECTOR_TILE_JSON_LAYER_FEATURE, NULL);
+        JNIObject f_arr(env, env->NewObjectArray(layer_features.size(), CLASS_VECTOR_TILE_JSON_LAYER_FEATURE, NULL));
         jsize f_idx = 0;
         for (auto feature_msg : layer_features) {
-            jobject feature_obj =
-                env->NewObject(CLASS_VECTOR_TILE_JSON_LAYER_FEATURE, CTOR_VECTOR_TILE_JSON_LAYER_FEATURE);
+            JNIObject feature_obj(
+                env, env->NewObject(CLASS_VECTOR_TILE_JSON_LAYER_FEATURE, CTOR_VECTOR_TILE_JSON_LAYER_FEATURE));
             mapnik::vector_tile_impl::GeometryPBF::pbf_itr geom_itr;
             mapnik::vector_tile_impl::GeometryPBF::pbf_itr tag_itr;
             bool has_geom = false;
@@ -340,7 +343,8 @@ JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_toJSON(JNIEnv *env, jobject obj
             while (feature_msg.next()) {
                 switch (feature_msg.tag()) {
                 case mapnik::vector_tile_impl::Feature_Encoding::ID:
-                    env->SetLongField(feature_obj, FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_ID, feature_msg.get_uint64());
+                    env->SetLongField(feature_obj.get(), FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_ID,
+                                      feature_msg.get_uint64());
                     break;
                 case mapnik::vector_tile_impl::Feature_Encoding::TAGS:
                     tag_itr = feature_msg.get_packed_uint32();
@@ -349,7 +353,7 @@ JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_toJSON(JNIEnv *env, jobject obj
                 case mapnik::vector_tile_impl::Feature_Encoding::TYPE:
                     geom_type_enum = feature_msg.get_enum();
                     has_geom_type = true;
-                    env->SetIntField(feature_obj, FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_TYPE, geom_type_enum);
+                    env->SetIntField(feature_obj.get(), FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_TYPE, geom_type_enum);
                     break;
                 case mapnik::vector_tile_impl::Feature_Encoding::GEOMETRY:
                     geom_itr = feature_msg.get_packed_uint32();
@@ -357,17 +361,14 @@ JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_toJSON(JNIEnv *env, jobject obj
                     break;
                 case mapnik::vector_tile_impl::Feature_Encoding::RASTER: {
                     auto im_buffer = feature_msg.get_view();
-                    jbyteArray im_bufferj = env->NewByteArray(im_buffer.size());
-                    env->SetByteArrayRegion(im_bufferj, 0, im_buffer.size(),
+                    JNIObject im_bufferj(env, env->NewByteArray(im_buffer.size()));
+                    env->SetByteArrayRegion((jbyteArray)im_bufferj.get(), 0, im_buffer.size(),
                                             reinterpret_cast<const jbyte *>(im_buffer.data()));
-                    env->SetObjectField(feature_obj, FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_RASTER, im_bufferj);
+                    env->SetObjectField(feature_obj.get(), FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_RASTER,
+                                        im_bufferj.get());
                     break;
                 }
-                default:
-                    // LCOV_EXCL_START
-                    feature_msg.skip();
-                    break;
-                    // LCOV_EXCL_STOP
+                default: feature_msg.skip(); break;
                 }
             }
             jobject att_obj = env->NewObject(CLASS_HASHMAP, CTOR_HASHMAP);
@@ -384,7 +385,7 @@ JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_toJSON(JNIEnv *env, jobject obj
                     }
                 }
             }
-            env->SetObjectField(feature_obj, FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_PROPERTIES, att_obj);
+            env->SetObjectField(feature_obj.get(), FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_PROPERTIES, att_obj);
             if (has_geom && has_geom_type) {
                 if (decode_geometry) {
                     // Decode the geometry first into an int64_t mapnik geometry
@@ -392,27 +393,29 @@ JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_toJSON(JNIEnv *env, jobject obj
                     mapnik::geometry::geometry<std::int64_t> geom =
                         mapnik::vector_tile_impl::decode_geometry<std::int64_t>(geoms, geom_type_enum, version, 0, 0,
                                                                                 1.0, 1.0);
-                    jobjectArray g_arr = geometry_to_array<std::int64_t>(env, geom);
-                    env->SetObjectField(feature_obj, FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_GEOMETRY, g_arr);
-                    env->SetObjectField(feature_obj, FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_GEOMETRY_TYPE,
-                                        env->NewStringUTF(geometry_type_name()(geom)));
+                    JNIObject g_arr(env, geometry_to_array<std::int64_t>(env, geom));
+                    JNIObject type(env, env->NewStringUTF(geometry_type_name()(geom)));
+                    env->SetObjectField(feature_obj.get(), FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_GEOMETRY, g_arr.get());
+                    env->SetObjectField(feature_obj.get(), FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_GEOMETRY_TYPE,
+                                        type.get());
                 } else {
                     std::vector<std::uint32_t> geom_vec;
                     for (auto _i = geom_itr.begin(); _i != geom_itr.end(); ++_i) geom_vec.push_back(*_i);
-                    jobjectArray g_arr = env->NewObjectArray(geom_vec.size(), CLASS_OBJECT, NULL);
+                    JNIObject g_arr(env, env->NewObjectArray(geom_vec.size(), CLASS_OBJECT, NULL));
                     for (std::size_t k = 0; k < geom_vec.size(); ++k) {
-                        env->SetObjectArrayElement(
-                            g_arr, k, env->CallStaticObjectMethod(CLASS_INTEGER, METHOD_INTEGER_VALUEOF, geom_vec[k]));
+                        JNIObject obj(env,
+                                      env->CallStaticObjectMethod(CLASS_INTEGER, METHOD_INTEGER_VALUEOF, geom_vec[k]));
+                        env->SetObjectArrayElement((jobjectArray)g_arr.get(), k, obj.get());
                     }
-                    env->SetObjectField(feature_obj, FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_GEOMETRY, g_arr);
+                    env->SetObjectField(feature_obj.get(), FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_GEOMETRY, g_arr.get());
                 }
             }
-            env->SetObjectArrayElement(f_arr, f_idx++, feature_obj);
+            env->SetObjectArrayElement((jobjectArray)f_arr.get(), f_idx++, feature_obj.get());
         }
-        env->SetObjectField(layer_obj, FIELD_VECTOR_TILE_JSON_LAYER_FEATURES, f_arr);
-        env->SetObjectArrayElement(arr, l_idx++, layer_obj);
+        env->SetObjectField(layer_obj.get(), FIELD_VECTOR_TILE_JSON_LAYER_FEATURES, f_arr.get());
+        env->SetObjectArrayElement((jobjectArray)arr.get(), l_idx++, layer_obj.get());
     }
-    env->SetObjectField(out, FIELD_VECTOR_TILE_JSON_LAYERS, arr);
+    env->SetObjectField(out, FIELD_VECTOR_TILE_JSON_LAYERS, arr.get());
     return out;
 
     TRAILER(NULL);
