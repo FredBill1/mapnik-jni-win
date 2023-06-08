@@ -18,7 +18,7 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_compositeImpl(
     if (array_len == 0) throw std::exception("input array is empty");
 
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
-    mapnik::Map map(tile->tile_size(), tile->tile_size(), "+init=epsg:3857");
+    mapnik::Map map(tile->tile_size(), tile->tile_size(), "epsg:3857");
     if (max_extent != NULL) {
         if (env->GetArrayLength(max_extent) != 4)
             throw std::invalid_argument("max_extent value must be an array of [minx,miny,maxx,maxy]");

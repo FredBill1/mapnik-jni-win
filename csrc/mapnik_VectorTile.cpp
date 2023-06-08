@@ -159,11 +159,11 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_addGeoJSONImpl(JNIEnv *env, jobjec
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     JNIString geojson_string(env, geojsonj);
     JNIString geojson_name(env, namej);
-    mapnik::Map map(tile->tile_size(), tile->tile_size(), "+init=epsg:3857");
+    mapnik::Map map(tile->tile_size(), tile->tile_size(), "epsg:3857");
     mapnik::parameters p;
     p["type"] = "geojson";
     p["inline"] = geojson_string.get();
-    mapnik::layer lyr(geojson_name.get(), "+init=epsg:4326");
+    mapnik::layer lyr(geojson_name.get(), "epsg:4326");
     lyr.set_datasource(mapnik::datasource_cache::instance().create(p));
     map.add_layer(lyr);
 

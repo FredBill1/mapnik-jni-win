@@ -73,6 +73,7 @@ void mapnik_jni_init_ids(JNIEnv* env) {
     METHOD_LONG_LONGVALUE = lookup_method(env, CLASS_LONG, "longValue", "()J");
 
     init_class(env, "java/lang/Object", CLASS_OBJECT);
+    init_class(env, "[Ljava/lang/Object;", CLASS_OBJECT_ARRAY);
 
     // Double
     init_class(env, "java/lang/Double", CLASS_DOUBLE);
@@ -197,5 +198,26 @@ void mapnik_jni_init_ids(JNIEnv* env) {
     FIELD_VECTOR_TILE_NOT_VALID_FEATURE_FEATURE_ID = lookup_field(env, CLASS_VECTOR_TILE_NOT_VALID_FEATURE, "feature_id", "J");
     FIELD_VECTOR_TILE_NOT_VALID_FEATURE_GEOJSON    = lookup_field(env, CLASS_VECTOR_TILE_NOT_VALID_FEATURE, "geojson",    "Ljava/lang/String;");
 
+    init_class(env, "mapnik/VectorTile$QueryResult", CLASS_VECTOR_TILE_QUERY_RESULT);
+    FIELD_VECTOR_TILE_QUERY_RESULT_FEATURES = lookup_field(env, CLASS_VECTOR_TILE_QUERY_RESULT, "features", "[Lmapnik/VectorTile$QueryResult$QueryFeature;");
+
+    init_class(env, "mapnik/VectorTile$QueryResult$QueryFeature", CLASS_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE);
+    FIELD_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE_LAYER    = lookup_field(env, CLASS_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE, "layer",    "Ljava/lang/String;");
+    FIELD_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE_DISTANCE = lookup_field(env, CLASS_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE, "distance", "D");
+    FIELD_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE_XHIT     = lookup_field(env, CLASS_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE, "x_hit",    "D");
+    FIELD_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE_YHIT     = lookup_field(env, CLASS_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE, "y_hit",    "D");
+    FIELD_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE_FEATURE  = lookup_field(env, CLASS_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE, "feature",  "Lmapnik/Feature;");
+
+    init_class(env, "mapnik/VectorTile$QueryManyResult", CLASS_VECTOR_TILE_QUERY_MANY_RESULT);
+    FIELD_VECTOR_TILE_QUERY_MANY_RESULT_FEATURES = lookup_field(env, CLASS_VECTOR_TILE_QUERY_MANY_RESULT, "features", "[Lmapnik/VectorTile$QueryManyResult$QueryFeature;");
+    FIELD_VECTOR_TILE_QUERY_MANY_RESULT_HITS     = lookup_field(env, CLASS_VECTOR_TILE_QUERY_MANY_RESULT, "hits",     "[[Lmapnik/VectorTile$QueryManyResult$QueryHit;");
+
+    init_class(env, "mapnik/VectorTile$QueryManyResult$QueryFeature", CLASS_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_FEATURE);
+    FIELD_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_FEATURE_LAYER   = lookup_field(env, CLASS_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_FEATURE, "layer",   "Ljava/lang/String;");
+    FIELD_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_FEATURE_FEATURE = lookup_field(env, CLASS_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_FEATURE, "feature", "Lmapnik/Feature;");
+
+    init_class(env, "mapnik/VectorTile$QueryManyResult$QueryHit", CLASS_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_HIT);
+    FIELD_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_HIT_DISTANCE   = lookup_field(env, CLASS_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_HIT, "distance", "D");
+    FIELD_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_HIT_FEATURE_ID = lookup_field(env, CLASS_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_HIT, "feature_id", "I");
     // clang-format on
 }

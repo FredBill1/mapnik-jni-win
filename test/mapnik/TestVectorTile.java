@@ -67,6 +67,14 @@ public class TestVectorTile {
         VectorTile.NotSimpleFeature[] notSimpleFeatures = vt.reportGeometrySimplicity();
         VectorTile.NotValidFeature[] notValidFeatures = vt.reportGeometryValidity();
 
+        Box2d box = vt.extent();
+        VectorTile.QueryResult queryResult = vt.query((box.maxx + box.minx) / 2, (box.maxy + box.miny) / 2);
+
+        double[][] array = new double[1][2];
+        array[0][0] = 0;
+        array[0][1] = 0;
+        VectorTile.QueryManyResult queryManyResult = vt.queryMany(array, "countries");
+
         m.close();
         vt.close();
         image.close();

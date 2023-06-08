@@ -21,8 +21,8 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_addImageImpl(JNIEnv *env, jobject 
     ds->envelope();  // can be removed later, currently doesn't work with out this.
     ds->set_envelope(tile->extent());
     // create map object
-    mapnik::Map map(tile->tile_size(), tile->tile_size(), "+init=epsg:3857");
-    mapnik::layer lyr(layer_name.get(), "+init=epsg:3857");
+    mapnik::Map map(tile->tile_size(), tile->tile_size(), "epsg:3857");
+    mapnik::layer lyr(layer_name.get(), "epsg:3857");
     lyr.set_datasource(ds);
     map.add_layer(lyr);
 

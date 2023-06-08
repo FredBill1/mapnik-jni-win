@@ -204,23 +204,91 @@ public class VectorTile extends NativeObject {
         public String layer = null;
     }
 
-    public FeatureSet query(double longitude, double latitude, QueryOptions options) {
+    public static class QueryResult implements AutoCloseable {
+        public static class QueryFeature implements AutoCloseable {
+            public String layer;
+            public double distance;
+            public double x_hit;
+            public double y_hit;
+            public Feature feature;
+
+            @Override
+            public void close() {
+                if (feature != null) {
+                    feature.close();
+                    feature = null;
+                }
+            }
+        }
+
+        QueryFeature[] features;
+
+        @Override
+        public void close() {
+            if (features != null) {
+                for (QueryFeature feature : features)
+                    feature.close();
+                features = null;
+            }
+        }
+    }
+
+    public QueryResult query(double longitude, double latitude, QueryOptions options) {
         return queryImpl(longitude, latitude, options.tolerance, options.layer);
     }
 
-    public native FeatureSet queryImpl(double longitude, double latitude, double tolerance, String layer);
+    public QueryResult query(double longitude, double latitude) {
+        return query(longitude, latitude, new QueryOptions());
+    }
+
+    public native QueryResult queryImpl(double longitude, double latitude, double tolerance, String layer);
 
     public static class QueryManyOptions {
         public double tolerance = 0.0;
-        public String layer = null;
         public String[] fields = null;
     }
 
-    public Object queryMany(float[][] array, QueryManyOptions options) {
-        return queryManyImpl(array, options.tolerance, options.layer, options.fields);
+    public static class QueryManyResult implements AutoCloseable {
+        public static class QueryFeature implements AutoCloseable {
+            public String layer;
+            public Feature feature;
+
+            @Override
+            public void close() {
+                if (feature != null) {
+                    feature.close();
+                    feature = null;
+                }
+            }
+        }
+
+        public static class QueryHit {
+            double distance;
+            int feature_id;
+        }
+
+        QueryFeature[] features;
+        QueryHit[][] hits;
+
+        @Override
+        public void close() {
+            if (features != null) {
+                for (QueryFeature feature : features)
+                    feature.close();
+                features = null;
+            }
+        }
     }
 
-    public native Object queryManyImpl(float[][] array, double tolerance, String layer, String[] fields);
+    public QueryManyResult queryMany(double[][] array, String layer, QueryManyOptions options) {
+        return queryManyImpl(array, layer, options.tolerance, options.fields);
+    }
+
+    public QueryManyResult queryMany(double[][] array, String layer) {
+        return queryMany(array, layer, new QueryManyOptions());
+    }
+
+    public native QueryManyResult queryManyImpl(double[][] array, String layer, double tolerance, String[] fields);
 
     public static class RenderOptions {
         public long[] zxy = null;
