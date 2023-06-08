@@ -79,16 +79,6 @@ void mapnik_jni_init_ids(JNIEnv* env) {
     METHOD_DOUBLE_VALUEOF = lookup_static_method(env, CLASS_DOUBLE, "valueOf", "(D)Ljava/lang/Double;");
     METHOD_DOUBLE_DOUBLEVALUE = lookup_method(env, CLASS_DOUBLE, "doubleValue", "()D");
 
-    // Parameters
-    init_class(env, "mapnik/Parameters", CLASS_PARAMETERS);
-    CTOR_PARAMETERS = lookup_method(env, CLASS_PARAMETERS, "<init>", "()V");
-    METHOD_PARAMETERS_SET_STRING = lookup_method(env, CLASS_PARAMETERS, "setString", "(Ljava/lang/String;Ljava/lang/String;)V");
-    METHOD_PARAMETERS_SET_BOOLEAN = lookup_method(env, CLASS_PARAMETERS, "setBool", "(Ljava/lang/String;Z)V");
-    METHOD_PARAMETERS_SET_INT = lookup_method(env, CLASS_PARAMETERS, "setInt", "(Ljava/lang/String;I)V");
-    METHOD_PARAMETERS_SET_LONG = lookup_method(env, CLASS_PARAMETERS, "setLong", "(Ljava/lang/String;J)V");
-    METHOD_PARAMETERS_SET_DOUBLE = lookup_method(env, CLASS_PARAMETERS, "setDouble", "(Ljava/lang/String;D)V");
-    METHOD_PARAMETERS_COPY_TO_NATIVE = lookup_method(env, CLASS_PARAMETERS, "copyToNative", "(J)V");
-
     // HashSet
     init_class(env, "java/util/HashSet", CLASS_HASHSET);
     CTOR_HASHSET = lookup_method(env, CLASS_HASHSET, "<init>", "()V");

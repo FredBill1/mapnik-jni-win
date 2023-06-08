@@ -14,7 +14,7 @@ public class Datasource extends NativeObject {
         ptr = alloc(params);
     }
 
-    public native Parameters getParameters();
+    public native Map<String, Object> parameters();
 
     public native int getType();
 
@@ -25,4 +25,5 @@ public class Datasource extends NativeObject {
     public native FeatureSet featuresAtPoint(Coord pt);
 
     public native LayerDescriptor getDescriptor();
+
 }

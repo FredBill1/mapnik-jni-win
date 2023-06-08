@@ -89,7 +89,7 @@ public class TestLayer {
         layer.setDatasource(ds);
         assertNotNull(layer.getDatasource());
 
-        params = ds.getParameters();
+        params = ds.parameters();
         assertEquals("postgis", params.get("type"));
         assertEquals("test", params.get("table"));
     }

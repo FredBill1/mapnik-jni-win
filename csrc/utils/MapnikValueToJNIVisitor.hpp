@@ -11,18 +11,20 @@ class MapnikValueToJNIVisitor {
  public:
     MapnikValueToJNIVisitor(JNIEnv *env) : env(env) {}
     jobject operator()(mapnik::value_null) const { return NULL; }
-    jobject operator()(mapnik::value_unicode_string const &val) {
+    jobject operator()(const char *val) const { return env->NewStringUTF(val); }
+    jobject operator()(std::string const &val) const { return (*this)(val.c_str()); }
+    jobject operator()(mapnik::value_unicode_string const &val) const {
         std::string result;
         mapnik::to_utf8(val, result);
-        return env->NewStringUTF(result.c_str());
+        return (*this)(result);
     }
-    jobject operator()(mapnik::value_bool const &val) {
+    jobject operator()(mapnik::value_bool const &val) const {
         return env->CallStaticObjectMethod(CLASS_BOOLEAN, METHOD_BOOLEAN_VALUEOF, val);
     }
-    jobject operator()(mapnik::value_integer const &val) {
+    jobject operator()(mapnik::value_integer const &val) const {
         return env->CallStaticObjectMethod(CLASS_LONG, METHOD_LONG_VALUEOF, val);
     }
-    jobject operator()(mapnik::value_double const &val) {
+    jobject operator()(mapnik::value_double const &val) const {
         return env->CallStaticObjectMethod(CLASS_DOUBLE, METHOD_DOUBLE_VALUEOF, val);
     }
 };

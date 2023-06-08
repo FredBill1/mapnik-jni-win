@@ -1,8 +1,8 @@
 #include "mapnik_Datasource.h"
 
 #include "globals.hpp"
+#include "utils/MapnikValueToJNIVisitor.hpp"
 #include "utils/jni_map_to_mapnik_attributes.hpp"
-
 /*
  * Class:     mapnik_Datasource
  * Method:    alloc
@@ -29,80 +29,24 @@ JNIEXPORT void JNICALL Java_mapnik_Datasource_dealloc(JNIEnv* env, jobject, jlon
     TRAILER_VOID;
 }
 
-class translate_parameter_visitor : public boost::static_visitor<> {
-    JNIEnv* env;
-    jobject paramobject;
-    jstring key;
-
- public:
-    translate_parameter_visitor(JNIEnv* aenv, jobject aparamobject, jstring akey)
-        : env(aenv), paramobject(aparamobject), key(akey) {}
-
-    void operator()(mapnik::value_integer value) const {
-#ifdef BIGINT
-        env->CallVoidMethod(paramobject, METHOD_PARAMETERS_SET_LONG, key, (jlong)value);
-#else
-        env->CallVoidMethod(paramobject, METHOD_PARAMETERS_SET_INT, key, (jint)value);
-#endif
-    }
-
-    void operator()(mapnik::value_bool value) const {
-        env->CallVoidMethod(paramobject, METHOD_PARAMETERS_SET_BOOLEAN, key, (jboolean)value);
-    }
-
-    void operator()(mapnik::value_double value) const {
-        env->CallVoidMethod(paramobject, METHOD_PARAMETERS_SET_DOUBLE, key, (jdouble)value);
-    }
-
-    void operator()(std::string const& value) const {
-        JNIObject jstr(env, env->NewStringUTF(value.c_str()));
-        env->CallVoidMethod(paramobject, METHOD_PARAMETERS_SET_STRING, key, jstr.get());
-    }
-
-    void operator()(mapnik::value_null const& value) const {
-        // FIXME
-    }
-};
-
 /*
  * Class:     mapnik_Datasource
- * Method:    getParameters
- * Signature: ()Lmapnik/Parameters;
+ * Method:    parameters
+ * Signature: ()Ljava/util/Map;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_Datasource_getParameters(JNIEnv* env, jobject dsobj) {
+JNIEXPORT jobject JNICALL Java_mapnik_Datasource_parameters(JNIEnv* env, jobject obj) {
     PREAMBLE;
-    mapnik::datasource_ptr* dsp = LOAD_DATASOURCE_POINTER(dsobj);
-    const mapnik::parameters& params((*dsp)->params());
-
-    jobject paramobject = env->NewObject(CLASS_PARAMETERS, CTOR_PARAMETERS);
-
-    for (mapnik::param_map::const_iterator iter = params.begin(); iter != params.end(); iter++) {
-        JNIObject key(env, env->NewStringUTF(iter->first.c_str()));
-        translate_parameter_visitor visitor(env, paramobject, (jstring)key.get());
-        // TODO - The call to visit() does not compile on MSVC 2015 (error C2783).
-        // The compiler cannot deduce the __formal type(?) in:
-        // const T &mapnik::util::variant<mapnik::value_null,
-        //                                mapnik::value_integer,
-        //                                mapnik::value_double,
-        //                                std::string,
-        //                                mapnik::value_bool>::get(void) const
-        // (ditto for the non-const version)
-        // mapnik::value_type::visit(iter->second, visitor);
-        // So, the variant<> types are temporarily unrolled here...
-        if (iter->second.is<mapnik::value_integer>()) {
-            visitor(iter->second.get<mapnik::value_integer>());
-        } else if (iter->second.is<mapnik::value_double>()) {
-            visitor(iter->second.get<mapnik::value_double>());
-        } else if (iter->second.is<std::string>()) {
-            visitor(iter->second.get<std::string>());
-        } else if (iter->second.is<mapnik::value_bool>()) {
-            visitor(iter->second.get<mapnik::value_bool>());
-        }
-        // else: value_null or unexpected value - ignore
+    auto ds = LOAD_DATASOURCE_POINTER(obj);
+    auto& params = (*ds)->params();
+    MapnikValueToJNIVisitor visitor(env);
+    jobject out = env->NewObject(CLASS_HASHMAP, CTOR_HASHMAP);
+    for (auto&& [k, v] : params) {
+        JNIObject key(env, env->NewStringUTF(k.c_str()));
+        JNIObject value(env, mapnik::util::apply_visitor(visitor, v));
+        JNIObjectAllowNull(env, env->CallObjectMethod(out, METHOD_HASHMAP_PUT, key.get(), value.get()));
     }
-
-    return paramobject;
-    TRAILER(0);
+    return out;
+    TRAILER(NULL);
 }
 
 /*

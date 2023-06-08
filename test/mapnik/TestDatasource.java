@@ -72,5 +72,7 @@ public class TestDatasource {
                 System.out.println(sb.toString());
             }
         }
+
+        params = ds.parameters();
     }
 }
