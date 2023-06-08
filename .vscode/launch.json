@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Demo",
+            "request": "launch",
+            "mainClass": "mapnik.Demo",
+            "projectName": "mapnik-jni",
+            "vmArgs": [
+                "-Djava.library.path=${workspaceFolder}/build/Release",
+            ],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

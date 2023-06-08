@@ -1,0 +1,15 @@
+{
+    "cmake.configureArgs": [
+        "-DBoost_NO_WARN_NEW_VERSIONS=ON",
+        "-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "-DVCPKG_TARGET_TRIPLET=x64-windows-static-release",
+        "-DMAPNIK_JNI_MSVC_USE_STATIC_LINKING=ON",
+    ],
+    "java.test.config": {
+        "vmArgs": [
+            "-Djava.library.path=${workspaceFolder}/build/Release",
+        ],
+        "workingDirectory": "${workspaceFolder}"
+    },
+    "java.debug.settings.vmArgs": "-Djava.library.path=${workspaceFolder}/build/Release",
+}
