@@ -1,6 +1,7 @@
 package mapnik;
 
 import java.util.Map;
+import java.util.HashMap;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -21,11 +22,11 @@ public class TestDatasource {
 
     @Test
     public void testBindAndTableDescriptors() {
-        Parameters params = new Parameters();
+        Map<String, Object> params = new HashMap<String, Object>();
         params.put("type", "shape");
         params.put("file", SHAPEFILE_NAME);
 
-        Datasource ds = DatasourceCache.create(params);
+        Datasource ds = new Datasource(params);
         System.out.println("Bound datasource");
 
         LayerDescriptor ld = ds.getDescriptor();
@@ -35,11 +36,11 @@ public class TestDatasource {
 
     @Test
     public void testFeatures() {
-        Parameters params = new Parameters();
+        Map<String, Object> params = new HashMap<String, Object>();
         params.put("type", "shape");
         params.put("file", SHAPEFILE_NAME);
 
-        Datasource ds = DatasourceCache.create(params);
+        Datasource ds = new Datasource(params);
         LayerDescriptor ld = ds.getDescriptor();
 
         Box2d bbox = new Box2d(-180, -85, 180, 85);

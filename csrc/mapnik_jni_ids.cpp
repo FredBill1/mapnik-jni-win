@@ -42,7 +42,6 @@ void mapnik_jni_init_ids(JNIEnv* env) {
     init_class(env, "mapnik/NativeObject", CLASS_NATIVEOBJECT);
     init_class(env, "mapnik/MapDefinition", CLASS_MAP_DEFINITION);
     init_class(env, "mapnik/Datasource", CLASS_DATASOURCE);
-    init_class(env, "mapnik/DatasourceCache", CLASS_DATASOURCE_CACHE);
     init_class(env, "mapnik/Layer", CLASS_LAYER);
     init_class(env, "mapnik/FeatureTypeStyle", CLASS_FEATURE_TYPE_STYLE);
     init_class(env, "mapnik/Projection", CLASS_PROJECTION);

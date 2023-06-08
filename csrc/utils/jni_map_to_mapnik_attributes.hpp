@@ -3,7 +3,11 @@
 
 #include "../globals.hpp"
 
-inline void jni_map_to_mapnik_attributes(JNIEnv* env, jobject mapj, mapnik::attributes& mapnik_attributes) {
+template <typename T>
+inline std::enable_if_t<std::is_same_v<T, mapnik::parameters> || std::is_same_v<T, mapnik::attributes>>
+jni_map_to_mapnik_attributes(JNIEnv* env, jobject mapj, T& mapnik_attributes) {
+    using string_t =
+        std::conditional_t<std::is_same_v<T, mapnik::parameters>, std::string, mapnik::value_unicode_string>;
     if (mapj == NULL) return;
     JNIObject setj(env, env->CallObjectMethod(mapj, METHOD_MAP_ENTRYSET));
     JNIObject iterj(env, env->CallObjectMethod(setj.get(), METHOD_SET_ITERATOR));
@@ -15,8 +19,7 @@ inline void jni_map_to_mapnik_attributes(JNIEnv* env, jobject mapj, mapnik::attr
         if (value.get() == NULL) {
             mapnik_attributes[keyc] = mapnik::value_null();
         } else if (env->IsInstanceOf(value.get(), CLASS_STRING)) {
-            mapnik_attributes[keyc] =
-                mapnik::value_unicode_string(JNIString(env, static_cast<jstring>(value.get())).get());
+            mapnik_attributes[keyc] = string_t(JNIString(env, static_cast<jstring>(value.get())).get());
         } else if (env->IsInstanceOf(value.get(), CLASS_INTEGER)) {
             jint valuei = env->CallIntMethod(value.get(), METHOD_INTEGER_INTVALUE);
             mapnik_attributes[keyc] = mapnik::value_integer(valuei);
@@ -31,7 +34,7 @@ inline void jni_map_to_mapnik_attributes(JNIEnv* env, jobject mapj, mapnik::attr
             mapnik_attributes[keyc] = mapnik::value_double(valued);
         } else {
             throw std::exception(
-                "Unknown type of value in `mapnik_attributes`, the value must be a `String`, `Integer`, `Boolean`, "
+                "Unknown type of value in `Map<String, Object>`, the value must be a `String`, `Integer`, `Boolean`, "
                 "`Long`, `Double` or `null`");
         }
     }

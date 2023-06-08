@@ -1,7 +1,22 @@
 #include "mapnik_Datasource.h"
 
 #include "globals.hpp"
-// -- Datasource
+#include "utils/jni_map_to_mapnik_attributes.hpp"
+
+/*
+ * Class:     mapnik_Datasource
+ * Method:    alloc
+ * Signature: (Ljava/util/Map;)J
+ */
+JNIEXPORT jlong JNICALL Java_mapnik_Datasource_alloc(JNIEnv* env, jobject, jobject paramsj) {
+    PREAMBLE;
+    mapnik::parameters params;
+    jni_map_to_mapnik_attributes(env, paramsj, params);
+    auto ds = new mapnik::datasource_ptr(mapnik::datasource_cache::instance().create(params));
+    return FROM_POINTER(ds);
+    TRAILER(0);
+}
+
 /*
  * Class:     mapnik_Datasource
  * Method:    dealloc

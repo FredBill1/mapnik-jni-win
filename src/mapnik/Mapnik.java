@@ -118,12 +118,12 @@ public class Mapnik {
 
             path = getInstalledFontsDir();
             if (path != null) {
-                FreetypeEngine.registerFonts(path);
+                registerFonts(path);
             }
 
             path = getInstalledInputPluginsDir();
             if (path != null) {
-                DatasourceCache.registerDatasources(path);
+                registerDatasources(path);
             }
         }
     }
@@ -162,4 +162,49 @@ public class Mapnik {
      * init the mapnik logger
      */
     public static native void initLogger(String loggerPath, int level);
+
+    public static native boolean registerDatasource(String path);
+
+    public static native boolean registerDatasources(String path, boolean recurse);
+
+    public static boolean registerDatasources(String path) {
+        return registerDatasources(path, false);
+    }
+
+    public static native boolean datasourceRegistered(String name);
+
+    public static boolean pluginRegistered(String name) {
+        return datasourceRegistered(name);
+    }
+
+    public static native String datasourceDirectories();
+
+    public static String pluginDirectories() {
+        return datasourceDirectories();
+    }
+
+    public static native String[] datasources();
+
+    public static String[] pluginNames() {
+        return datasources();
+    }
+
+    public static native boolean registerFont(String path);
+
+    public static native boolean registerFonts(String path, boolean recurse);
+
+    public static boolean registerFonts(String path) {
+        return registerFonts(path, false);
+    }
+
+    public static native boolean isFontFile(String path);
+
+    public static native String[] fonts();
+
+    public static native Map<String, String> fontFiles();
+
+    public static native String[] memoryFonts();
+
+    public static native void clearCache();
+
 }

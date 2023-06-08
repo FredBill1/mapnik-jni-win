@@ -44,13 +44,13 @@ JNIEXPORT jobject JNICALL Java_mapnik_MapDefinition_fontFiles(JNIEnv *env, jobje
     PREAMBLE
     auto map = LOAD_MAP_POINTER(obj);
     auto &mapping = map->get_font_file_mapping();
-    jobjectArray arr = env->NewObjectArray(mapping.size(), CLASS_STRING, nullptr);
-    int i = 0;
+    jobject mapj = env->NewObject(CLASS_HASHMAP, CTOR_HASHMAP);
     for (auto &&[k, v] : mapping) {
-        JNIObject key(env, env->NewStringUTF(v.second.c_str()));
-        env->SetObjectArrayElement(arr, i++, key.get());
+        JNIObject key(env, env->NewStringUTF(k.c_str()));
+        JNIObject value(env, env->NewStringUTF(v.second.c_str()));
+        JNIObjectAllowNull(env, env->CallObjectMethod(mapj, METHOD_HASHMAP_PUT, key.get(), value.get()));
     }
-    return arr;
+    return mapj;
     TRAILER(NULL);
 }
 

@@ -5,6 +5,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class TestLayer {
     @BeforeClass
     public static void initMapnik() {
@@ -77,12 +80,12 @@ public class TestLayer {
         Layer layer = new Layer("test");
         assertNull(layer.getDatasource());
 
-        Parameters params = new Parameters();
+        Map<String, Object> params = new HashMap<String, Object>();
         params.put("type", "postgis");
         params.put("dbname", "mapnik-tmp-postgis-test-db");
         params.put("table", "test");
 
-        Datasource ds = DatasourceCache.create(params);
+        Datasource ds = new Datasource(params);
         layer.setDatasource(ds);
         assertNotNull(layer.getDatasource());
 

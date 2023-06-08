@@ -1,19 +1,17 @@
 package mapnik;
 
-/**
- * Wraps a mapnik::datasource object. Datasources should be created
- * by passing parameters to DatasourceCache.
- * 
- * @author stella
- *
- */
+import java.util.Map;
+
 public class Datasource extends NativeObject {
     // Native pointer: boost::shared_ptr<mapnik::datasource>
 
     @Override
     native void dealloc(long ptr);
 
-    private Datasource() {
+    private native long alloc(Map<String, Object> params);
+
+    public Datasource(Map<String, Object> params) {
+        ptr = alloc(params);
     }
 
     public native Parameters getParameters();
