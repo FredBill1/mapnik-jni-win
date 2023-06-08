@@ -3,6 +3,7 @@ package mapnik;
 import java.util.Collection;
 import java.util.Map;
 
+import mapnik.options.AspectFixMode;
 import mapnik.options.ImageFormat;
 import mapnik.options.ImageScaling;
 import mapnik.options.Launch;
@@ -167,11 +168,11 @@ public class MapDefinition extends NativeObject {
 
     // Aspect fix mode
     public void setAspectFixMode(AspectFixMode m) {
-        _setAspectFixMode(m.nativeCode);
+        _setAspectFixMode(m.ordinal());
     }
 
     public AspectFixMode getAspectFixMode() {
-        return AspectFixMode.fromNativeCode(_getAspectFixMode());
+        return AspectFixMode.values()[_getAspectFixMode()];
     }
 
     private native void _setAspectFixMode(int v);
