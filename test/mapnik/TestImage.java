@@ -29,7 +29,7 @@ public class TestImage {
     public void setUp() {
         map = new MapDefinition();
         image = new Image(128, 128);
-        Renderer.renderAgg(map, image);
+        map.render(image);
     }
 
     @After

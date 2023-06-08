@@ -19,7 +19,7 @@ public class CrunchMemory {
         m.setBufferSize(128);
 
         Image image = new Image(width, height);
-        Renderer.renderAgg(m, image);
+        m.render(image);
 
         byte[] contents = image.saveToMemory("png");
         image.close();
