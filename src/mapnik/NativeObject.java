@@ -18,7 +18,7 @@ public abstract class NativeObject implements AutoCloseable {
     }
 
     /**
-     * Manually disposes of the native resources associated with this
+     * Manually closes of the native resources associated with this
      * object (versus waiting for finalization).
      */
     public final void close() {
@@ -31,20 +31,10 @@ public abstract class NativeObject implements AutoCloseable {
     }
 
     /**
-     * @deprecated
-     *             Implementation moved to close() for try-with-resources
-     *             compatibility
-     */
-    @Deprecated
-    public final void dispose() {
-        close();
-    }
-
-    /**
      * @return true if the native resources associated with this object have been
      *         destroyed
      */
-    public final boolean isDisposed() {
+    public final boolean isClosed() {
         return ptr == 0;
     }
 
@@ -55,7 +45,7 @@ public abstract class NativeObject implements AutoCloseable {
     // }
 
     /**
-     * Called on finalize and dispose to dealloc the pointer if != 0
+     * Called on finalize and close to dealloc the pointer if != 0
      * 
      * @param ptr
      */

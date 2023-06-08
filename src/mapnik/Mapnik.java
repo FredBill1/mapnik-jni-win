@@ -35,7 +35,7 @@ public class Mapnik {
     /**
      * Return a Map of Object type to allocation count of current active native
      * allocations.
-     * Native allocations are cleared either through an explicit call to dispose()
+     * Native allocations are cleared either through an explicit call to close()
      * or
      * finalization.
      * 

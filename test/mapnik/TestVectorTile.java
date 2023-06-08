@@ -34,7 +34,7 @@ public class TestVectorTile {
     public void test1() {
         Box2d bounds = new Box2d(-180, -90, 180, 90);
         MapDefinition m = new MapDefinition();
-        m.load("C:/Users/17819/GEO/mapnik-jni-win/122.xml");
+        m.load("test/122.xml");
         m.setSrs(Projection.SRS900913_PARAMS);
         m.resize(512, 512);
         m.zoomToBox(bounds);
@@ -48,12 +48,12 @@ public class TestVectorTile {
         getDataOptions.level = 9;
         VectorTile.Info info = VectorTile.info(vt.getData(getDataOptions));
 
-        image.saveToFile("C:/Users/17819/GEO/mapnik-jni-win/test.png", "png");
+        image.saveToFile("test/test.png", "png");
         Image image2 = new Image(4096, 4096);
         m.renderImage(image2);
-        image2.saveToFile("C:/Users/17819/GEO/mapnik-jni-win/test2.png", "png");
+        image2.saveToFile("test/test2.png", "png");
 
-        File file = new File("C:/Users/17819/GEO/mapnik-jni-win/test.pbf");
+        File file = new File("test/test.pbf");
         try {
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(vt.getData(getDataOptions));

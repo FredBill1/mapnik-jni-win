@@ -68,7 +68,7 @@ public class CrunchMemory {
             if ((count % 1000) == 0) {
                 System.out.println("Completed " + count + " iterations");
             }
-            m.dispose();
+            m.close();
         }
     }
 }
