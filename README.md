@@ -48,22 +48,22 @@ git clone https://github.com/microsoft/vcpkg.git
 
 必装插件：
 
-[C/C++](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)
-[CMake](https://marketplace.visualstudio.com/items?itemName=twxs.cmake)
-[CMake Language Support](https://marketplace.visualstudio.com/items?itemName=josetr.cmake-language-support-vscode)
-[CMake Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools)
-[Debugger for Java](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-debug)
-[Language Support for Java(TM) by Red Hat](https://marketplace.visualstudio.com/items?itemName=redhat.java)
-[Project Manager for Java](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-dependency)
-[Test Runner for Java](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-test)
+- [C/C++](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)
+- [CMake](https://marketplace.visualstudio.com/items?itemName=twxs.cmake)
+- [CMake Language Support](https://marketplace.visualstudio.com/items?itemName=josetr.cmake-language-support-vscode)
+- [CMake Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools)
+- [Debugger for Java](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-debug)
+- [Language Support for Java(TM) by Red Hat](https://marketplace.visualstudio.com/items?itemName=redhat.java)
+- [Project Manager for Java](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-dependency)
+- [Test Runner for Java](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-test)
 
 可选插件：
 
-[IntelliCode](https://marketplace.visualstudio.com/items?itemName=VisualStudioExptTeam.vscodeintellicode)
-[indent-rainbow](https://marketplace.visualstudio.com/items?itemName=oderwat.indent-rainbow)
-[Better Comments](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments)
-[Better C++ Syntax](https://marketplace.visualstudio.com/items?itemName=jeff-hykin.better-cpp-syntax)
-[Chinese (Simplified) (简体中文) Language Pack for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-zh-hans)
+- [IntelliCode](https://marketplace.visualstudio.com/items?itemName=VisualStudioExptTeam.vscodeintellicode)
+- [indent-rainbow](https://marketplace.visualstudio.com/items?itemName=oderwat.indent-rainbow)
+- [Better Comments](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments)
+- [Better C++ Syntax](https://marketplace.visualstudio.com/items?itemName=jeff-hykin.better-cpp-syntax)
+- [Chinese (Simplified) (简体中文) Language Pack for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-zh-hans)
 
 ### 1.6 克隆本项目
 
@@ -135,9 +135,9 @@ git clone --recursive https://github.com/FredBill1/mapnik-jni-win.git
 
 并且，可能需要设置如下环境变量才能正常加载这些文件：
 
-`GDAL_DATA=C:\vcpkg\installed\x64-windows-static-release\share\gdal`
-`PROJ_LIB=C:\vcpkg\installed\x64-windows-static-release\share\proj`
-`ICU_DATA=C:\vcpkg\installed\x64-windows-static-release\share\icu`
+- `GDAL_DATA=C:\vcpkg\installed\x64-windows-static-release\share\gdal`
+- `PROJ_LIB=C:\vcpkg\installed\x64-windows-static-release\share\proj`
+- `ICU_DATA=C:\vcpkg\installed\x64-windows-static-release\share\icu`
 
 其中`ICU_DATA`的路径好像不包含node-mapnik中对应的`icudt56l.dat`，不清楚是不是不需要这个
 
