@@ -20,7 +20,17 @@ public class Datasource extends NativeObject {
 
     public native Box2d getEnvelope();
 
+    public Box2d extent() {
+        return getEnvelope();
+    }
+
     public native FeatureSet features(Query q);
+
+    public FeatureSet featureset(Box2d extent) {
+        try (Query q = new Query(extent)) {
+            return features(q);
+        }
+    }
 
     public native FeatureSet featuresAtPoint(Coord pt);
 
