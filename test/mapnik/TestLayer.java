@@ -66,6 +66,8 @@ public class TestLayer {
             map.removeLayer(0);
             assertEquals(0, map.getLayerCount());
 
+            Layer.Description description = layer.describe();
+
             layer.close();
         }
     }

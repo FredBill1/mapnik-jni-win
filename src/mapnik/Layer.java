@@ -58,10 +58,49 @@ public class Layer extends NativeObject {
 
     public native void setCacheFeatures(boolean b);
 
-    // -- datasource
     public native Datasource getDatasource();
 
     public native void setDatasource(Datasource datasource);
 
-    // -- envelope
+    public native double getMinimumScaleDenominator();
+
+    public native void setMinimumScaleDenominator(double minimum_scale_denom);
+
+    public native double getMaximumScaleDenominator();
+
+    public native void setMaximumScaleDenominator(double maximum_scale_denom);
+
+    public static class Description implements AutoCloseable {
+        public String name;
+        public String srs;
+        public boolean active;
+        public boolean clear_label_cache;
+        public double minimum_scale_denominator;
+        public double maximum_scale_denominator;
+        public boolean queryable;
+        public String[] style_names;
+        public Datasource datasource;
+
+        @Override
+        public void close() {
+            if (datasource != null) {
+                datasource.close();
+                datasource = null;
+            }
+        }
+    }
+
+    public Description describe() {
+        Description desc = new Description();
+        desc.name = getName();
+        desc.srs = getSrs();
+        desc.active = isActive();
+        desc.clear_label_cache = isClearLabelCache();
+        desc.minimum_scale_denominator = getMinimumScaleDenominator();
+        desc.maximum_scale_denominator = getMaximumScaleDenominator();
+        desc.queryable = isQueryable();
+        desc.style_names = getStyles();
+        desc.datasource = getDatasource();
+        return desc;
+    }
 }

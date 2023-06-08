@@ -1,7 +1,7 @@
 #include "mapnik_Layer.h"
 
 #include "globals.hpp"
-//// -- Layer class
+
 /*
  * Class:     mapnik_Layer
  * Method:    alloc
@@ -310,5 +310,55 @@ JNIEXPORT void JNICALL Java_mapnik_Layer_setDatasource(JNIEnv *env, jobject laye
     mapnik::datasource_ptr *dspinned =
         static_cast<mapnik::datasource_ptr *>(TO_POINTER(env->GetLongField(dsobject, FIELD_PTR)));
     layer->set_datasource(*dspinned);
+    TRAILER_VOID;
+}
+
+/*
+ * Class:     mapnik_Layer
+ * Method:    getMinimumScaleDenominator
+ * Signature: ()D
+ */
+JNIEXPORT jdouble JNICALL Java_mapnik_Layer_getMinimumScaleDenominator(JNIEnv *env, jobject obj) {
+    PREAMBLE;
+    auto layer = LOAD_LAYER_POINTER(obj);
+    return layer->minimum_scale_denominator();
+    TRAILER(0);
+}
+
+/*
+ * Class:     mapnik_Layer
+ * Method:    setMinimumScaleDenominator
+ * Signature: (D)V
+ */
+JNIEXPORT void JNICALL Java_mapnik_Layer_setMinimumScaleDenominator(JNIEnv *env, jobject obj,
+                                                                    jdouble minimum_scale_denom) {
+    PREAMBLE;
+    auto layer = LOAD_LAYER_POINTER(obj);
+    layer->set_minimum_scale_denominator(minimum_scale_denom);
+    TRAILER_VOID;
+}
+
+/*
+ * Class:     mapnik_Layer
+ * Method:    getMaximumScaleDenominator
+ * Signature: ()D
+ */
+JNIEXPORT jdouble JNICALL Java_mapnik_Layer_getMaximumScaleDenominator(JNIEnv *env, jobject obj) {
+    PREAMBLE;
+    auto layer = LOAD_LAYER_POINTER(obj);
+    return layer->maximum_scale_denominator();
+    TRAILER(0);
+}
+
+/*
+ * Class:     mapnik_Layer
+ * Method:    setMaximumScaleDenominator
+ * Signature: (D)V
+ */
+JNIEXPORT void JNICALL Java_mapnik_Layer_setMaximumScaleDenominator(JNIEnv *env, jobject obj,
+                                                                    jdouble maximum_scale_denom) {
+    PREAMBLE;
+    auto layer = LOAD_LAYER_POINTER(obj);
+    layer->set_maximum_scale_denominator(maximum_scale_denom);
     TRAILER_VOID;
 }
