@@ -332,6 +332,10 @@ public class MapDefinition extends NativeObject {
         }
     }
 
+    public void renderFile(String fileName, String type) {
+        renderFile(fileName, type, new RenderImageOptions());
+    }
+
     public native String[] fonts();
 
     public native String fontDirectory();
