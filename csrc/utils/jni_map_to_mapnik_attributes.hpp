@@ -33,7 +33,7 @@ jni_map_to_mapnik_attributes(JNIEnv* env, jobject mapj, T& mapnik_attributes) {
             jdouble valued = env->CallDoubleMethod(value.get(), METHOD_DOUBLE_DOUBLEVALUE);
             mapnik_attributes[keyc] = mapnik::value_double(valued);
         } else {
-            throw std::exception(
+            throw std::runtime_error(
                 "Unknown type of value in `Map<String, Object>`, the value must be a `String`, `Integer`, `Boolean`, "
                 "`Long`, `Double` or `null`");
         }

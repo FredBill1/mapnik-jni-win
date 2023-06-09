@@ -132,7 +132,7 @@ JNIEXPORT jstring JNICALL Java_mapnik_VectorTile_toGeoJSON__Ljava_lang_String_2(
         write_geojson_all(result, tile);
     } else {
         if (!write_geojson_layer_name(result, layer_name, tile))
-            throw std::exception("layer does not exist in vector tile");
+            throw std::runtime_error("layer does not exist in vector tile");
     }
     return env->NewStringUTF(result.c_str());
     TRAILER(NULL);
@@ -148,7 +148,7 @@ JNIEXPORT jstring JNICALL Java_mapnik_VectorTile_toGeoJSON__J(JNIEnv *env, jobje
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     std::string result;
     if (!write_geojson_layer_index(result, layer_idx, tile))
-        throw std::exception("layer does not exist in vector tile");
+        throw std::runtime_error("layer does not exist in vector tile");
     return env->NewStringUTF(result.c_str());
     TRAILER(NULL);
 }

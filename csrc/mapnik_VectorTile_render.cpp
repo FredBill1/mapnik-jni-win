@@ -37,15 +37,15 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_renderImpl(JNIEnv *env, jobject ob
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
 
-    if (mapj == NULL) throw std::exception("map is null");
+    if (mapj == NULL) throw std::runtime_error("map is null");
     auto &map_in = *LOAD_MAP_POINTER(mapj);
 
-    if (surfacej == NULL) throw std::exception("surface is null");
+    if (surfacej == NULL) throw std::runtime_error("surface is null");
     auto &im = *LOAD_IMAGE_POINTER(surfacej);
 
     mapnik::box2d<double> map_extent;
     if (zxy != NULL) {
-        if (env->GetArrayLength(zxy) != 3) throw std::exception("zxy must be an array of length 3");
+        if (env->GetArrayLength(zxy) != 3) throw std::runtime_error("zxy must be an array of length 3");
         JNILongArrayElements tmp(env, zxy);
         map_extent = mapnik::vector_tile_impl::tile_mercator_bbox(tmp[1], tmp[2], tmp[0]);
     } else {

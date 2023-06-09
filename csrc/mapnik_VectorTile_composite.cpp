@@ -13,9 +13,9 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_compositeImpl(
     jdouble scale_denominator, jboolean reencode, jdoubleArray max_extent, jdouble simplify_distance,
     jboolean process_all_rings, jint image_format, jint scaling_method, jint threading_mode) {
     PREAMBLE;
-    if (array == NULL) throw std::exception("input array is null");
+    if (array == NULL) throw std::runtime_error("input array is null");
     jsize array_len = env->GetArrayLength(array);
-    if (array_len == 0) throw std::exception("input array is empty");
+    if (array_len == 0) throw std::runtime_error("input array is empty");
 
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     mapnik::Map map(tile->tile_size(), tile->tile_size(), "epsg:3857");

@@ -244,7 +244,7 @@ JNIEXPORT jlong JNICALL Java_mapnik_VectorTile_layerImpl(JNIEnv *env, jobject ob
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     std::string layer_name = JNIString(env, layer_namej).get();
-    if (!tile->has_layer(layer_name)) throw std::exception("layer does not exist in vector tile");
+    if (!tile->has_layer(layer_name)) throw std::runtime_error("layer does not exist in vector tile");
 
     auto v = new mapnik::vector_tile_impl::merc_tile(tile->x(), tile->y(), tile->z(), tile->tile_size(),
                                                      tile->buffer_size());

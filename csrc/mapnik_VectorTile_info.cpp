@@ -9,7 +9,7 @@
  */
 JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_info(JNIEnv *env, jclass, jbyteArray infoj) {
     PREAMBLE;
-    if (infoj == NULL) throw std::exception("info is null");
+    if (infoj == NULL) throw std::runtime_error("info is null");
     auto size = env->GetArrayLength(infoj);
     JNIByteArrayElements dataj(env, infoj);
     auto data = reinterpret_cast<const char *>(dataj.data());
