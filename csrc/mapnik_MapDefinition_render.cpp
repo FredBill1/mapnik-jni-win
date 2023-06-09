@@ -47,7 +47,7 @@ JNIEXPORT void JNICALL Java_mapnik_MapDefinition_renderImageImpl(JNIEnv* env, jo
     auto image = LOAD_IMAGE_POINTER(imagej);
     mapnik::attributes variables;
     jni_map_to_mapnik_attributes(env, variablesj, variables);
-    mapnik::request req(image->width(), image->height(), map->get_current_extent());
+    mapnik::request req(map->width(), map->height(), map->get_current_extent());
     req.set_buffer_size(buffer_size);
     mapnik::agg_renderer<mapnik::image_rgba8> ren(*map, req, variables, *image, scale, offset_x, offset_y);
     ren.apply(scale_denominator);
