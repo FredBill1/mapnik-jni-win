@@ -1,4 +1,4 @@
-package mapnik;
+package geowin.mapnik;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;

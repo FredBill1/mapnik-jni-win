@@ -1,4 +1,4 @@
-package mapnik;
+package geowin.mapnik;
 
 public class Demo {
     public static void main(String[] args) {

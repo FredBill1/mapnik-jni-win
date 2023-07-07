@@ -5,10 +5,10 @@
             "type": "java",
             "name": "Demo",
             "request": "launch",
-            "mainClass": "mapnik.Demo",
+            "mainClass": "geowin.mapnik.Demo",
             "projectName": "mapnik-jni",
             "vmArgs": [
-                "-Djava.library.path=${workspaceFolder}/build/Release",
+                "-Djava.library.path=${workspaceFolder}/build/Release"
             ],
             "cwd": "${workspaceFolder}"
         }

@@ -1,10 +1,10 @@
-package mapnik;
+package geowin.mapnik;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import mapnik.options.Compression;
+import geowin.mapnik.options.Compression;
 
 import static org.junit.Assert.*;
 
@@ -39,7 +39,7 @@ public class TestVectorTile {
         m.resize(512, 512);
         m.zoomToBox(bounds);
         Image image = new Image(512, 512);
-        VectorTile vt = new mapnik.VectorTile(3, 3, 2);
+        VectorTile vt = new VectorTile(3, 3, 2);
         m.renderVectorTile(vt);
         vt.render(m, image);
 

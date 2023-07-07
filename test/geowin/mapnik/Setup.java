@@ -1,4 +1,4 @@
-package mapnik;
+package geowin.mapnik;
 
 public class Setup {
     public static void initialize() {

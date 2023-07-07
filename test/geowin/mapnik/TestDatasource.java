@@ -1,4 +1,4 @@
-package mapnik;
+package geowin.mapnik;
 
 import java.util.Map;
 import java.util.HashMap;

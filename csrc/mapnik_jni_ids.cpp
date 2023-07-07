@@ -39,17 +39,17 @@ void mapnik_jni_init_ids(JNIEnv* env) {
     // clang-format off
 
     // Load NativeObject classes
-    init_class(env, "mapnik/NativeObject", CLASS_NATIVEOBJECT);
-    init_class(env, "mapnik/MapDefinition", CLASS_MAP_DEFINITION);
-    init_class(env, "mapnik/Datasource", CLASS_DATASOURCE);
-    init_class(env, "mapnik/Layer", CLASS_LAYER);
-    init_class(env, "mapnik/FeatureTypeStyle", CLASS_FEATURE_TYPE_STYLE);
-    init_class(env, "mapnik/Projection", CLASS_PROJECTION);
-    init_class(env, "mapnik/Query", CLASS_QUERY);
-    init_class(env, "mapnik/FeatureSet", CLASS_FEATURESET);
-    init_class(env, "mapnik/Feature", CLASS_FEATURE);
-    init_class(env, "mapnik/Geometry", CLASS_GEOMETRY);
-    init_class(env, "mapnik/Image", CLASS_IMAGE);
+    init_class(env, "geowin/mapnik/NativeObject", CLASS_NATIVEOBJECT);
+    init_class(env, "geowin/mapnik/MapDefinition", CLASS_MAP_DEFINITION);
+    init_class(env, "geowin/mapnik/Datasource", CLASS_DATASOURCE);
+    init_class(env, "geowin/mapnik/Layer", CLASS_LAYER);
+    init_class(env, "geowin/mapnik/FeatureTypeStyle", CLASS_FEATURE_TYPE_STYLE);
+    init_class(env, "geowin/mapnik/Projection", CLASS_PROJECTION);
+    init_class(env, "geowin/mapnik/Query", CLASS_QUERY);
+    init_class(env, "geowin/mapnik/FeatureSet", CLASS_FEATURESET);
+    init_class(env, "geowin/mapnik/Feature", CLASS_FEATURE);
+    init_class(env, "geowin/mapnik/Geometry", CLASS_GEOMETRY);
+    init_class(env, "geowin/mapnik/Image", CLASS_IMAGE);
 
     // Ptr
     CTOR_NATIVEOBJECT = lookup_method(env, CLASS_NATIVEOBJECT, "<init>", "()V");
@@ -102,33 +102,33 @@ void mapnik_jni_init_ids(JNIEnv* env) {
     METHOD_MAP_ENTRY_GETVALUE = lookup_method(env, CLASS_MAP_ENTRY, "getValue", "()Ljava/lang/Object;");
 
     // Box2d
-    init_class(env, "mapnik/Box2d", CLASS_BOX2D);
+    init_class(env, "geowin/mapnik/Box2d", CLASS_BOX2D);
     FIELD_BOX2D_MINX = lookup_field(env, CLASS_BOX2D, "minx", "D");
     FIELD_BOX2D_MINY = lookup_field(env, CLASS_BOX2D, "miny", "D");
     FIELD_BOX2D_MAXX = lookup_field(env, CLASS_BOX2D, "maxx", "D");
     FIELD_BOX2D_MAXY = lookup_field(env, CLASS_BOX2D, "maxy", "D");
 
     // Color
-    init_class(env, "mapnik/Color", CLASS_COLOR);
+    init_class(env, "geowin/mapnik/Color", CLASS_COLOR);
     FIELD_COLOR_RED = lookup_field(env, CLASS_COLOR, "red", "I");
     FIELD_COLOR_GREEN = lookup_field(env, CLASS_COLOR, "green", "I");
     FIELD_COLOR_BLUE = lookup_field(env, CLASS_COLOR, "blue", "I");
     FIELD_COLOR_ALPHA = lookup_field(env, CLASS_COLOR, "alpha", "I");
 
     // Coord
-    init_class(env, "mapnik/Coord", CLASS_COORD);
+    init_class(env, "geowin/mapnik/Coord", CLASS_COORD);
     FIELD_COORD_X = lookup_field(env, CLASS_COORD, "x", "D");
     FIELD_COORD_Y = lookup_field(env, CLASS_COORD, "y", "D");
 
     // LayerDescriptor
-    init_class(env, "mapnik/LayerDescriptor", CLASS_LAYERDESCRIPTOR);
+    init_class(env, "geowin/mapnik/LayerDescriptor", CLASS_LAYERDESCRIPTOR);
     CTOR_LAYERDESCRIPTOR = lookup_method(env, CLASS_LAYERDESCRIPTOR, "<init>", "()V");
     FIELD_LAYERDESCRIPTOR_NAME = lookup_field(env, CLASS_LAYERDESCRIPTOR, "name", "Ljava/lang/String;");
     FIELD_LAYERDESCRIPTOR_ENCODING = lookup_field(env, CLASS_LAYERDESCRIPTOR, "encoding", "Ljava/lang/String;");
-    METHOD_LAYERDESCRIPTOR_ADDDESCRIPTOR = lookup_method(env, CLASS_LAYERDESCRIPTOR, "addDescriptor", "(Lmapnik/AttributeDescriptor;)V");
+    METHOD_LAYERDESCRIPTOR_ADDDESCRIPTOR = lookup_method(env, CLASS_LAYERDESCRIPTOR, "addDescriptor", "(Lgeowin/mapnik/AttributeDescriptor;)V");
 
     // AttributeDescriptor
-    init_class(env, "mapnik/AttributeDescriptor", CLASS_ATTRIBUTEDESCRIPTOR);
+    init_class(env, "geowin/mapnik/AttributeDescriptor", CLASS_ATTRIBUTEDESCRIPTOR);
     CTOR_ATTRIBUTEDESCRIPTOR = lookup_method(env, CLASS_ATTRIBUTEDESCRIPTOR, "<init>", "()V");
     FIELD_ATTRIBUTEDESCRIPTOR_NAME = lookup_field(env, CLASS_ATTRIBUTEDESCRIPTOR, "name", "Ljava/lang/String;");
     FIELD_ATTRIBUTEDESCRIPTOR_TYPE = lookup_field(env, CLASS_ATTRIBUTEDESCRIPTOR, "type", "I");
@@ -137,13 +137,13 @@ void mapnik_jni_init_ids(JNIEnv* env) {
     FIELD_ATTRIBUTEDESCRIPTOR_PRECISION = lookup_field(env, CLASS_ATTRIBUTEDESCRIPTOR, "precision", "I");
 
     // VectorTile
-    init_class(env, "mapnik/VectorTile$Info", CLASS_VECTOR_TILE_INFO);
+    init_class(env, "geowin/mapnik/VectorTile$Info", CLASS_VECTOR_TILE_INFO);
     CTOR_VECTOR_TILE_INFO = lookup_method(env, CLASS_VECTOR_TILE_INFO, "<init>", "()V");
-    FIELD_VECTOR_TILE_INFO_LAYERS      = lookup_field(env, CLASS_VECTOR_TILE_INFO,       "layers",      "[Lmapnik/VectorTile$Info$Layer;");
+    FIELD_VECTOR_TILE_INFO_LAYERS      = lookup_field(env, CLASS_VECTOR_TILE_INFO,       "layers",      "[Lgeowin/mapnik/VectorTile$Info$Layer;");
     FIELD_VECTOR_TILE_INFO_ERRORS      = lookup_field(env, CLASS_VECTOR_TILE_INFO,       "errors",      "Z");
     FIELD_VECTOR_TILE_INFO_TILE_ERRORS = lookup_field(env, CLASS_VECTOR_TILE_INFO, "tile_errors", "[Ljava/lang/String;");
 
-    init_class(env, "mapnik/VectorTile$Info$Layer", CLASS_VECTOR_TILE_INFO_LAYER);
+    init_class(env, "geowin/mapnik/VectorTile$Info$Layer", CLASS_VECTOR_TILE_INFO_LAYER);
     CTOR_VECTOR_TILE_INFO_LAYER = lookup_method(env, CLASS_VECTOR_TILE_INFO_LAYER, "<init>", "()V");
     FIELD_VECTOR_TILE_INFO_LAYER_NAME                = lookup_field(env, CLASS_VECTOR_TILE_INFO_LAYER, "name",                "Ljava/lang/String;");
     FIELD_VECTOR_TILE_INFO_LAYER_FEATURES            = lookup_field(env, CLASS_VECTOR_TILE_INFO_LAYER, "features",            "J");
@@ -155,18 +155,18 @@ void mapnik_jni_init_ids(JNIEnv* env) {
     FIELD_VECTOR_TILE_INFO_LAYER_VERSION             = lookup_field(env, CLASS_VECTOR_TILE_INFO_LAYER, "version",             "I");
     FIELD_VECTOR_TILE_INFO_LAYER_ERRORS              = lookup_field(env, CLASS_VECTOR_TILE_INFO_LAYER, "errors",              "[Ljava/lang/String;");
 
-    init_class(env, "mapnik/VectorTile$JSON", CLASS_VECTOR_TILE_JSON);
+    init_class(env, "geowin/mapnik/VectorTile$JSON", CLASS_VECTOR_TILE_JSON);
     CTOR_VECTOR_TILE_JSON = lookup_method(env, CLASS_VECTOR_TILE_JSON, "<init>", "()V");
-    FIELD_VECTOR_TILE_JSON_LAYERS = lookup_field(env, CLASS_VECTOR_TILE_JSON, "layers", "[Lmapnik/VectorTile$JSON$Layer;");
+    FIELD_VECTOR_TILE_JSON_LAYERS = lookup_field(env, CLASS_VECTOR_TILE_JSON, "layers", "[Lgeowin/mapnik/VectorTile$JSON$Layer;");
 
-    init_class(env, "mapnik/VectorTile$JSON$Layer", CLASS_VECTOR_TILE_JSON_LAYER);
+    init_class(env, "geowin/mapnik/VectorTile$JSON$Layer", CLASS_VECTOR_TILE_JSON_LAYER);
     CTOR_VECTOR_TILE_JSON_LAYER = lookup_method(env, CLASS_VECTOR_TILE_JSON_LAYER, "<init>", "()V");
     FIELD_VECTOR_TILE_JSON_LAYER_NAME     = lookup_field(env, CLASS_VECTOR_TILE_JSON_LAYER, "name",     "Ljava/lang/String;");
     FIELD_VECTOR_TILE_JSON_LAYER_EXTENT   = lookup_field(env, CLASS_VECTOR_TILE_JSON_LAYER, "extent",   "I");
     FIELD_VECTOR_TILE_JSON_LAYER_VERSION  = lookup_field(env, CLASS_VECTOR_TILE_JSON_LAYER, "version",  "I");
-    FIELD_VECTOR_TILE_JSON_LAYER_FEATURES = lookup_field(env, CLASS_VECTOR_TILE_JSON_LAYER, "features", "[Lmapnik/VectorTile$JSON$Layer$Feature;");
+    FIELD_VECTOR_TILE_JSON_LAYER_FEATURES = lookup_field(env, CLASS_VECTOR_TILE_JSON_LAYER, "features", "[Lgeowin/mapnik/VectorTile$JSON$Layer$Feature;");
 
-    init_class(env, "mapnik/VectorTile$JSON$Layer$Feature", CLASS_VECTOR_TILE_JSON_LAYER_FEATURE);
+    init_class(env, "geowin/mapnik/VectorTile$JSON$Layer$Feature", CLASS_VECTOR_TILE_JSON_LAYER_FEATURE);
     CTOR_VECTOR_TILE_JSON_LAYER_FEATURE = lookup_method(env, CLASS_VECTOR_TILE_JSON_LAYER_FEATURE, "<init>", "()V");
     FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_ID            = lookup_field(env, CLASS_VECTOR_TILE_JSON_LAYER_FEATURE, "id",            "J");
     FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_TYPE          = lookup_field(env, CLASS_VECTOR_TILE_JSON_LAYER_FEATURE, "type",          "I");
@@ -175,37 +175,37 @@ void mapnik_jni_init_ids(JNIEnv* env) {
     FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_GEOMETRY      = lookup_field(env, CLASS_VECTOR_TILE_JSON_LAYER_FEATURE, "geometry",      "[Ljava/lang/Object;");
     FIELD_VECTOR_TILE_JSON_LAYER_FEATURE_GEOMETRY_TYPE = lookup_field(env, CLASS_VECTOR_TILE_JSON_LAYER_FEATURE, "geometry_type", "Ljava/lang/String;");
 
-    init_class(env, "mapnik/VectorTile$NotSimpleFeature", CLASS_VECTOR_TILE_NOT_SIMPLE_FEATURE);
+    init_class(env, "geowin/mapnik/VectorTile$NotSimpleFeature", CLASS_VECTOR_TILE_NOT_SIMPLE_FEATURE);
     CTOR_VECTOR_TILE_NOT_SIMPLE_FEATURE = lookup_method(env, CLASS_VECTOR_TILE_NOT_SIMPLE_FEATURE, "<init>", "()V");
     FIELD_VECTOR_TILE_NOT_SIMPLE_FEATURE_LAYER      = lookup_field(env, CLASS_VECTOR_TILE_NOT_SIMPLE_FEATURE, "layer",      "Ljava/lang/String;");
     FIELD_VECTOR_TILE_NOT_SIMPLE_FEATURE_FEATURE_ID = lookup_field(env, CLASS_VECTOR_TILE_NOT_SIMPLE_FEATURE, "feature_id", "J");
 
-    init_class(env, "mapnik/VectorTile$NotValidFeature", CLASS_VECTOR_TILE_NOT_VALID_FEATURE);
+    init_class(env, "geowin/mapnik/VectorTile$NotValidFeature", CLASS_VECTOR_TILE_NOT_VALID_FEATURE);
     CTOR_VECTOR_TILE_NOT_VALID_FEATURE = lookup_method(env, CLASS_VECTOR_TILE_NOT_VALID_FEATURE, "<init>", "()V");
     FIELD_VECTOR_TILE_NOT_VALID_FEATURE_MESSAGE    = lookup_field(env, CLASS_VECTOR_TILE_NOT_VALID_FEATURE, "message",    "Ljava/lang/String;");
     FIELD_VECTOR_TILE_NOT_VALID_FEATURE_LAYER      = lookup_field(env, CLASS_VECTOR_TILE_NOT_VALID_FEATURE, "layer",      "Ljava/lang/String;");
     FIELD_VECTOR_TILE_NOT_VALID_FEATURE_FEATURE_ID = lookup_field(env, CLASS_VECTOR_TILE_NOT_VALID_FEATURE, "feature_id", "J");
     FIELD_VECTOR_TILE_NOT_VALID_FEATURE_GEOJSON    = lookup_field(env, CLASS_VECTOR_TILE_NOT_VALID_FEATURE, "geojson",    "Ljava/lang/String;");
 
-    init_class(env, "mapnik/VectorTile$QueryResult", CLASS_VECTOR_TILE_QUERY_RESULT);
-    FIELD_VECTOR_TILE_QUERY_RESULT_FEATURES = lookup_field(env, CLASS_VECTOR_TILE_QUERY_RESULT, "features", "[Lmapnik/VectorTile$QueryResult$QueryFeature;");
+    init_class(env, "geowin/mapnik/VectorTile$QueryResult", CLASS_VECTOR_TILE_QUERY_RESULT);
+    FIELD_VECTOR_TILE_QUERY_RESULT_FEATURES = lookup_field(env, CLASS_VECTOR_TILE_QUERY_RESULT, "features", "[Lgeowin/mapnik/VectorTile$QueryResult$QueryFeature;");
 
-    init_class(env, "mapnik/VectorTile$QueryResult$QueryFeature", CLASS_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE);
+    init_class(env, "geowin/mapnik/VectorTile$QueryResult$QueryFeature", CLASS_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE);
     FIELD_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE_LAYER    = lookup_field(env, CLASS_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE, "layer",    "Ljava/lang/String;");
     FIELD_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE_DISTANCE = lookup_field(env, CLASS_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE, "distance", "D");
     FIELD_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE_XHIT     = lookup_field(env, CLASS_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE, "x_hit",    "D");
     FIELD_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE_YHIT     = lookup_field(env, CLASS_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE, "y_hit",    "D");
-    FIELD_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE_FEATURE  = lookup_field(env, CLASS_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE, "feature",  "Lmapnik/Feature;");
+    FIELD_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE_FEATURE  = lookup_field(env, CLASS_VECTOR_TILE_QUERY_RESULT_QUERY_FEATURE, "feature",  "Lgeowin/mapnik/Feature;");
 
-    init_class(env, "mapnik/VectorTile$QueryManyResult", CLASS_VECTOR_TILE_QUERY_MANY_RESULT);
-    FIELD_VECTOR_TILE_QUERY_MANY_RESULT_FEATURES = lookup_field(env, CLASS_VECTOR_TILE_QUERY_MANY_RESULT, "features", "[Lmapnik/VectorTile$QueryManyResult$QueryFeature;");
-    FIELD_VECTOR_TILE_QUERY_MANY_RESULT_HITS     = lookup_field(env, CLASS_VECTOR_TILE_QUERY_MANY_RESULT, "hits",     "[[Lmapnik/VectorTile$QueryManyResult$QueryHit;");
+    init_class(env, "geowin/mapnik/VectorTile$QueryManyResult", CLASS_VECTOR_TILE_QUERY_MANY_RESULT);
+    FIELD_VECTOR_TILE_QUERY_MANY_RESULT_FEATURES = lookup_field(env, CLASS_VECTOR_TILE_QUERY_MANY_RESULT, "features", "[Lgeowin/mapnik/VectorTile$QueryManyResult$QueryFeature;");
+    FIELD_VECTOR_TILE_QUERY_MANY_RESULT_HITS     = lookup_field(env, CLASS_VECTOR_TILE_QUERY_MANY_RESULT, "hits",     "[[Lgeowin/mapnik/VectorTile$QueryManyResult$QueryHit;");
 
-    init_class(env, "mapnik/VectorTile$QueryManyResult$QueryFeature", CLASS_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_FEATURE);
+    init_class(env, "geowin/mapnik/VectorTile$QueryManyResult$QueryFeature", CLASS_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_FEATURE);
     FIELD_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_FEATURE_LAYER   = lookup_field(env, CLASS_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_FEATURE, "layer",   "Ljava/lang/String;");
-    FIELD_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_FEATURE_FEATURE = lookup_field(env, CLASS_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_FEATURE, "feature", "Lmapnik/Feature;");
+    FIELD_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_FEATURE_FEATURE = lookup_field(env, CLASS_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_FEATURE, "feature", "Lgeowin/mapnik/Feature;");
 
-    init_class(env, "mapnik/VectorTile$QueryManyResult$QueryHit", CLASS_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_HIT);
+    init_class(env, "geowin/mapnik/VectorTile$QueryManyResult$QueryHit", CLASS_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_HIT);
     FIELD_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_HIT_DISTANCE   = lookup_field(env, CLASS_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_HIT, "distance", "D");
     FIELD_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_HIT_FEATURE_ID = lookup_field(env, CLASS_VECTOR_TILE_QUERY_MANY_RESULT_QUERY_HIT, "feature_id", "I");
     // clang-format on
