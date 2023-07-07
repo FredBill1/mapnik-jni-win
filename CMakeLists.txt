@@ -28,7 +28,7 @@ find_package(GEOS CONFIG REQUIRED)
 
 include(UseJava)
 
-file(GLOB_RECURSE JAVA_SOURCES src/mapnik/*.java)
+file(GLOB_RECURSE JAVA_SOURCES src/geowin/mapnik/*.java)
 add_jar(${PROJECT_NAME}_jar ${JAVA_SOURCES} GENERATE_NATIVE_HEADERS ${PROJECT_NAME}_native)
 
 file(GLOB_RECURSE JNI_SOURCES csrc/*.cpp)
