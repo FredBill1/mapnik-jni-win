@@ -1,5 +1,5 @@
 
-#include "mapnik_Projection.h"
+#include "geowin_mapnik_Projection.h"
 
 #include "globals.hpp"
 
@@ -9,7 +9,7 @@
  * Method:    alloc
  * Signature: (Ljava/lang/String;)J
  */
-JNIEXPORT jlong JNICALL Java_mapnik_Projection_alloc(JNIEnv *env, jclass c, jstring paramsj) {
+JNIEXPORT jlong JNICALL Java_geowin_mapnik_Projection_alloc(JNIEnv *env, jclass c, jstring paramsj) {
     PREAMBLE;
     JNIString params(env, paramsj);
     mapnik::projection *prj = new mapnik::projection(params.get());
@@ -22,7 +22,7 @@ JNIEXPORT jlong JNICALL Java_mapnik_Projection_alloc(JNIEnv *env, jclass c, jstr
  * Method:    dealloc
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_mapnik_Projection_dealloc(JNIEnv *env, jobject, jlong ptr) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_Projection_dealloc(JNIEnv *env, jobject, jlong ptr) {
     PREAMBLE;
     delete static_cast<mapnik::projection *>(TO_POINTER(ptr));
     TRAILER_VOID;
@@ -33,7 +33,7 @@ JNIEXPORT void JNICALL Java_mapnik_Projection_dealloc(JNIEnv *env, jobject, jlon
  * Method:    getParams
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_mapnik_Projection_getParams(JNIEnv *env, jobject prjobject) {
+JNIEXPORT jstring JNICALL Java_geowin_mapnik_Projection_getParams(JNIEnv *env, jobject prjobject) {
     PREAMBLE;
     mapnik::projection *prj = LOAD_PROJECTION_POINTER(prjobject);
     return env->NewStringUTF(prj->params().c_str());
@@ -45,7 +45,7 @@ JNIEXPORT jstring JNICALL Java_mapnik_Projection_getParams(JNIEnv *env, jobject 
  * Method:    getExpanded
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_mapnik_Projection_getExpanded(JNIEnv *env, jobject prjobject) {
+JNIEXPORT jstring JNICALL Java_geowin_mapnik_Projection_getExpanded(JNIEnv *env, jobject prjobject) {
     PREAMBLE;
     mapnik::projection *prj = LOAD_PROJECTION_POINTER(prjobject);
     return env->NewStringUTF(prj->expanded().c_str());
@@ -55,9 +55,9 @@ JNIEXPORT jstring JNICALL Java_mapnik_Projection_getExpanded(JNIEnv *env, jobjec
 /*
  * Class:     mapnik_Projection
  * Method:    forward
- * Signature: (Lmapnik/Coord;)V
+ * Signature: (Lgeowin/mapnik/Coord;)V
  */
-JNIEXPORT void JNICALL Java_mapnik_Projection_forward(JNIEnv *env, jobject prjobject, jobject coord) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_Projection_forward(JNIEnv *env, jobject prjobject, jobject coord) {
     PREAMBLE;
     if (!coord) return;
     mapnik::projection *prj = LOAD_PROJECTION_POINTER(prjobject);
@@ -71,9 +71,9 @@ JNIEXPORT void JNICALL Java_mapnik_Projection_forward(JNIEnv *env, jobject prjob
 /*
  * Class:     mapnik_Projection
  * Method:    inverse
- * Signature: (Lmapnik/Coord;)V
+ * Signature: (Lgeowin/mapnik/Coord;)V
  */
-JNIEXPORT void JNICALL Java_mapnik_Projection_inverse(JNIEnv *env, jobject prjobject, jobject coord) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_Projection_inverse(JNIEnv *env, jobject prjobject, jobject coord) {
     PREAMBLE;
     if (!coord) return;
     mapnik::projection *prj = LOAD_PROJECTION_POINTER(prjobject);
@@ -87,9 +87,9 @@ JNIEXPORT void JNICALL Java_mapnik_Projection_inverse(JNIEnv *env, jobject prjob
 /*
  * Class:     mapnik_Projection
  * Method:    forward
- * Signature: (Lmapnik/Coord;)Lmapnik/Coord;
+ * Signature: (Lgeowin/mapnik/Coord;)Lmapnik/Coord;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_Projection_forward__Lmapnik_Coord_2(JNIEnv *env, jobject obj, jobject xy_obj) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_Projection_forward__Lmapnik_Coord_2(JNIEnv *env, jobject obj, jobject xy_obj) {
     PREAMBLE;
     mapnik::projection *prj = LOAD_PROJECTION_POINTER(obj);
     auto xy = coordToNative(env, xy_obj);
@@ -101,9 +101,9 @@ JNIEXPORT jobject JNICALL Java_mapnik_Projection_forward__Lmapnik_Coord_2(JNIEnv
 /*
  * Class:     mapnik_Projection
  * Method:    inverse
- * Signature: (Lmapnik/Coord;)Lmapnik/Coord;
+ * Signature: (Lgeowin/mapnik/Coord;)Lmapnik/Coord;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_Projection_inverse__Lmapnik_Coord_2(JNIEnv *env, jobject obj, jobject xy_obj) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_Projection_inverse__Lmapnik_Coord_2(JNIEnv *env, jobject obj, jobject xy_obj) {
     PREAMBLE;
     mapnik::projection *prj = LOAD_PROJECTION_POINTER(obj);
     auto xy = coordToNative(env, xy_obj);
@@ -115,9 +115,9 @@ JNIEXPORT jobject JNICALL Java_mapnik_Projection_inverse__Lmapnik_Coord_2(JNIEnv
 /*
  * Class:     mapnik_Projection
  * Method:    forward
- * Signature: (Lmapnik/Box2d;)Lmapnik/Box2d;
+ * Signature: (Lgeowin/mapnik/Box2d;)Lmapnik/Box2d;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_Projection_forward__Lmapnik_Box2d_2(JNIEnv *env, jobject obj, jobject box_obj) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_Projection_forward__Lmapnik_Box2d_2(JNIEnv *env, jobject obj, jobject box_obj) {
     PREAMBLE;
     mapnik::projection *prj = LOAD_PROJECTION_POINTER(obj);
     auto box = box2dToNative(env, box_obj);
@@ -130,9 +130,9 @@ JNIEXPORT jobject JNICALL Java_mapnik_Projection_forward__Lmapnik_Box2d_2(JNIEnv
 /*
  * Class:     mapnik_Projection
  * Method:    inverse
- * Signature: (Lmapnik/Box2d;)Lmapnik/Box2d;
+ * Signature: (Lgeowin/mapnik/Box2d;)Lmapnik/Box2d;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_Projection_inverse__Lmapnik_Box2d_2(JNIEnv *env, jobject obj, jobject box_obj) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_Projection_inverse__Lmapnik_Box2d_2(JNIEnv *env, jobject obj, jobject box_obj) {
     PREAMBLE;
     mapnik::projection *prj = LOAD_PROJECTION_POINTER(obj);
     auto box = box2dToNative(env, box_obj);

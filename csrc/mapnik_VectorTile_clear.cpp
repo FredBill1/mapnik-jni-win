@@ -1,4 +1,4 @@
-#include "mapnik_VectorTile.h"
+#include "geowin_mapnik_VectorTile.h"
 //
 #include "globals.hpp"
 
@@ -7,7 +7,7 @@
  * Method:    clear
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_mapnik_VectorTile_clear(JNIEnv *env, jobject obj) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_VectorTile_clear(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     tile->clear();

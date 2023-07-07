@@ -1,4 +1,4 @@
-#include "mapnik_VectorTile.h"
+#include "geowin_mapnik_VectorTile.h"
 //
 #include "globals.hpp"
 
@@ -7,7 +7,7 @@
  * Method:    info
  * Signature: ([B)Lmapnik/VectorTile/Info;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_info(JNIEnv *env, jclass, jbyteArray infoj) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_VectorTile_info(JNIEnv *env, jclass, jbyteArray infoj) {
     PREAMBLE;
     if (infoj == NULL) throw std::runtime_error("info is null");
     auto size = env->GetArrayLength(infoj);

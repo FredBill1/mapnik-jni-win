@@ -1,4 +1,4 @@
-#include "mapnik_VectorTile.h"
+#include "geowin_mapnik_VectorTile.h"
 //
 #include "globals.hpp"
 #include "utils/jni_map_to_mapnik_attributes.hpp"
@@ -29,11 +29,12 @@ static void process_layers(Renderer &ren, mapnik::request const &m_req, mapnik::
 /*
  * Class:     mapnik_VectorTile
  * Method:    renderImpl
- * Signature: (Lmapnik/MapDefinition;Lmapnik/Image;[JIDDLjava/util/Map;)V
+ * Signature: (Lgeowin/mapnik/MapDefinition;Lmapnik/Image;[JIDDLjava/util/Map;)V
  */
-JNIEXPORT void JNICALL Java_mapnik_VectorTile_renderImpl(JNIEnv *env, jobject obj, jobject mapj, jobject surfacej,
-                                                         jlongArray zxy, jint buffer_size, jdouble scale,
-                                                         jdouble scale_denominator, jobject variablesj) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_VectorTile_renderImpl(JNIEnv *env, jobject obj, jobject mapj,
+                                                                jobject surfacej, jlongArray zxy, jint buffer_size,
+                                                                jdouble scale, jdouble scale_denominator,
+                                                                jobject variablesj) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
 

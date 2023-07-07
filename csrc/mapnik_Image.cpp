@@ -1,4 +1,4 @@
-#include "mapnik_Image.h"
+#include "geowin_mapnik_Image.h"
 
 #include "globals.hpp"
 /*
@@ -6,7 +6,7 @@
  * Method:    alloc
  * Signature: (II)J
  */
-JNIEXPORT jlong JNICALL Java_mapnik_Image_alloc__II(JNIEnv* env, jclass c, jint width, jint height) {
+JNIEXPORT jlong JNICALL Java_geowin_mapnik_Image_alloc__II(JNIEnv* env, jclass c, jint width, jint height) {
     PREAMBLE;
     mapnik::image_rgba8* im = new mapnik::image_rgba8(width, height);
     return FROM_POINTER(im);
@@ -16,9 +16,9 @@ JNIEXPORT jlong JNICALL Java_mapnik_Image_alloc__II(JNIEnv* env, jclass c, jint 
 /*
  * Class:     mapnik_Image
  * Method:    alloc
- * Signature: (Lmapnik/Image;)J
+ * Signature: (Lgeowin/mapnik/Image;)J
  */
-JNIEXPORT jlong JNICALL Java_mapnik_Image_alloc__Lmapnik_Image_2(JNIEnv* env, jclass c, jobject iobjother) {
+JNIEXPORT jlong JNICALL Java_geowin_mapnik_Image_alloc__Lmapnik_Image_2(JNIEnv* env, jclass c, jobject iobjother) {
     PREAMBLE;
     if (!iobjother) {
         throw_runtime_exception(env, "Image cannot be null in call to constructor");
@@ -37,7 +37,7 @@ JNIEXPORT jlong JNICALL Java_mapnik_Image_alloc__Lmapnik_Image_2(JNIEnv* env, jc
  * Method:    dealloc
  * Signature: (J)J
  */
-JNIEXPORT void JNICALL Java_mapnik_Image_dealloc(JNIEnv* env, jobject, jlong ptr) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_Image_dealloc(JNIEnv* env, jobject, jlong ptr) {
     PREAMBLE;
     mapnik::image_rgba8* im = static_cast<mapnik::image_rgba8*>(TO_POINTER(ptr));
     if (im) { delete im; }
@@ -49,7 +49,7 @@ JNIEXPORT void JNICALL Java_mapnik_Image_dealloc(JNIEnv* env, jobject, jlong ptr
  * Method:    getWidth
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_mapnik_Image_getWidth(JNIEnv* env, jobject imobj) {
+JNIEXPORT jint JNICALL Java_geowin_mapnik_Image_getWidth(JNIEnv* env, jobject imobj) {
     PREAMBLE;
     mapnik::image_rgba8* im = LOAD_IMAGE_POINTER(imobj);
     return im->width();
@@ -61,7 +61,7 @@ JNIEXPORT jint JNICALL Java_mapnik_Image_getWidth(JNIEnv* env, jobject imobj) {
  * Method:    getHeight
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_mapnik_Image_getHeight(JNIEnv* env, jobject imobj) {
+JNIEXPORT jint JNICALL Java_geowin_mapnik_Image_getHeight(JNIEnv* env, jobject imobj) {
     PREAMBLE;
     mapnik::image_rgba8* im = LOAD_IMAGE_POINTER(imobj);
     return im->height();
@@ -73,7 +73,7 @@ JNIEXPORT jint JNICALL Java_mapnik_Image_getHeight(JNIEnv* env, jobject imobj) {
  * Method:    saveToFile
  * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_mapnik_Image_saveToFile(JNIEnv* env, jobject imobj, jstring filenamej, jstring typej) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_Image_saveToFile(JNIEnv* env, jobject imobj, jstring filenamej, jstring typej) {
     PREAMBLE;
     mapnik::image_rgba8* im = LOAD_IMAGE_POINTER(imobj);
     JNIString filename(env, filenamej);
@@ -88,7 +88,7 @@ JNIEXPORT void JNICALL Java_mapnik_Image_saveToFile(JNIEnv* env, jobject imobj, 
  * Method:    saveToMemory
  * Signature: (Ljava/lang/String;)[B
  */
-JNIEXPORT jbyteArray JNICALL Java_mapnik_Image_saveToMemory(JNIEnv* env, jobject imobj, jstring typej) {
+JNIEXPORT jbyteArray JNICALL Java_geowin_mapnik_Image_saveToMemory(JNIEnv* env, jobject imobj, jstring typej) {
     PREAMBLE;
     mapnik::image_rgba8* im = LOAD_IMAGE_POINTER(imobj);
     JNIString type(env, typej);

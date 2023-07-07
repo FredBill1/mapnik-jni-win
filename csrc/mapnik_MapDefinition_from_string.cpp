@@ -1,13 +1,13 @@
-#include "mapnik_MapDefinition.h"
+#include "geowin_mapnik_MapDefinition.h"
 //
 #include "globals.hpp"
 
 /*
- * Class:     mapnik_MapDefinition
+ * Class:     geowin_mapnik_MapDefinition
  * Method:    fromStringImpl
  * Signature: (Ljava/lang/String;ZLjava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_mapnik_MapDefinition_fromStringImpl(JNIEnv* env, jobject obj, jstring stylesheet,
+JNIEXPORT void JNICALL Java_geowin_mapnik_MapDefinition_fromStringImpl(JNIEnv* env, jobject obj, jstring stylesheet,
                                                                 jboolean strict, jstring base) {
     PREAMBLE;
     auto map = LOAD_MAP_POINTER(obj);

@@ -1,4 +1,4 @@
-#include "mapnik_Datasource.h"
+#include "geowin_mapnik_Datasource.h"
 
 #include "globals.hpp"
 #include "utils/MapnikValueToJNIVisitor.hpp"
@@ -8,7 +8,7 @@
  * Method:    alloc
  * Signature: (Ljava/util/Map;)J
  */
-JNIEXPORT jlong JNICALL Java_mapnik_Datasource_alloc(JNIEnv* env, jobject, jobject paramsj) {
+JNIEXPORT jlong JNICALL Java_geowin_mapnik_Datasource_alloc(JNIEnv* env, jobject, jobject paramsj) {
     PREAMBLE;
     mapnik::parameters params;
     jni_map_to_mapnik_attributes(env, paramsj, params);
@@ -22,7 +22,7 @@ JNIEXPORT jlong JNICALL Java_mapnik_Datasource_alloc(JNIEnv* env, jobject, jobje
  * Method:    dealloc
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_mapnik_Datasource_dealloc(JNIEnv* env, jobject, jlong ptr) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_Datasource_dealloc(JNIEnv* env, jobject, jlong ptr) {
     PREAMBLE;
     mapnik::datasource_ptr* dspinned = static_cast<mapnik::datasource_ptr*>(TO_POINTER(ptr));
     delete dspinned;
@@ -34,7 +34,7 @@ JNIEXPORT void JNICALL Java_mapnik_Datasource_dealloc(JNIEnv* env, jobject, jlon
  * Method:    parameters
  * Signature: ()Ljava/util/Map;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_Datasource_parameters(JNIEnv* env, jobject obj) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_Datasource_parameters(JNIEnv* env, jobject obj) {
     PREAMBLE;
     auto ds = LOAD_DATASOURCE_POINTER(obj);
     auto& params = (*ds)->params();
@@ -54,7 +54,7 @@ JNIEXPORT jobject JNICALL Java_mapnik_Datasource_parameters(JNIEnv* env, jobject
  * Method:    getType
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_mapnik_Datasource_getType(JNIEnv* env, jobject dsobj) {
+JNIEXPORT jint JNICALL Java_geowin_mapnik_Datasource_getType(JNIEnv* env, jobject dsobj) {
     PREAMBLE;
     mapnik::datasource_ptr* dsp = LOAD_DATASOURCE_POINTER(dsobj);
     return (*dsp)->type();
@@ -66,7 +66,7 @@ JNIEXPORT jint JNICALL Java_mapnik_Datasource_getType(JNIEnv* env, jobject dsobj
  * Method:    getEnvelope
  * Signature: ()Lmapnik/Box2d;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_Datasource_getEnvelope(JNIEnv* env, jobject dsobj) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_Datasource_getEnvelope(JNIEnv* env, jobject dsobj) {
     PREAMBLE;
     mapnik::datasource_ptr* dsp = LOAD_DATASOURCE_POINTER(dsobj);
     return box2dFromNative(env, (*dsp)->envelope());
@@ -76,9 +76,9 @@ JNIEXPORT jobject JNICALL Java_mapnik_Datasource_getEnvelope(JNIEnv* env, jobjec
 /*
  * Class:     mapnik_Datasource
  * Method:    features
- * Signature: (Lmapnik/Query;)Lmapnik/FeatureSet;
+ * Signature: (Lgeowin/mapnik/Query;)Lmapnik/FeatureSet;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_Datasource_features(JNIEnv* env, jobject dsobj, jobject queryobj) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_Datasource_features(JNIEnv* env, jobject dsobj, jobject queryobj) {
     PREAMBLE;
     if (!queryobj) return 0;
 
@@ -99,9 +99,9 @@ JNIEXPORT jobject JNICALL Java_mapnik_Datasource_features(JNIEnv* env, jobject d
 /*
  * Class:     mapnik_Datasource
  * Method:    featuresAtPoint
- * Signature: (Lmapnik/Coord;)Lmapnik/FeatureSet;
+ * Signature: (Lgeowin/mapnik/Coord;)Lmapnik/FeatureSet;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_Datasource_featuresAtPoint(JNIEnv* env, jobject dsobj, jobject ptobj) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_Datasource_featuresAtPoint(JNIEnv* env, jobject dsobj, jobject ptobj) {
     PREAMBLE;
     if (!ptobj) return 0;
 
@@ -121,7 +121,7 @@ JNIEXPORT jobject JNICALL Java_mapnik_Datasource_featuresAtPoint(JNIEnv* env, jo
  * Method:    getDescriptor
  * Signature: ()Lmapnik/LayerDescriptor;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_Datasource_getDescriptor(JNIEnv* env, jobject dsobj) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_Datasource_getDescriptor(JNIEnv* env, jobject dsobj) {
     PREAMBLE;
     mapnik::datasource_ptr* dsp = LOAD_DATASOURCE_POINTER(dsobj);
     mapnik::layer_descriptor desc = (*dsp)->get_descriptor();

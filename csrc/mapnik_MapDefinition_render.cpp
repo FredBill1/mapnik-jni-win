@@ -1,14 +1,14 @@
-#include "mapnik_MapDefinition.h"
+#include "geowin_mapnik_MapDefinition.h"
 //
 #include "globals.hpp"
 #include "utils/jni_map_to_mapnik_attributes.hpp"
 
 /*
- * Class:     mapnik_MapDefinition
+ * Class:     geowin_mapnik_MapDefinition
  * Method:    renderVectorTileImpl
- * Signature: (Lmapnik/VectorTile;DDIIIIDZZIIDLjava/util/Map;Z)V
+ * Signature: (Lgeowin/mapnik/VectorTile;DDIIIIDZZIIDLjava/util/Map;Z)V
  */
-JNIEXPORT void JNICALL Java_mapnik_MapDefinition_renderVectorTileImpl(
+JNIEXPORT void JNICALL Java_geowin_mapnik_MapDefinition_renderVectorTileImpl(
     JNIEnv* env, jobject mapj, jobject tilej, jdouble scale, jdouble scale_denominator, jint offset_x, jint offset_y,
     jint image_scaling, jint image_format, jdouble area_threshold, jboolean strictly_simple,
     jboolean multi_polygon_union, jint fill_type, jint threading_mode, jdouble simplify_distance, jobject variablesj,
@@ -34,14 +34,14 @@ JNIEXPORT void JNICALL Java_mapnik_MapDefinition_renderVectorTileImpl(
 }
 
 /*
- * Class:     mapnik_MapDefinition
+ * Class:     geowin_mapnik_MapDefinition
  * Method:    renderImageImpl
- * Signature: (Lmapnik/Image;IDDIILjava/util/Map;)V
+ * Signature: (Lgeowin/mapnik/Image;IDDIILjava/util/Map;)V
  */
-JNIEXPORT void JNICALL Java_mapnik_MapDefinition_renderImageImpl(JNIEnv* env, jobject mapj, jobject imagej,
-                                                                 jint buffer_size, jdouble scale,
-                                                                 jdouble scale_denominator, jint offset_x,
-                                                                 jint offset_y, jobject variablesj) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_MapDefinition_renderImageImpl(JNIEnv* env, jobject mapj, jobject imagej,
+                                                                        jint buffer_size, jdouble scale,
+                                                                        jdouble scale_denominator, jint offset_x,
+                                                                        jint offset_y, jobject variablesj) {
     PREAMBLE;
     auto map = LOAD_MAP_POINTER(mapj);
     auto image = LOAD_IMAGE_POINTER(imagej);

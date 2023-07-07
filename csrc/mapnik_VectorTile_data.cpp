@@ -1,4 +1,4 @@
-#include "mapnik_VectorTile.h"
+#include "geowin_mapnik_VectorTile.h"
 //
 #include "globals.hpp"
 
@@ -7,7 +7,7 @@
  * Method:    setDataImpl
  * Signature: ([BZZ)V
  */
-JNIEXPORT void JNICALL Java_mapnik_VectorTile_setDataImpl(JNIEnv *env, jobject obj, jbyteArray bufferj,
+JNIEXPORT void JNICALL Java_geowin_mapnik_VectorTile_setDataImpl(JNIEnv *env, jobject obj, jbyteArray bufferj,
                                                           jboolean validate, jboolean upgrade) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
@@ -23,7 +23,7 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_setDataImpl(JNIEnv *env, jobject o
  * Method:    addData
  * Signature: ([BZZ)V
  */
-JNIEXPORT void JNICALL Java_mapnik_VectorTile_addDataImpl(JNIEnv *env, jobject obj, jbyteArray bufferj,
+JNIEXPORT void JNICALL Java_geowin_mapnik_VectorTile_addDataImpl(JNIEnv *env, jobject obj, jbyteArray bufferj,
                                                           jboolean validate, jboolean upgrade) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
@@ -38,7 +38,7 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_addDataImpl(JNIEnv *env, jobject o
  * Method:    getDataImpl
  * Signature: (ZII)[B
  */
-JNIEXPORT jbyteArray JNICALL Java_mapnik_VectorTile_getDataImpl(JNIEnv *env, jobject obj, jboolean compress, jint level,
+JNIEXPORT jbyteArray JNICALL Java_geowin_mapnik_VectorTile_getDataImpl(JNIEnv *env, jobject obj, jboolean compress, jint level,
                                                                 jint strategy) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);

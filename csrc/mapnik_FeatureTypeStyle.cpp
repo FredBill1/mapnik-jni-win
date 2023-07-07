@@ -1,4 +1,4 @@
-#include "mapnik_FeatureTypeStyle.h"
+#include "geowin_mapnik_FeatureTypeStyle.h"
 
 #include "globals.hpp"
 /// -- FeatureTypeStyle class
@@ -7,7 +7,7 @@
  * Method:    alloc
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_mapnik_FeatureTypeStyle_alloc(JNIEnv* env, jclass c) {
+JNIEXPORT jlong JNICALL Java_geowin_mapnik_FeatureTypeStyle_alloc(JNIEnv* env, jclass c) {
     PREAMBLE;
     return FROM_POINTER(new mapnik::feature_type_style());
     TRAILER(0);
@@ -18,7 +18,7 @@ JNIEXPORT jlong JNICALL Java_mapnik_FeatureTypeStyle_alloc(JNIEnv* env, jclass c
  * Method:    dealloc
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_mapnik_FeatureTypeStyle_dealloc(JNIEnv* env, jobject, jlong ptr) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_FeatureTypeStyle_dealloc(JNIEnv* env, jobject, jlong ptr) {
     PREAMBLE;
     mapnik::feature_type_style* style = static_cast<mapnik::feature_type_style*>(TO_POINTER(ptr));
     delete style;
@@ -30,7 +30,7 @@ JNIEXPORT void JNICALL Java_mapnik_FeatureTypeStyle_dealloc(JNIEnv* env, jobject
  * Method:    collectAttributes
  * Signature: ()Ljava/util/Set;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_FeatureTypeStyle_collectAttributes(JNIEnv* env, jobject styleobject) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_FeatureTypeStyle_collectAttributes(JNIEnv* env, jobject styleobject) {
     PREAMBLE;
     mapnik::feature_type_style* style = LOAD_FEATURE_TYPE_STYLE_POINTER(styleobject);
     const std::vector<mapnik::rule>& rules(style->get_rules());

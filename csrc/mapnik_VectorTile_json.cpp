@@ -1,4 +1,4 @@
-#include "mapnik_VectorTile.h"
+#include "geowin_mapnik_VectorTile.h"
 //
 #include "globals.hpp"
 
@@ -120,7 +120,7 @@ static bool write_geojson_layer_name(std::string &result, std::string const &nam
  * Method:    toGeoJSON
  * Signature: (Ljava/lang/String;)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_mapnik_VectorTile_toGeoJSON__Ljava_lang_String_2(JNIEnv *env, jobject obj,
+JNIEXPORT jstring JNICALL Java_geowin_mapnik_VectorTile_toGeoJSON__Ljava_lang_String_2(JNIEnv *env, jobject obj,
                                                                                 jstring layer_namej) {
     PREAMBLE;
     std::string layer_name = JNIString(env, layer_namej).get();
@@ -143,7 +143,7 @@ JNIEXPORT jstring JNICALL Java_mapnik_VectorTile_toGeoJSON__Ljava_lang_String_2(
  * Method:    toGeoJSON
  * Signature: (J)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_mapnik_VectorTile_toGeoJSON__J(JNIEnv *env, jobject obj, jlong layer_idx) {
+JNIEXPORT jstring JNICALL Java_geowin_mapnik_VectorTile_toGeoJSON__J(JNIEnv *env, jobject obj, jlong layer_idx) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     std::string result;
@@ -252,7 +252,7 @@ struct json_value_visitor {
  * Method:    toJSON
  * Signature: (Z)Lmapnik/VectorTile/JSON;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_toJSON(JNIEnv *env, jobject obj, jboolean decode_geometry) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_VectorTile_toJSON(JNIEnv *env, jobject obj, jboolean decode_geometry) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     jobject out = env->NewObject(CLASS_VECTOR_TILE_JSON, CTOR_VECTOR_TILE_JSON);

@@ -1,12 +1,12 @@
-#include "mapnik_VectorTile.h"
+#include "geowin_mapnik_VectorTile.h"
 //
 #include "globals.hpp"
 /*
  * Class:     mapnik_VectorTile
  * Method:    addImageImpl
- * Signature: (Lmapnik/Image;Ljava/lang/String;II)V
+ * Signature: (Lgeowin/mapnik/Image;Ljava/lang/String;II)V
  */
-JNIEXPORT void JNICALL Java_mapnik_VectorTile_addImageImpl(JNIEnv *env, jobject obj, jobject imagej, jstring name,
+JNIEXPORT void JNICALL Java_geowin_mapnik_VectorTile_addImageImpl(JNIEnv *env, jobject obj, jobject imagej, jstring name,
                                                            jint image_scaling, jint image_format) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
@@ -38,7 +38,7 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_addImageImpl(JNIEnv *env, jobject 
  * Method:    addImageBuffer
  * Signature: ([BLjava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_mapnik_VectorTile_addImageBuffer(JNIEnv *env, jobject obj, jbyteArray bufferj,
+JNIEXPORT void JNICALL Java_geowin_mapnik_VectorTile_addImageBuffer(JNIEnv *env, jobject obj, jbyteArray bufferj,
                                                              jstring name) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);

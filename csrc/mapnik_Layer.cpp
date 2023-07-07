@@ -1,4 +1,4 @@
-#include "mapnik_Layer.h"
+#include "geowin_mapnik_Layer.h"
 
 #include "globals.hpp"
 
@@ -7,7 +7,7 @@
  * Method:    alloc
  * Signature: (Ljava/lang/String;Ljava/lang/String;)J
  */
-JNIEXPORT jlong JNICALL Java_mapnik_Layer_alloc(JNIEnv *env, jclass c, jstring namej, jstring srsj) {
+JNIEXPORT jlong JNICALL Java_geowin_mapnik_Layer_alloc(JNIEnv *env, jclass c, jstring namej, jstring srsj) {
     PREAMBLE;
     JNIString name(env, namej);
     JNIString srs(env, srsj);
@@ -22,7 +22,7 @@ JNIEXPORT jlong JNICALL Java_mapnik_Layer_alloc(JNIEnv *env, jclass c, jstring n
  * Method:    dealloc
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_mapnik_Layer_dealloc(JNIEnv *env, jobject, jlong ptr) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_Layer_dealloc(JNIEnv *env, jobject, jlong ptr) {
     PREAMBLE;
     if (ptr) { delete static_cast<mapnik::layer *>(TO_POINTER(ptr)); }
     TRAILER_VOID;
@@ -33,7 +33,7 @@ JNIEXPORT void JNICALL Java_mapnik_Layer_dealloc(JNIEnv *env, jobject, jlong ptr
  * Method:    getName
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_mapnik_Layer_getName(JNIEnv *env, jobject layerobj) {
+JNIEXPORT jstring JNICALL Java_geowin_mapnik_Layer_getName(JNIEnv *env, jobject layerobj) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
     return env->NewStringUTF(layer->name().c_str());
@@ -45,7 +45,7 @@ JNIEXPORT jstring JNICALL Java_mapnik_Layer_getName(JNIEnv *env, jobject layerob
  * Method:    setName
  * Signature: (Ljava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_mapnik_Layer_setName(JNIEnv *env, jobject layerobj, jstring sj) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_Layer_setName(JNIEnv *env, jobject layerobj, jstring sj) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
     JNIString s(env, sj);
@@ -58,7 +58,7 @@ JNIEXPORT void JNICALL Java_mapnik_Layer_setName(JNIEnv *env, jobject layerobj, 
  * Method:    getSrs
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_mapnik_Layer_getSrs(JNIEnv *env, jobject layerobj) {
+JNIEXPORT jstring JNICALL Java_geowin_mapnik_Layer_getSrs(JNIEnv *env, jobject layerobj) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
     return env->NewStringUTF(layer->srs().c_str());
@@ -70,7 +70,7 @@ JNIEXPORT jstring JNICALL Java_mapnik_Layer_getSrs(JNIEnv *env, jobject layerobj
  * Method:    setSrs
  * Signature: (Ljava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_mapnik_Layer_setSrs(JNIEnv *env, jobject layerobj, jstring sj) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_Layer_setSrs(JNIEnv *env, jobject layerobj, jstring sj) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
     JNIString s(env, sj);
@@ -83,7 +83,7 @@ JNIEXPORT void JNICALL Java_mapnik_Layer_setSrs(JNIEnv *env, jobject layerobj, j
  * Method:    getStyles
  * Signature: ()[Ljava/lang/String;
  */
-JNIEXPORT jobjectArray JNICALL Java_mapnik_Layer_getStyles(JNIEnv *env, jobject layerobj) {
+JNIEXPORT jobjectArray JNICALL Java_geowin_mapnik_Layer_getStyles(JNIEnv *env, jobject layerobj) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
     std::vector<std::string> &styles(layer->styles());
@@ -104,7 +104,7 @@ JNIEXPORT jobjectArray JNICALL Java_mapnik_Layer_getStyles(JNIEnv *env, jobject 
  * Method:    setStyles
  * Signature: ([Ljava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_mapnik_Layer_setStyles(JNIEnv *env, jobject layerobj, jobjectArray ary) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_Layer_setStyles(JNIEnv *env, jobject layerobj, jobjectArray ary) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
     std::vector<std::string> &styles(layer->styles());
@@ -126,7 +126,7 @@ JNIEXPORT void JNICALL Java_mapnik_Layer_setStyles(JNIEnv *env, jobject layerobj
  * Method:    getMinZoom
  * Signature: ()D
  */
-JNIEXPORT jdouble JNICALL Java_mapnik_Layer_getMinZoom(JNIEnv *env, jobject layerobj) {
+JNIEXPORT jdouble JNICALL Java_geowin_mapnik_Layer_getMinZoom(JNIEnv *env, jobject layerobj) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
     return layer->minimum_scale_denominator();
@@ -138,7 +138,7 @@ JNIEXPORT jdouble JNICALL Java_mapnik_Layer_getMinZoom(JNIEnv *env, jobject laye
  * Method:    setMinZoom
  * Signature: (D)V
  */
-JNIEXPORT void JNICALL Java_mapnik_Layer_setMinZoom(JNIEnv *env, jobject layerobj, jdouble z) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_Layer_setMinZoom(JNIEnv *env, jobject layerobj, jdouble z) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
     layer->set_minimum_scale_denominator(z);
@@ -150,7 +150,7 @@ JNIEXPORT void JNICALL Java_mapnik_Layer_setMinZoom(JNIEnv *env, jobject layerob
  * Method:    getMaxZoom
  * Signature: ()D
  */
-JNIEXPORT jdouble JNICALL Java_mapnik_Layer_getMaxZoom(JNIEnv *env, jobject layerobj) {
+JNIEXPORT jdouble JNICALL Java_geowin_mapnik_Layer_getMaxZoom(JNIEnv *env, jobject layerobj) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
     return layer->maximum_scale_denominator();
@@ -162,7 +162,7 @@ JNIEXPORT jdouble JNICALL Java_mapnik_Layer_getMaxZoom(JNIEnv *env, jobject laye
  * Method:    setMaxZoom
  * Signature: (D)V
  */
-JNIEXPORT void JNICALL Java_mapnik_Layer_setMaxZoom(JNIEnv *env, jobject layerobj, jdouble z) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_Layer_setMaxZoom(JNIEnv *env, jobject layerobj, jdouble z) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
     layer->set_maximum_scale_denominator(z);
@@ -174,7 +174,7 @@ JNIEXPORT void JNICALL Java_mapnik_Layer_setMaxZoom(JNIEnv *env, jobject layerob
  * Method:    isActive
  * Signature: ()Z
  */
-JNIEXPORT jboolean JNICALL Java_mapnik_Layer_isActive(JNIEnv *env, jobject layerobj) {
+JNIEXPORT jboolean JNICALL Java_geowin_mapnik_Layer_isActive(JNIEnv *env, jobject layerobj) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
     return (jboolean)layer->active();
@@ -186,7 +186,7 @@ JNIEXPORT jboolean JNICALL Java_mapnik_Layer_isActive(JNIEnv *env, jobject layer
  * Method:    setActive
  * Signature: (Z)V
  */
-JNIEXPORT void JNICALL Java_mapnik_Layer_setActive(JNIEnv *env, jobject layerobj, jboolean b) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_Layer_setActive(JNIEnv *env, jobject layerobj, jboolean b) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
     layer->set_active((bool)b);
@@ -198,7 +198,7 @@ JNIEXPORT void JNICALL Java_mapnik_Layer_setActive(JNIEnv *env, jobject layerobj
  * Method:    isQueryable
  * Signature: ()Z
  */
-JNIEXPORT jboolean JNICALL Java_mapnik_Layer_isQueryable(JNIEnv *env, jobject layerobj) {
+JNIEXPORT jboolean JNICALL Java_geowin_mapnik_Layer_isQueryable(JNIEnv *env, jobject layerobj) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
     return (jboolean)layer->queryable();
@@ -210,7 +210,7 @@ JNIEXPORT jboolean JNICALL Java_mapnik_Layer_isQueryable(JNIEnv *env, jobject la
  * Method:    setQueryable
  * Signature: (Z)V
  */
-JNIEXPORT void JNICALL Java_mapnik_Layer_setQueryable(JNIEnv *env, jobject layerobj, jboolean b) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_Layer_setQueryable(JNIEnv *env, jobject layerobj, jboolean b) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
     layer->set_queryable((bool)b);
@@ -222,7 +222,7 @@ JNIEXPORT void JNICALL Java_mapnik_Layer_setQueryable(JNIEnv *env, jobject layer
  * Method:    isVisible
  * Signature: (D)Z
  */
-JNIEXPORT jboolean JNICALL Java_mapnik_Layer_isVisible(JNIEnv *env, jobject layerobj, jdouble scale) {
+JNIEXPORT jboolean JNICALL Java_geowin_mapnik_Layer_isVisible(JNIEnv *env, jobject layerobj, jdouble scale) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
     return layer->visible(scale);
@@ -234,7 +234,7 @@ JNIEXPORT jboolean JNICALL Java_mapnik_Layer_isVisible(JNIEnv *env, jobject laye
  * Method:    isClearLabelCache
  * Signature: ()Z
  */
-JNIEXPORT jboolean JNICALL Java_mapnik_Layer_isClearLabelCache(JNIEnv *env, jobject layerobj) {
+JNIEXPORT jboolean JNICALL Java_geowin_mapnik_Layer_isClearLabelCache(JNIEnv *env, jobject layerobj) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
     return (jboolean)layer->clear_label_cache();
@@ -246,7 +246,7 @@ JNIEXPORT jboolean JNICALL Java_mapnik_Layer_isClearLabelCache(JNIEnv *env, jobj
  * Method:    setClearLabelCache
  * Signature: (Z)V
  */
-JNIEXPORT void JNICALL Java_mapnik_Layer_setClearLabelCache(JNIEnv *env, jobject layerobj, jboolean b) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_Layer_setClearLabelCache(JNIEnv *env, jobject layerobj, jboolean b) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
     layer->set_clear_label_cache((bool)b);
@@ -258,7 +258,7 @@ JNIEXPORT void JNICALL Java_mapnik_Layer_setClearLabelCache(JNIEnv *env, jobject
  * Method:    isCacheFeatures
  * Signature: ()Z
  */
-JNIEXPORT jboolean JNICALL Java_mapnik_Layer_isCacheFeatures(JNIEnv *env, jobject layerobj) {
+JNIEXPORT jboolean JNICALL Java_geowin_mapnik_Layer_isCacheFeatures(JNIEnv *env, jobject layerobj) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
     return (jboolean)layer->cache_features();
@@ -270,7 +270,7 @@ JNIEXPORT jboolean JNICALL Java_mapnik_Layer_isCacheFeatures(JNIEnv *env, jobjec
  * Method:    setCacheFeatures
  * Signature: (Z)V
  */
-JNIEXPORT void JNICALL Java_mapnik_Layer_setCacheFeatures(JNIEnv *env, jobject layerobj, jboolean b) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_Layer_setCacheFeatures(JNIEnv *env, jobject layerobj, jboolean b) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
     layer->set_cache_features((bool)b);
@@ -282,7 +282,7 @@ JNIEXPORT void JNICALL Java_mapnik_Layer_setCacheFeatures(JNIEnv *env, jobject l
  * Method:    getDatasource
  * Signature: ()Lmapnik/Datasource;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_Layer_getDatasource(JNIEnv *env, jobject layerobj) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_Layer_getDatasource(JNIEnv *env, jobject layerobj) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
     mapnik::datasource_ptr ds = layer->datasource();
@@ -296,9 +296,9 @@ JNIEXPORT jobject JNICALL Java_mapnik_Layer_getDatasource(JNIEnv *env, jobject l
 /*
  * Class:     mapnik_Layer
  * Method:    setDatasource
- * Signature: (Lmapnik/Datasource;)V
+ * Signature: (Lgeowin/mapnik/Datasource;)V
  */
-JNIEXPORT void JNICALL Java_mapnik_Layer_setDatasource(JNIEnv *env, jobject layerobj, jobject dsobject) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_Layer_setDatasource(JNIEnv *env, jobject layerobj, jobject dsobject) {
     PREAMBLE;
     mapnik::layer *layer = LOAD_LAYER_POINTER(layerobj);
 
@@ -318,7 +318,7 @@ JNIEXPORT void JNICALL Java_mapnik_Layer_setDatasource(JNIEnv *env, jobject laye
  * Method:    getMinimumScaleDenominator
  * Signature: ()D
  */
-JNIEXPORT jdouble JNICALL Java_mapnik_Layer_getMinimumScaleDenominator(JNIEnv *env, jobject obj) {
+JNIEXPORT jdouble JNICALL Java_geowin_mapnik_Layer_getMinimumScaleDenominator(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto layer = LOAD_LAYER_POINTER(obj);
     return layer->minimum_scale_denominator();
@@ -330,7 +330,7 @@ JNIEXPORT jdouble JNICALL Java_mapnik_Layer_getMinimumScaleDenominator(JNIEnv *e
  * Method:    setMinimumScaleDenominator
  * Signature: (D)V
  */
-JNIEXPORT void JNICALL Java_mapnik_Layer_setMinimumScaleDenominator(JNIEnv *env, jobject obj,
+JNIEXPORT void JNICALL Java_geowin_mapnik_Layer_setMinimumScaleDenominator(JNIEnv *env, jobject obj,
                                                                     jdouble minimum_scale_denom) {
     PREAMBLE;
     auto layer = LOAD_LAYER_POINTER(obj);
@@ -343,7 +343,7 @@ JNIEXPORT void JNICALL Java_mapnik_Layer_setMinimumScaleDenominator(JNIEnv *env,
  * Method:    getMaximumScaleDenominator
  * Signature: ()D
  */
-JNIEXPORT jdouble JNICALL Java_mapnik_Layer_getMaximumScaleDenominator(JNIEnv *env, jobject obj) {
+JNIEXPORT jdouble JNICALL Java_geowin_mapnik_Layer_getMaximumScaleDenominator(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto layer = LOAD_LAYER_POINTER(obj);
     return layer->maximum_scale_denominator();
@@ -355,7 +355,7 @@ JNIEXPORT jdouble JNICALL Java_mapnik_Layer_getMaximumScaleDenominator(JNIEnv *e
  * Method:    setMaximumScaleDenominator
  * Signature: (D)V
  */
-JNIEXPORT void JNICALL Java_mapnik_Layer_setMaximumScaleDenominator(JNIEnv *env, jobject obj,
+JNIEXPORT void JNICALL Java_geowin_mapnik_Layer_setMaximumScaleDenominator(JNIEnv *env, jobject obj,
                                                                     jdouble maximum_scale_denom) {
     PREAMBLE;
     auto layer = LOAD_LAYER_POINTER(obj);

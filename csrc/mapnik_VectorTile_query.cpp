@@ -1,4 +1,4 @@
-#include "mapnik_VectorTile.h"
+#include "geowin_mapnik_VectorTile.h"
 //
 #include <mapnik/geom_util.hpp>
 #include <mapnik/hit_test_filter.hpp>
@@ -390,7 +390,7 @@ jobject _queryManyResultToJNI(JNIEnv* env, queryMany_result& result) {
  * Method:    queryImpl
  * Signature: (DDDLjava/lang/String;)Lmapnik/VectorTile/QueryResult;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_queryImpl(JNIEnv* env, jobject obj, jdouble longitude,
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_VectorTile_queryImpl(JNIEnv* env, jobject obj, jdouble longitude,
                                                            jdouble latitude, jdouble tolerance, jstring layerj) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
@@ -406,7 +406,7 @@ JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_queryImpl(JNIEnv* env, jobject 
  * Method:    queryManyImpl
  * Signature: ([[DLjava/lang/String;D[Ljava/lang/String;)Lmapnik/VectorTile/QueryManyResult;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_queryManyImpl(JNIEnv* env, jobject obj, jobjectArray array,
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_VectorTile_queryManyImpl(JNIEnv* env, jobject obj, jobjectArray array,
                                                                jstring layerj, jdouble tolerance,
                                                                jobjectArray fieldsj) {
     PREAMBLE;

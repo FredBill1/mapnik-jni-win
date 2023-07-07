@@ -1,5 +1,4 @@
-#include "mapnik_FeatureSet.h"
-
+#include "geowin_mapnik_FeatureSet.h"
 #include "globals.hpp"
 
 /*
@@ -7,7 +6,7 @@
  * Method:    dealloc
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_mapnik_FeatureSet_dealloc(JNIEnv *env, jobject, jlong ptr) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_FeatureSet_dealloc(JNIEnv *env, jobject, jlong ptr) {
     PREAMBLE;
     delete reinterpret_cast<mapnik::featureset_ptr *>(ptr);
     TRAILER_VOID;
@@ -18,7 +17,7 @@ JNIEXPORT void JNICALL Java_mapnik_FeatureSet_dealloc(JNIEnv *env, jobject, jlon
  * Method:    next
  * Signature: ()Lmapnik/Feature;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_FeatureSet_next(JNIEnv *env, jobject obj) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_FeatureSet_next(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto featureset = LOAD_FEATURESET_POINTER(obj);
     auto feature = new mapnik::feature_ptr((*featureset)->next());

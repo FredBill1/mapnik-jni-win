@@ -1,4 +1,4 @@
-#include "mapnik_VectorTile.h"
+#include "geowin_mapnik_VectorTile.h"
 //
 #include "globals.hpp"
 
@@ -7,7 +7,7 @@
  * Method:    compositeImpl
  * Signature: ([Lmapnik/VectorTile;DIIDZZIDZ[DDZIII)V
  */
-JNIEXPORT void JNICALL Java_mapnik_VectorTile_compositeImpl(
+JNIEXPORT void JNICALL Java_geowin_mapnik_VectorTile_compositeImpl(
     JNIEnv *env, jobject obj, jobjectArray array, jdouble scale_factor, jint offset_x, jint offset_y,
     jdouble area_threshold, jboolean strictly_simple, jboolean multi_polygon_union, jint fill_type,
     jdouble scale_denominator, jboolean reencode, jdoubleArray max_extent, jdouble simplify_distance,

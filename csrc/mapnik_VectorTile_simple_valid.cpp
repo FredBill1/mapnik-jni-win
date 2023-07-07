@@ -1,4 +1,4 @@
-#include "mapnik_VectorTile.h"
+#include "geowin_mapnik_VectorTile.h"
 //
 #include <mapnik/geometry/is_simple.hpp>
 #include <mapnik/geometry/is_valid.hpp>
@@ -366,7 +366,7 @@ jobjectArray make_not_valid_array(JNIEnv* env, std::vector<not_valid_feature>& e
  * Method:    reportGeometrySimplicity
  * Signature: ()[Lmapnik/VectorTile/NotSimpleFeature;
  */
-JNIEXPORT jobjectArray JNICALL Java_mapnik_VectorTile_reportGeometrySimplicity(JNIEnv* env, jobject obj) {
+JNIEXPORT jobjectArray JNICALL Java_geowin_mapnik_VectorTile_reportGeometrySimplicity(JNIEnv* env, jobject obj) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     std::vector<not_simple_feature> result;
@@ -380,7 +380,7 @@ JNIEXPORT jobjectArray JNICALL Java_mapnik_VectorTile_reportGeometrySimplicity(J
  * Method:    reportGeometryValidityImpl
  * Signature: (ZZZ)[Lmapnik/VectorTile/NotValidFeature;
  */
-JNIEXPORT jobjectArray JNICALL Java_mapnik_VectorTile_reportGeometryValidityImpl(JNIEnv* env, jobject obj,
+JNIEXPORT jobjectArray JNICALL Java_geowin_mapnik_VectorTile_reportGeometryValidityImpl(JNIEnv* env, jobject obj,
                                                                                  jboolean split_multi_features,
                                                                                  jboolean lat_lon, jboolean web_merc) {
     PREAMBLE;

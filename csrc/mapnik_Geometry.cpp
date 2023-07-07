@@ -1,5 +1,5 @@
-#include "mapnik_Geometry.h"
-
+#include "geowin_mapnik_Geometry.h"
+//
 #include <mapnik/geometry/geometry_type.hpp>
 #include <mapnik/util/geometry_to_geojson.hpp>
 #include <mapnik/util/geometry_to_wkb.hpp>
@@ -20,7 +20,7 @@ static bool to_geojson_projected(std::string &json, mapnik::geometry::geometry<d
  * Method:    dealloc
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_mapnik_Geometry_dealloc(JNIEnv *env, jobject, jlong ptr) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_Geometry_dealloc(JNIEnv *env, jobject, jlong ptr) {
     PREAMBLE;
     delete reinterpret_cast<mapnik::feature_ptr *>(ptr);
     TRAILER_VOID;
@@ -31,7 +31,7 @@ JNIEXPORT void JNICALL Java_mapnik_Geometry_dealloc(JNIEnv *env, jobject, jlong 
  * Method:    extent
  * Signature: ()Lmapnik/Box2d;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_Geometry_extent(JNIEnv *env, jobject obj) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_Geometry_extent(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto feature = LOAD_FEATURE_POINTER(obj);
     return box2dFromNative(env, (*feature)->envelope());
@@ -41,9 +41,9 @@ JNIEXPORT jobject JNICALL Java_mapnik_Geometry_extent(JNIEnv *env, jobject obj) 
 /*
  * Class:     mapnik_Geometry
  * Method:    toJSON
- * Signature: (Lmapnik/ProjTransform;)Ljava/lang/String;
+ * Signature: (Lgeowin/mapnik/ProjTransform;)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_mapnik_Geometry_toJSON(JNIEnv *env, jobject obj, jobject transform) {
+JNIEXPORT jstring JNICALL Java_geowin_mapnik_Geometry_toJSON(JNIEnv *env, jobject obj, jobject transform) {
     PREAMBLE;
     const auto &geom = (*LOAD_FEATURE_POINTER(obj))->get_geometry();
     std::string json;
@@ -62,7 +62,7 @@ JNIEXPORT jstring JNICALL Java_mapnik_Geometry_toJSON(JNIEnv *env, jobject obj, 
  * Method:    toWKB
  * Signature: ()[B
  */
-JNIEXPORT jbyteArray JNICALL Java_mapnik_Geometry_toWKB(JNIEnv *env, jobject obj) {
+JNIEXPORT jbyteArray JNICALL Java_geowin_mapnik_Geometry_toWKB(JNIEnv *env, jobject obj) {
     PREAMBLE;
     const auto &geom = (*LOAD_FEATURE_POINTER(obj))->get_geometry();
     mapnik::util::wkb_buffer_ptr wkb = mapnik::util::to_wkb(geom, mapnik::wkbNDR);
@@ -78,7 +78,7 @@ JNIEXPORT jbyteArray JNICALL Java_mapnik_Geometry_toWKB(JNIEnv *env, jobject obj
  * Method:    toWKT
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_mapnik_Geometry_toWKT(JNIEnv *env, jobject obj) {
+JNIEXPORT jstring JNICALL Java_geowin_mapnik_Geometry_toWKT(JNIEnv *env, jobject obj) {
     PREAMBLE;
     const auto &geom = (*LOAD_FEATURE_POINTER(obj))->get_geometry();
     std::string wkt;
@@ -92,7 +92,7 @@ JNIEXPORT jstring JNICALL Java_mapnik_Geometry_toWKT(JNIEnv *env, jobject obj) {
  * Method:    typeImpl
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_mapnik_Geometry_typeImpl(JNIEnv *env, jobject obj) {
+JNIEXPORT jint JNICALL Java_geowin_mapnik_Geometry_typeImpl(JNIEnv *env, jobject obj) {
     PREAMBLE;
     const auto &geom = (*LOAD_FEATURE_POINTER(obj))->get_geometry();
     return mapnik::geometry::geometry_type(geom);

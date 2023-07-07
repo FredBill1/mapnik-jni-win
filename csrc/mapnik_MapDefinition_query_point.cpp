@@ -1,4 +1,4 @@
-#include "mapnik_MapDefinition.h"
+#include "geowin_mapnik_MapDefinition.h"
 //
 #include "globals.hpp"
 
@@ -52,61 +52,61 @@ jobject query_point_layer_impl(JNIEnv *env, jobject obj, jdouble x, jdouble y, j
 }  // namespace
 
 /*
- * Class:     mapnik_MapDefinition
+ * Class:     geowin_mapnik_MapDefinition
  * Method:    queryMapPoint
  * Signature: (DDLjava/lang/String;)Lmapnik/FeatureSet;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_MapDefinition_queryMapPoint__DDLjava_lang_String_2(JNIEnv *env, jobject obj,
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_MapDefinition_queryMapPoint__DDLjava_lang_String_2(JNIEnv *env, jobject obj,
                                                                                          jdouble x, jdouble y,
                                                                                          jstring layer_namej) {
     return query_point_layer_impl(env, obj, x, y, layer_namej, false);
 }
 
 /*
- * Class:     mapnik_MapDefinition
+ * Class:     geowin_mapnik_MapDefinition
  * Method:    queryMapPoint
  * Signature: (DDI)Lmapnik/FeatureSet;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_MapDefinition_queryMapPoint__DDI(JNIEnv *env, jobject obj, jdouble x, jdouble y,
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_MapDefinition_queryMapPoint__DDI(JNIEnv *env, jobject obj, jdouble x, jdouble y,
                                                                        jint layer_idx) {
     return query_point_layer_impl(env, obj, x, y, layer_idx, false);
 }
 
 /*
- * Class:     mapnik_MapDefinition
+ * Class:     geowin_mapnik_MapDefinition
  * Method:    queryMapPoint
  * Signature: (DD)Ljava/util/Map;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_MapDefinition_queryMapPoint__DD(JNIEnv *env, jobject obj, jdouble x, jdouble y) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_MapDefinition_queryMapPoint__DD(JNIEnv *env, jobject obj, jdouble x, jdouble y) {
     return query_point_all_impl(env, obj, x, y, false);
 }
 
 /*
- * Class:     mapnik_MapDefinition
+ * Class:     geowin_mapnik_MapDefinition
  * Method:    queryPoint
  * Signature: (DDLjava/lang/String;)Lmapnik/FeatureSet;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_MapDefinition_queryPoint__DDLjava_lang_String_2(JNIEnv *env, jobject obj,
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_MapDefinition_queryPoint__DDLjava_lang_String_2(JNIEnv *env, jobject obj,
                                                                                       jdouble x, jdouble y,
                                                                                       jstring layer_namej) {
     return query_point_layer_impl(env, obj, x, y, layer_namej, true);
 }
 
 /*
- * Class:     mapnik_MapDefinition
+ * Class:     geowin_mapnik_MapDefinition
  * Method:    queryPoint
  * Signature: (DDI)Lmapnik/FeatureSet;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_MapDefinition_queryPoint__DDI(JNIEnv *env, jobject obj, jdouble x, jdouble y,
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_MapDefinition_queryPoint__DDI(JNIEnv *env, jobject obj, jdouble x, jdouble y,
                                                                     jint layer_idx) {
     return query_point_layer_impl(env, obj, x, y, layer_idx, true);
 }
 
 /*
- * Class:     mapnik_MapDefinition
+ * Class:     geowin_mapnik_MapDefinition
  * Method:    queryPoint
  * Signature: (DD)Ljava/util/Map;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_MapDefinition_queryPoint__DD(JNIEnv *env, jobject obj, jdouble x, jdouble y) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_MapDefinition_queryPoint__DD(JNIEnv *env, jobject obj, jdouble x, jdouble y) {
     return query_point_all_impl(env, obj, x, y, true);
 }

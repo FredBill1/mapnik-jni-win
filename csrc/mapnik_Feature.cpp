@@ -1,4 +1,4 @@
-#include "mapnik_Feature.h"
+#include "geowin_mapnik_Feature.h"
 
 #include <mapnik/json/feature_parser.hpp>
 #include <mapnik/util/feature_to_geojson.hpp>
@@ -11,7 +11,7 @@
  * Method:    dealloc
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_mapnik_Feature_dealloc(JNIEnv *env, jobject, jlong ptr) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_Feature_dealloc(JNIEnv *env, jobject, jlong ptr) {
     PREAMBLE;
     auto feature = reinterpret_cast<mapnik::feature_ptr *>(ptr);
     delete feature;
@@ -23,7 +23,7 @@ JNIEXPORT void JNICALL Java_mapnik_Feature_dealloc(JNIEnv *env, jobject, jlong p
  * Method:    fromJSON
  * Signature: (Ljava/lang/String;)Lmapnik/Feature;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_Feature_fromJSON(JNIEnv *env, jclass, jstring geojson) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_Feature_fromJSON(JNIEnv *env, jclass, jstring geojson) {
     PREAMBLE;
     JNIString json(env, geojson);
     auto feature =
@@ -38,7 +38,7 @@ JNIEXPORT jobject JNICALL Java_mapnik_Feature_fromJSON(JNIEnv *env, jclass, jstr
  * Method:    attributes
  * Signature: ()Ljava/util/Map;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_Feature_attributes(JNIEnv *env, jobject obj) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_Feature_attributes(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto feature = LOAD_FEATURE_POINTER(obj);
     jobject attributes = env->NewObject(CLASS_HASHMAP, CTOR_HASHMAP);
@@ -58,7 +58,7 @@ JNIEXPORT jobject JNICALL Java_mapnik_Feature_attributes(JNIEnv *env, jobject ob
  * Method:    extent
  * Signature: ()Lmapnik/Box2d;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_Feature_extent(JNIEnv *env, jobject obj) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_Feature_extent(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto feature = LOAD_FEATURE_POINTER(obj);
     return box2dFromNative(env, (*feature)->envelope());
@@ -70,7 +70,7 @@ JNIEXPORT jobject JNICALL Java_mapnik_Feature_extent(JNIEnv *env, jobject obj) {
  * Method:    geometry
  * Signature: ()Lmapnik/Geometry;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_Feature_geometry(JNIEnv *env, jobject obj) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_Feature_geometry(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto feature = LOAD_FEATURE_POINTER(obj);
     auto geom_feature = new mapnik::feature_ptr(*feature);
@@ -83,7 +83,7 @@ JNIEXPORT jobject JNICALL Java_mapnik_Feature_geometry(JNIEnv *env, jobject obj)
  * Method:    id
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_mapnik_Feature_id(JNIEnv *env, jobject obj) {
+JNIEXPORT jint JNICALL Java_geowin_mapnik_Feature_id(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto feature = LOAD_FEATURE_POINTER(obj);
     return (*feature)->id();
@@ -95,7 +95,7 @@ JNIEXPORT jint JNICALL Java_mapnik_Feature_id(JNIEnv *env, jobject obj) {
  * Method:    toJSON
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_mapnik_Feature_toJSON(JNIEnv *env, jobject obj) {
+JNIEXPORT jstring JNICALL Java_geowin_mapnik_Feature_toJSON(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto feature = LOAD_FEATURE_POINTER(obj);
     std::string json;

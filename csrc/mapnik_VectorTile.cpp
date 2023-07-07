@@ -1,4 +1,4 @@
-#include "mapnik_VectorTile.h"
+#include "geowin_mapnik_VectorTile.h"
 
 #include "globals.hpp"
 
@@ -7,7 +7,7 @@
  * Method:    alloc
  * Signature: (JJJII)J
  */
-JNIEXPORT jlong JNICALL Java_mapnik_VectorTile_alloc(JNIEnv *env, jclass, jlong x, jlong y, jlong z, jint tileSize,
+JNIEXPORT jlong JNICALL Java_geowin_mapnik_VectorTile_alloc(JNIEnv *env, jclass, jlong x, jlong y, jlong z, jint tileSize,
                                                      jint bufferSize) {
     PREAMBLE;
     auto t = new mapnik::vector_tile_impl::merc_tile(x, y, z, tileSize, bufferSize);
@@ -20,7 +20,7 @@ JNIEXPORT jlong JNICALL Java_mapnik_VectorTile_alloc(JNIEnv *env, jclass, jlong 
  * Method:    dealloc
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_mapnik_VectorTile_dealloc(JNIEnv *env, jobject, jlong ptr) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_VectorTile_dealloc(JNIEnv *env, jobject, jlong ptr) {
     PREAMBLE;
     delete static_cast<mapnik::vector_tile_impl::merc_tile *>(TO_POINTER(ptr));
     TRAILER_VOID;
@@ -31,7 +31,7 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_dealloc(JNIEnv *env, jobject, jlon
  * Method:    getTileX
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_mapnik_VectorTile_getTileX(JNIEnv *env, jobject obj) {
+JNIEXPORT jint JNICALL Java_geowin_mapnik_VectorTile_getTileX(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     return tile->x();
@@ -43,7 +43,7 @@ JNIEXPORT jint JNICALL Java_mapnik_VectorTile_getTileX(JNIEnv *env, jobject obj)
  * Method:    setTileX
  * Signature: (I)V
  */
-JNIEXPORT void JNICALL Java_mapnik_VectorTile_setTileX(JNIEnv *env, jobject obj, jint x) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_VectorTile_setTileX(JNIEnv *env, jobject obj, jint x) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     tile->x(x);
@@ -55,7 +55,7 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_setTileX(JNIEnv *env, jobject obj,
  * Method:    getTileY
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_mapnik_VectorTile_getTileY(JNIEnv *env, jobject obj) {
+JNIEXPORT jint JNICALL Java_geowin_mapnik_VectorTile_getTileY(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     return tile->y();
@@ -67,7 +67,7 @@ JNIEXPORT jint JNICALL Java_mapnik_VectorTile_getTileY(JNIEnv *env, jobject obj)
  * Method:    setTileY
  * Signature: (I)V
  */
-JNIEXPORT void JNICALL Java_mapnik_VectorTile_setTileY(JNIEnv *env, jobject obj, jint y) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_VectorTile_setTileY(JNIEnv *env, jobject obj, jint y) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     tile->y(y);
@@ -79,7 +79,7 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_setTileY(JNIEnv *env, jobject obj,
  * Method:    getTileZ
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_mapnik_VectorTile_getTileZ(JNIEnv *env, jobject obj) {
+JNIEXPORT jint JNICALL Java_geowin_mapnik_VectorTile_getTileZ(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     return tile->z();
@@ -91,7 +91,7 @@ JNIEXPORT jint JNICALL Java_mapnik_VectorTile_getTileZ(JNIEnv *env, jobject obj)
  * Method:    setTileZ
  * Signature: (I)V
  */
-JNIEXPORT void JNICALL Java_mapnik_VectorTile_setTileZ(JNIEnv *env, jobject obj, jint z) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_VectorTile_setTileZ(JNIEnv *env, jobject obj, jint z) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     tile->z(z);
@@ -103,7 +103,7 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_setTileZ(JNIEnv *env, jobject obj,
  * Method:    getTileSize
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_mapnik_VectorTile_getTileSize(JNIEnv *env, jobject obj) {
+JNIEXPORT jint JNICALL Java_geowin_mapnik_VectorTile_getTileSize(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     return tile->tile_size();
@@ -115,7 +115,7 @@ JNIEXPORT jint JNICALL Java_mapnik_VectorTile_getTileSize(JNIEnv *env, jobject o
  * Method:    setTileSize
  * Signature: (I)V
  */
-JNIEXPORT void JNICALL Java_mapnik_VectorTile_setTileSize(JNIEnv *env, jobject obj, jint tile_size) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_VectorTile_setTileSize(JNIEnv *env, jobject obj, jint tile_size) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     tile->tile_size(tile_size);
@@ -127,7 +127,7 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_setTileSize(JNIEnv *env, jobject o
  * Method:    getBufferSize
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_mapnik_VectorTile_getBufferSize(JNIEnv *env, jobject obj) {
+JNIEXPORT jint JNICALL Java_geowin_mapnik_VectorTile_getBufferSize(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     return tile->buffer_size();
@@ -139,7 +139,7 @@ JNIEXPORT jint JNICALL Java_mapnik_VectorTile_getBufferSize(JNIEnv *env, jobject
  * Method:    setBufferSize
  * Signature: (I)V
  */
-JNIEXPORT void JNICALL Java_mapnik_VectorTile_setBufferSize(JNIEnv *env, jobject obj, jint buffer_size) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_VectorTile_setBufferSize(JNIEnv *env, jobject obj, jint buffer_size) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     tile->buffer_size(buffer_size);
@@ -151,7 +151,7 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_setBufferSize(JNIEnv *env, jobject
  * Method:    addGeoJSONImpl
  * Signature: (Ljava/lang/String;Ljava/lang/String;DDZZIZ)V
  */
-JNIEXPORT void JNICALL Java_mapnik_VectorTile_addGeoJSONImpl(JNIEnv *env, jobject obj, jstring geojsonj, jstring namej,
+JNIEXPORT void JNICALL Java_geowin_mapnik_VectorTile_addGeoJSONImpl(JNIEnv *env, jobject obj, jstring geojsonj, jstring namej,
                                                              jdouble area_threshold, jdouble simplify_distance,
                                                              jboolean strictly_simple, jboolean multi_polygon_union,
                                                              jint fill_type, jboolean process_all_rings) {
@@ -183,7 +183,7 @@ JNIEXPORT void JNICALL Java_mapnik_VectorTile_addGeoJSONImpl(JNIEnv *env, jobjec
  * Method:    bufferedExtent
  * Signature: ()Lmapnik/Box2d;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_bufferedExtent(JNIEnv *env, jobject obj) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_VectorTile_bufferedExtent(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     auto ext = tile->get_buffered_extent();
@@ -196,7 +196,7 @@ JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_bufferedExtent(JNIEnv *env, job
  * Method:    empty
  * Signature: ()Z
  */
-JNIEXPORT jboolean JNICALL Java_mapnik_VectorTile_empty(JNIEnv *env, jobject obj) {
+JNIEXPORT jboolean JNICALL Java_geowin_mapnik_VectorTile_empty(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     return tile->is_empty();
@@ -208,7 +208,7 @@ JNIEXPORT jboolean JNICALL Java_mapnik_VectorTile_empty(JNIEnv *env, jobject obj
  * Method:    emptyLayers
  * Signature: ()[Ljava/lang/String;
  */
-JNIEXPORT jobjectArray JNICALL Java_mapnik_VectorTile_emptyLayers(JNIEnv *env, jobject obj) {
+JNIEXPORT jobjectArray JNICALL Java_geowin_mapnik_VectorTile_emptyLayers(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     auto &names = tile->get_empty_layers();
@@ -227,7 +227,7 @@ JNIEXPORT jobjectArray JNICALL Java_mapnik_VectorTile_emptyLayers(JNIEnv *env, j
  * Method:    extent
  * Signature: ()Lmapnik/Box2d;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_extent(JNIEnv *env, jobject obj) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_VectorTile_extent(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     auto ext = tile->extent();
@@ -240,7 +240,7 @@ JNIEXPORT jobject JNICALL Java_mapnik_VectorTile_extent(JNIEnv *env, jobject obj
  * Method:    layerImpl
  * Signature: (Ljava/lang/String;)J
  */
-JNIEXPORT jlong JNICALL Java_mapnik_VectorTile_layerImpl(JNIEnv *env, jobject obj, jstring layer_namej) {
+JNIEXPORT jlong JNICALL Java_geowin_mapnik_VectorTile_layerImpl(JNIEnv *env, jobject obj, jstring layer_namej) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     std::string layer_name = JNIString(env, layer_namej).get();
@@ -268,7 +268,7 @@ JNIEXPORT jlong JNICALL Java_mapnik_VectorTile_layerImpl(JNIEnv *env, jobject ob
  * Method:    names
  * Signature: ()[Ljava/lang/String;
  */
-JNIEXPORT jobjectArray JNICALL Java_mapnik_VectorTile_names(JNIEnv *env, jobject obj) {
+JNIEXPORT jobjectArray JNICALL Java_geowin_mapnik_VectorTile_names(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     auto &names = tile->get_layers();
@@ -287,7 +287,7 @@ JNIEXPORT jobjectArray JNICALL Java_mapnik_VectorTile_names(JNIEnv *env, jobject
  * Method:    painted
  * Signature: ()Z
  */
-JNIEXPORT jboolean JNICALL Java_mapnik_VectorTile_painted(JNIEnv *env, jobject obj) {
+JNIEXPORT jboolean JNICALL Java_geowin_mapnik_VectorTile_painted(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     return tile->is_painted();
@@ -299,7 +299,7 @@ JNIEXPORT jboolean JNICALL Java_mapnik_VectorTile_painted(JNIEnv *env, jobject o
  * Method:    paintedLayers
  * Signature: ()[Ljava/lang/String;
  */
-JNIEXPORT jobjectArray JNICALL Java_mapnik_VectorTile_paintedLayers(JNIEnv *env, jobject obj) {
+JNIEXPORT jobjectArray JNICALL Java_geowin_mapnik_VectorTile_paintedLayers(JNIEnv *env, jobject obj) {
     PREAMBLE;
     auto tile = LOAD_VECTOR_TILE_POINTER(obj);
     auto &names = tile->get_painted_layers();

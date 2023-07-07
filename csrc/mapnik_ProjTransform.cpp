@@ -1,13 +1,13 @@
-#include "mapnik_ProjTransform.h"
+#include "geowin_mapnik_ProjTransform.h"
 
 #include "globals.hpp"
 
 /*
  * Class:     mapnik_ProjTransform
  * Method:    alloc
- * Signature: (Lmapnik/Projection;Lmapnik/Projection;)J
+ * Signature: (Lgeowin/mapnik/Projection;Lmapnik/Projection;)J
  */
-JNIEXPORT jlong JNICALL Java_mapnik_ProjTransform_alloc(JNIEnv *env, jclass, jobject src_obj, jobject dst_obj) {
+JNIEXPORT jlong JNICALL Java_geowin_mapnik_ProjTransform_alloc(JNIEnv *env, jclass, jobject src_obj, jobject dst_obj) {
     PREAMBLE;
     auto src = LOAD_PROJECTION_POINTER(src_obj);
     auto dst = LOAD_PROJECTION_POINTER(dst_obj);
@@ -21,7 +21,7 @@ JNIEXPORT jlong JNICALL Java_mapnik_ProjTransform_alloc(JNIEnv *env, jclass, job
  * Method:    dealloc
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_mapnik_ProjTransform_dealloc(JNIEnv *env, jobject, jlong ptr) {
+JNIEXPORT void JNICALL Java_geowin_mapnik_ProjTransform_dealloc(JNIEnv *env, jobject, jlong ptr) {
     PREAMBLE;
     delete reinterpret_cast<mapnik::proj_transform *>(ptr);
     TRAILER_VOID;
@@ -30,9 +30,9 @@ JNIEXPORT void JNICALL Java_mapnik_ProjTransform_dealloc(JNIEnv *env, jobject, j
 /*
  * Class:     mapnik_ProjTransform
  * Method:    forward
- * Signature: (Lmapnik/Box2d;)Lmapnik/Box2d;
+ * Signature: (Lgeowin/mapnik/Box2d;)Lmapnik/Box2d;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_ProjTransform_forward__Lmapnik_Box2d_2(JNIEnv *env, jobject obj,
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_ProjTransform_forward__Lmapnik_Box2d_2(JNIEnv *env, jobject obj,
                                                                              jobject box_obj) {
     PREAMBLE;
     auto tr = LOAD_PROJ_TRANSFORM_POINTER(obj);
@@ -50,9 +50,9 @@ JNIEXPORT jobject JNICALL Java_mapnik_ProjTransform_forward__Lmapnik_Box2d_2(JNI
 /*
  * Class:     mapnik_ProjTransform
  * Method:    forward
- * Signature: (Lmapnik/Coord;)Lmapnik/Coord;
+ * Signature: (Lgeowin/mapnik/Coord;)Lmapnik/Coord;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_ProjTransform_forward__Lmapnik_Coord_2(JNIEnv *env, jobject obj, jobject xy_obj) {
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_ProjTransform_forward__Lmapnik_Coord_2(JNIEnv *env, jobject obj, jobject xy_obj) {
     PREAMBLE;
     auto tr = LOAD_PROJ_TRANSFORM_POINTER(obj);
     auto xy = coordToNative(env, xy_obj);
@@ -71,9 +71,9 @@ JNIEXPORT jobject JNICALL Java_mapnik_ProjTransform_forward__Lmapnik_Coord_2(JNI
 /*
  * Class:     mapnik_ProjTransform
  * Method:    backward
- * Signature: (Lmapnik/Box2d;)Lmapnik/Box2d;
+ * Signature: (Lgeowin/mapnik/Box2d;)Lmapnik/Box2d;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_ProjTransform_backward__Lmapnik_Box2d_2(JNIEnv *env, jobject obj,
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_ProjTransform_backward__Lmapnik_Box2d_2(JNIEnv *env, jobject obj,
                                                                               jobject box_obj) {
     PREAMBLE;
     auto tr = LOAD_PROJ_TRANSFORM_POINTER(obj);
@@ -91,9 +91,9 @@ JNIEXPORT jobject JNICALL Java_mapnik_ProjTransform_backward__Lmapnik_Box2d_2(JN
 /*
  * Class:     mapnik_ProjTransform
  * Method:    backward
- * Signature: (Lmapnik/Coord;)Lmapnik/Coord;
+ * Signature: (Lgeowin/mapnik/Coord;)Lmapnik/Coord;
  */
-JNIEXPORT jobject JNICALL Java_mapnik_ProjTransform_backward__Lmapnik_Coord_2(JNIEnv *env, jobject obj,
+JNIEXPORT jobject JNICALL Java_geowin_mapnik_ProjTransform_backward__Lmapnik_Coord_2(JNIEnv *env, jobject obj,
                                                                               jobject xy_obj) {
     PREAMBLE;
     auto tr = LOAD_PROJ_TRANSFORM_POINTER(obj);
