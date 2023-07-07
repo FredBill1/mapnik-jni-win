@@ -31,7 +31,7 @@ git clone https://github.com/microsoft/vcpkg.git
 之后使用如下指令安装本项目的依赖：
 
 ```bash
-.\vcpkg\vcpkg install mapnik[input-csv,input-gdal,input-geobuf,input-geojson,input-ogr,input-pgraster,input-postgis,input-raster,input-shape,input-sqlite,input-topojson] mapbox-wagyu --triplet=x64-windows-static-release
+.\vcpkg\vcpkg install mapnik[input-csv,input-gdal,input-geobuf,input-geojson,input-ogr,input-pgraster,input-postgis,input-raster,input-shape,input-sqlite,input-topojson] mapbox-wagyu pkgconf --triplet=x64-windows-static-release
 ```
 
 如果在`arm64-linux`下使用本项目，则需使用`--triplet=arm64-linux-release`。
