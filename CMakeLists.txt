@@ -29,19 +29,33 @@ find_package(GEOS CONFIG REQUIRED)
 include(UseJava)
 
 file(GLOB_RECURSE JAVA_SOURCES src/geowin/mapnik/*.java)
-add_jar(${PROJECT_NAME}_jar ${JAVA_SOURCES} GENERATE_NATIVE_HEADERS ${PROJECT_NAME}_native)
+add_jar(mapnik-jni_jar
+    SOURCES ${JAVA_SOURCES}
+    OUTPUT_NAME mapnik-jni
+    OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}
+    GENERATE_NATIVE_HEADERS mapnik-jni_native
+)
 
 file(GLOB_RECURSE JNI_SOURCES csrc/*.cpp)
-add_library(${PROJECT_NAME} SHARED ${JNI_SOURCES})
+add_library(mapnik-jni SHARED ${JNI_SOURCES})
 
-target_link_libraries(${PROJECT_NAME} PRIVATE
+target_link_libraries(mapnik-jni PRIVATE
     mapnik::mapnik mapnik::json mapnik::wkt
     GDAL::GDAL
     ICU::uc ICU::io ICU::dt ICU::in
     unofficial::Lerc::Lerc
     GEOS::geos_c
     mapnik-vector-tile
-    ${PROJECT_NAME}_native
+    mapnik-jni_native
 )
-target_include_directories(${PROJECT_NAME} PRIVATE ${JNI_INCLUDE_DIRS})
-target_precompile_headers(${PROJECT_NAME} PRIVATE "csrc/globals.hpp")
+target_include_directories(mapnik-jni PRIVATE ${JNI_INCLUDE_DIRS})
+target_precompile_headers(mapnik-jni PRIVATE "csrc/globals.hpp")
+
+add_custom_target(
+    make_final_jar ALL
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/final_jar/geowin/mapnik/jnilib
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/mapnik-jni.jar ${CMAKE_CURRENT_BINARY_DIR}/final_jar/mapnik-jni.jar
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:mapnik-jni> ${CMAKE_CURRENT_BINARY_DIR}/final_jar/geowin/mapnik/jnilib/mapnik-jni.out
+    COMMAND ${Java_JAR_EXECUTABLE} uf ${CMAKE_CURRENT_BINARY_DIR}/final_jar/mapnik-jni.jar -C ${CMAKE_CURRENT_BINARY_DIR}/final_jar geowin/mapnik/jnilib/mapnik-jni.out
+)
+add_dependencies(make_final_jar mapnik-jni mapnik-jni_jar)

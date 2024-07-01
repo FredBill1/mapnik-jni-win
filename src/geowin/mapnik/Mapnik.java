@@ -1,4 +1,9 @@
 package geowin.mapnik;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -94,7 +99,24 @@ public class Mapnik {
             if (initializationFailure) {
                 throw new IllegalStateException("Previous call to Mapnik.initialize() failed");
             }
-            System.loadLibrary("mapnik-jni");
+            File jni_file;
+            try {
+                jni_file = File.createTempFile("mapnik-jni", ".out");
+            } catch (IOException e) {
+                throw new IllegalStateException("Failed to create temporary file for jni library", e);
+            }
+            jni_file.deleteOnExit();
+
+            try (InputStream link = Mapnik.class.getResourceAsStream("/geowin/mapnik/jnilib/mapnik-jni.out")) {
+                if (link == null) {
+                    throw new IllegalStateException("Failed to load jni library from resources");
+                }
+                Files.copy(link, jni_file.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                throw new IllegalStateException("Failed to write jni library to temporary file", e);
+            }
+
+            System.load(jni_file.getAbsolutePath());
 
             try {
                 nativeInit();

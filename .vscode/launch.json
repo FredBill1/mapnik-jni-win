@@ -7,9 +7,6 @@
             "request": "launch",
             "mainClass": "geowin.mapnik.Demo",
             "projectName": "mapnik-jni",
-            "vmArgs": [
-                "-Djava.library.path=${workspaceFolder}/build/Release"
-            ],
             "cwd": "${workspaceFolder}"
         }
     ]
